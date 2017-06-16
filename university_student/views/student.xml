@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+  
+          
+        <!-- School Student -->
+        <record id="view_school_student_university_form_inherit" model="ir.ui.view">
+            <field name="name">school.student.university.form.inherit</field>
+            <field name="model">school.student</field>
+            <field name="inherit_id" ref="boston_modifier_status.view_school_student_boston_form_inherit"/>
+            <field name="arch" type="xml">
+                <notebook>
+                    <page string="Education Background">
+                    <field name="education_background" colspan="4" nolabel="1" editable="bottom">
+                        <tree>
+                            <field name="student_id" invisible="1"/>
+                            <field name="name"/>
+                            <field name="country_id"/>
+                            <field name="language_id" string="Language of Instructions"/>
+                            <field name="from_date"/>
+                            <field name="to_date"/>
+                            <field name="qualification"/>
+                            <field name="obtain" invisible="1"/>
+                            <field name="grade_obtain" invisible="1"/>
+                        </tree>
+                    </field>
+                    <group>
+                        <group>
+                            <field name="obtain"/>
+                            <field name="grade_obtain"/>
+                        </group>
+                    </group>
+                    </page>
+                    <page string="Employment History">
+                    <field name="history_id" colspan="4" nolabel="1" editable="bottom" context="{'default_student_id':active_id}">
+                        <tree>
+                            <field name="student_id" invisible="1"/>
+                            <field name="name"/>
+                            <field name="country_id"/>
+                            <field name="from_date"/>
+                            <field name="to_date"/>
+                            <field name="position"/>
+                        </tree>
+                        <form string="Employment History">
+                            <sheet>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="country_id"/>
+                                    <field name="from_date"/>
+                                    <field name="to_date"/>
+                                    <field name="position"/>
+                                    <field name="student_id" invisible="1"/>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+    
+  </data>
+</openerp>

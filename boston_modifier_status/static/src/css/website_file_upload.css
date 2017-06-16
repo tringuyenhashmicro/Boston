@@ -1,0 +1,83 @@
+form#file_upload_form {
+	padding: 0px;
+	margin-bottom: 25px;
+}
+
+a.file_browse_btn {
+	margin-left: -2px !important;
+	height: 36px; 
+}
+
+button.file_upload_btn {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.popover-title {
+	color: white;
+	font-size: 20px;
+	text-align: center !important;
+	background-color: #D50000;
+	width: 243px;
+	}
+
+.popover-content {
+	color: #D50000;
+	font-style: italic;
+	}
+
+div#file-upload-name {
+	height: 36px;
+	border-radius: 4px;
+}
+
+div.attachment-history {
+	width: 519px;
+	max-height: 265px;
+	overflow-y: auto;
+    white-space: nowrap;
+    padding: 5px;
+    border: 1px solid #cccccc;
+    margin-bottom: 10px;
+    margin-top: 17px;
+    border-radius: 4px;
+}
+
+a#attachment-remove:hover {
+	color: red;
+	cursor: pointer;
+}
+
+a.add-attachment {
+	margin-bottom: 20px;
+	margin-top: 6px;
+}
+
+div.order-attachment-upload {
+	margin-top: 23%;
+	border-radius: 0px;
+	background-color: #e6e6e6;
+}
+
+div.order-attachment-upload .modal-body {
+	border: 4px solid #b3b3b3;
+}
+
+.attachment-close{
+  position: relative;
+  top:-29px;
+  left: 29px;
+  opacity: 1;
+}
+
+.upload-message {
+	font-family: Georgia,Times,"Times New Roman",serif;
+	font-style: italic;
+	font-weight: 900;
+	font-size: 18px;
+	margin-bottom: 6px;
+}
+
+div.attachment {
+	margin-top: 18px;
+}

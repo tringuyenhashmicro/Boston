@@ -1,0 +1,1609 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="action_open_website" model="ir.actions.act_url">
+            <field name="name">Website Contact Form</field>
+            <field name="target">self</field>
+            <field name="url">/page/contactus</field>
+        </record>
+        <record id="base.open_menu" model="ir.actions.todo">
+            <field name="action_id" ref="action_open_website"/>
+            <field name="state">open</field>
+        </record>
+        <record model="crm.case.section" id="website.salesteam_website_sales">
+            <field name="name">Website Sales</field>
+            <field name="code">WS</field>
+            <field name="member_ids" eval="[(4, ref('base.user_root'))]"/>
+            <field name="use_leads">True</field>
+            <field name="use_opportunities" eval="False"/>
+        </record>
+        <record model="crm.case.stage" id="stage_applied">
+            <field name="name">Applied</field>
+            <field name="case_default">1</field>
+            <field name="probability">20</field>
+            <field name="on_change">1</field>
+            <field name="sequence">2</field>
+            <field name="type">both</field>
+        </record>
+        <record model="crm.case.stage" id="stage_offered">
+            <field name="name">Offered</field>
+            <field name="case_default">1</field>
+            <field name="probability">20</field>
+            <field name="on_change">1</field>
+            <field name="sequence">2</field>
+            <field name="type">both</field>
+        </record>
+        <record model="crm.case.stage" id="stage_accepted">
+            <field name="name">Accepted</field>
+            <field name="case_default">1</field>
+            <field name="probability">20</field>
+            <field name="on_change">1</field>
+            <field name="sequence">2</field>
+            <field name="type">both</field>
+        </record>
+        <delete model="crm.case.stage" id="crm.stage_lead2"/>
+        <delete model="ir.ui.menu" id="school_attendance.menu_student_attendance_line"/>
+        <delete model="ir.ui.menu" id="school_management.menu_school_teacher"/>
+        <delete model="ir.ui.menu" id="school_management.menu_school_parent"/>
+        
+        <!-- Sequences for student.announcement -->
+        <record id="seq_type_student_announcement" model="ir.sequence.type">
+            <field name="name">Student Announcements</field>
+            <field name="code">student.announcement</field>
+        </record>
+
+        <record id="seq_student_announcement" model="ir.sequence">
+            <field name="name">Student Announcements</field>
+            <field name="code">student.announcement</field>
+            <field name="prefix">SA</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+    </data>
+
+  <data>
+    <template id="assets_frontend_stock" inherit_id="website.assets_frontend" name="Stock">
+      <xpath expr="." position="inside">
+          <link rel='stylesheet' href='/boston_modifier_status/static/src/css/website_file_upload.css'/>
+          <script type="text/javascript" src="/boston_modifier_status/static/src/js/website_file_upload.js"></script>
+      </xpath>
+    </template>
+    
+    <template id="contactus_form" name="Contact Form" inherit_id="website.contactus" customize_show="True">
+    <xpath expr="//div[@name='mail_button']" position="replace">
+        <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
+            <div t-attf-class="form-group #{error and 'contact_name' in error and 'has-error' or ''}">
+                <label class="col-md-3 col-sm-4 control-label" for="contact_name">Your Name</label>
+                <div class="col-md-7 col-sm-8">
+                    <input type="text" class="form-control" name="contact_name" required="True" t-attf-value="#{contact_name or ''}"/>
+                </div>
+            </div>
+            <div t-attf-class="form-group #{error and 'phone' in error and 'has-error' or ''}">
+                <label class="col-md-3 col-sm-4 control-label" for="phone">Phone Number</label>
+                <div class="col-md-7 col-sm-8">
+                    <input type="text" class="form-control" name="phone" t-attf-value="#{phone or ''}"/>
+                </div>
+            </div>
+            <div name="email_from_container" t-attf-class="form-group #{error and 'email_from' in error and 'has-error' or ''}">
+                <label class="col-md-3 col-sm-4 control-label" for="email_from">Email</label>
+                <div class="col-md-7 col-sm-8">
+                    <input type="email" class="form-control" name="email_from" required="True" t-attf-value="#{email_from or ''}"/>
+                </div>
+            </div>
+            <div t-attf-class="form-group #{error and 'name' in error and 'has-error' or ''}">
+                <label class="col-md-3 col-sm-4 control-label" for="name">Subject</label>
+                <div class="col-md-7 col-sm-8">
+                    <input type="text" class="form-control" name="name" t-attf-value="#{name or ''}"/>
+                </div>
+            </div>
+            <div t-attf-class="form-group #{error and 'description' in error and 'has-error' or ''}">
+                <label class="col-md-3 col-sm-4 control-label" for="description">Your Question</label>
+                <div class="col-md-7 col-sm-8">
+                    <textarea  class="form-control" name="description" style="min-height: 120px" required="True"><t t-esc="description or ''"/></textarea>
+                </div>
+            </div>
+            <t t-foreach="kwargs" t-as="kwarg">
+                <input type="file" t-att-name="kwarg[0]" t-att-value="kwarg[1]"/>
+            </t>
+            
+            <div class="form-group">
+                <input type="file" name="filename"/>
+                <div class="col-md-offset-3 col-sm-offset-4 col-sm-8 col-md-7">
+                    <button class="btn btn-primary btn-lg">Send</button>
+                </div>
+            </div>
+        </form>
+    </xpath>
+</template>
+
+<template id="contactus_form_company_name" name="Company Name" inherit_id="boston_modifier_status.contactus_form" customize_show="True">
+    <xpath expr="//div[@name='email_from_container']" position="after">
+        <div t-attf-class="form-group #{error and 'partner_name' in error and 'has-error' or ''}">
+            <label class="col-md-3 col-sm-4 control-label" for="partner_name">Your Company</label>
+            <div class="col-md-7 col-sm-8">
+                <input type="text" class="form-control" name="partner_name" required="True" t-attf-value="#{partner_name or ''}"/>
+            </div>
+        </div>
+    </xpath>
+</template>
+
+<template id="contactus_attachment" name="Contact Attachment">
+    <t t-call="website.layout">
+      <div id="wrap">
+        <div class="oe_structure"/>
+        <div class="container">
+            <div class="modal fade" id="file_upload_modal" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content order-attachment-upload">
+                    <div class="modal-body">
+                      <button type="button" class="close attachment-close" data-dismiss="modal"><img src="/website_file_upload/static/src/img/icon-cross.png"/></button>
+                      <form id="file_upload_form" action="/page/contactus/file_upload" method="post" class="s_website_form form-horizontal container-fluid mt32" enctype="multipart/form-data">
+                        <center><div class="upload-message">
+                          <strong> Select File to Upload</strong>
+                        </div></center>
+                        <div class="clearfix"/>
+                        <div class="input-group col-md-offset-1 col-md-10">
+                          <input type="file" name="Upload-File" required="required" style="display:none;"/>
+                          <div id="file-upload-name" tabindex="500"  class="form-control">-----Choose File for Upload-----
+                          </div>
+                          <span class="input-group-btn">
+                            <a class="btn btn-primary file_browse_btn fa fa-folder-open-o">&#032;Browse...</a>
+                          </span>
+                        </div>
+                        <button type="submit" class="btn btn-primary col-md-offset-4 file_upload_btn fa fa-upload disabled" style="display:none;">&#032;Upload File</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </t>
+</template>
+
+<template id="contactus_thanks" name="Contact us">
+    <t t-call="website.layout">
+      <div id="wrap">
+        <div class="oe_structure"/>
+        <div class="container">
+            <h1>Thanks!</h1>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="alert alert-success">
+                        Your message has been sent successfully.
+                        <button type="button" class="close" data-dismiss="alert">&amp;times;</button>
+                    </div>
+                    <p>
+                        We will get back to you shortly.
+                    </p><p class="mt64">
+                        If you have an emergency, do not hesitate to contact us by phone:
+                    </p>
+                    <ul class="list-unstyled">
+                        <li><i class="fa fa-phone"></i> : <span t-field="res_company.phone"/></li>
+                        <li><i class="fa fa-envelope"></i> : <span t-field="res_company.email"/></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <t t-call="website.company_description"/>
+                </div>
+            </div>
+        </div>
+        <div class="oe_structure"/>
+      </div>
+    </t>
+</template>
+
+        <record id="view_crm_lead_status_form_inherit" model="ir.ui.view">
+            <field name="name">crm.lead.form.status.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='email_from']" position="before">
+                    <field name="state" invisible="1"/>
+                </xpath>
+                <xpath expr="//button[@name='%(crm.action_crm_lead2opportunity_partner)d']" position="replace">
+                	<button name="btn_offer" states="applied" string="Offer" type="object" help="Change status to Offer" class="oe_highlight"/>
+                    <button name="btn_accept" states="offered" string="Accept" type="object" help="Change status to Accept" class="oe_highlight"/>
+                    <button name="btn_enrol" states="accepted" string="Enrol" type="object" help="Create a student" class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <menuitem id="school_attendance.menu_student_attendance" parent="school_attendance.menu_attendance" name="Student’s Attendance" action="school_attendance.action_student_attendance" sequence="0" groups="school_management.group_school_admin,school_management.group_school_teacher"/>
+        
+        <record id="school_attendance.action_student_attendance" model="ir.actions.act_window">
+            <field name="name">Student’s Attendance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">student.attendance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        
+        <record id="view_student_attendance_form_inherit" model="ir.ui.view">
+            <field name="name">student.attendance.form.inherit</field>
+            <field name="model">student.attendance</field>
+            <field name="inherit_id" ref="school_attendance.view_student_attendance_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='attendance_ids']/tree[@editable='bottom']" position="replace">
+                    <tree editable="bottom">
+                        <field name="student_id" options="{'no_create': True, 'no_open': True}"
+                            required="1" domain="[('is_parent', '=', False)]"/>
+                        <field name="gender" invisible="1"/>
+                        <field name="present_ok"/>
+                        <field name="absent_ok"/>
+                        <field name="late_ok" invisible="1"/>
+                        <field name="makeup_ok" invisible="1"/>
+                        <field name="credits_deduct" invisible="1"/>
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_student_attendance_form_inherit1" model="ir.ui.view">
+            <field name="name">student.attendance.form.inherit1</field>
+            <field name="model">student.attendance</field>
+            <field name="inherit_id" ref="school_attendance.view_student_attendance_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='subject_id']" position="replace">
+                    <field name="subject_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly':[('state', '!=', 'draft')]}" invisible="1"/>
+                    <field name="course_id" options="{'no_create': True, 'no_open': True}" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" string="Course Name"/>
+                </xpath>
+                <xpath expr="//field[@name='class_id']" position="replace">
+                    <field name="class_id" options="{'no_create': True, 'no_open': True}" domain="[('subject_id', '=', course_id)]" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" string="Intake"/>
+                </xpath>
+                <xpath expr="//field[@name='session_id']" position="replace">
+                    <field name="session_id" options="{'no_create': True, 'no_open': True}" domain="[('class_id', '=', class_id)]" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" string="Class Name"/>
+                </xpath>
+                <xpath expr="//field[@name='attendance_ids']/tree[@editable='bottom']" position="replace">
+                    <tree editable="bottom">
+                        <field name="student_id" options="{'no_create': True, 'no_open': True}"
+                            required="1" domain="[('is_parent', '=', False)]"/>
+                        <field name="gender" invisible="1"/>
+                        <field name="present_ok"/>
+                        <field name="absent_ok"/>
+                        <field name="leave"/>
+                        <field name="mc"/>
+                        <field name="late_ok" invisible="1"/>
+                        <field name="makeup_ok" invisible="1"/>
+                        <field name="credits_deduct" invisible="1"/>
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_student_attendance_tree_inherit1" model="ir.ui.view">
+            <field name="name">student.attendance.tree.inherit1</field>
+            <field name="model">student.attendance</field>
+            <field name="inherit_id" ref="school_attendance.view_student_attendance_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='subject_id']" position="attributes">
+                    <attribute name="string">Course Name</attribute>
+                </xpath>
+                <xpath expr="//field[@name='class_id']" position="attributes">
+                    <attribute name="string">Intake</attribute>
+                </xpath>
+                <xpath expr="//field[@name='session_id']" position="attributes">
+                    <attribute name="string">Class Name</attribute>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_school_student_boston_form_inherit" model="ir.ui.view">
+            <field name="name">school.student.boston.form.inherit</field>
+            <field name="model">school.student</field>
+            <field name="inherit_id" ref="school_management.view_school_student_form"/>
+            <field name="arch" type="xml">
+                <sheet position="before">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="progressed,completed,graduated,withdrawn,expelled"/>
+                    </header>
+                </sheet>
+                <notebook position="before">
+                    <group colspan="4" col="4">
+                        <group colspan="4" col="4">
+                    <!-- <div class="oe_right oe_button_box" name="button_box"> -->
+                            <field name="title_id"/>
+                            <field name="date_progressed"/>
+                            <field name="date_completed"/>
+                            <field name="date_graduated"/>
+                            <field name="date_withdrawn"/>
+                            <field name="date_expelled"/>
+                        </group>
+                    <!-- </div> -->
+                    </group>
+                </notebook>
+                <xpath expr="//field[@name='occupation']" position="replace"/>
+                <xpath expr="//field[@name='address']" position="replace"/>
+                <xpath expr="//field[@name='handfone']" position="after">
+                    <field name="age" widget="interger"/>
+                    <field name="insu_policy"/>
+                    <field name="passport_no"/>
+                    <field name="employer" />
+                    <field name="pass_exp"/>
+                    <field name="src_info"/>
+                    <field name="crs_consul"/>
+                    <field name="wk_pass_issue"/>
+                    <field name="wk_pass_exp"/>
+                    <field name="att_rate"/>
+                    <field name="oversea_add"/>
+                    <field name="occupation"/>
+                    <group colspan="2" col="1" string="Singapore Address">
+                    <field name="street" placeholder="Street..." nolabel="1"/>
+                    <div class="address_format">
+                        <field name="blk" placeholder="Blk" style="width: 20%"/>
+                        <field name="unit" class="oe_no_button" placeholder="Unit" style="width: 30%"/>
+                        <field name="postcode" placeholder="Postcode" style="width: 50%"/>
+                    </div>
+                    <field name="country_id" placeholder="Country" class="oe_no_button" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" nolabel="1"/>
+                    </group>
+                    <field name="address" invisible="1"/>
+                </xpath>                
+                <xpath expr="//form[@string='Students']" position="inside">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='birth_date']" position="attributes">
+                    <attribute name="on_change">onchange_birthday(birth_date)</attribute>
+                </xpath>
+                <notebook position="inside">
+                    <page string="Assignment Result">
+                    <field name="assignment_id" colspan="4" nolabel="1">
+                        <tree delete="false" create="false">
+                            <field name="student_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('state', '!=', 'draft')]}" invisible="1"/>
+                            <field name="attachment_result" filename="file_result" readonly="1"/>
+                            <field name="marks" attrs="{'readonly': [('state', '!=', 'submitted')]}"/>
+                            <field name="grade_id"/>
+                            <field name="state" readonly="1"/>
+                            <field name="file_result" invisible="1"/>
+                        </tree>
+                    </field>
+                    </page>
+                    <page string="Parent’s Particulars">
+                        <group colspan="4" col="4">
+                        <group colspan="4" col="4">
+                        <field name="pa_fullname"/>
+                        <field name="pa_nationality"/>
+                        <field name="pa_nric"/>
+                        <field name="pa_poscode"/>
+                        <field name="pa_relation"/>
+                        <field name="pa_office_tel"/>
+                        <field name="pa_handphone"/>
+                        <field name="pa_email"/>
+                        <field name="pa_address"/>
+                        <field name="pa_occupation"/>
+                        </group>
+                        </group>                        
+                    </page>
+                </notebook>
+            </field>
+        </record>
+                
+        <record id="view_hr_employee_boston_form_inherit" model="ir.ui.view">
+            <field name="name">hr.employee.boston.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <!-- <xpath expr="//field[@name='work_location']" position="after"> -->
+                        <!-- <field name="att_rate"/> -->
+                <!-- </xpath> -->
+                <xpath expr="//field[@name='work_email']" position="attributes">
+                        <attribute name="required">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        <!-- School Module -->
+        <record id="view_school_module_tree" model="ir.ui.view">
+    		<field name="name">school.module.tree</field>
+            <field name="model">school.module</field>
+            	<field name="arch" type="xml">
+                <tree string="Module">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="theory_ok"/>
+                    <field name="practical_ok"/>
+                    <!-- <field name="prerequisite"/> -->
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_school_module_form" model="ir.ui.view">
+    		<field name="name">school.module.form</field>
+            <field name="model">school.module</field>
+            	<field name="arch" type="xml">
+                <form string="Module">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="theory_ok"/>
+                            <field name="practical_ok"/>
+                            <!-- <field name="prerequisite"> -->
+                                <!-- <form string="Prerequisite"> -->
+                                    <!-- <sheet> -->
+                                        <!-- <group> -->
+                                            <!-- <field name="name"/> -->
+                                            <!-- <field name="description"/> -->
+                                        <!-- </group> -->
+                                    <!-- </sheet> -->
+                                <!-- </form> -->
+                            <!-- </field> -->
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_school_module" model="ir.actions.act_window">
+            <field name="name">Module</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.module</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        
+        <menuitem id="menu_action_school_module" parent="school_management.menu_subject_class" action="action_school_module" sequence="0"/>
+        <!-- Teacher Attendance --> 
+        <record id="view_teacher_attendance_form" model="ir.ui.view">
+    		<field name="name">teacher.attendance.form</field>
+            <field name="model">teacher.attendance</field>
+            	<field name="arch" type="xml">
+                <form string="Attendance">
+                	<header>
+                        <button name="action_validate" type="object" states="draft" string="Validate" class="oe_highlight"/>
+                    	<field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                	</header>
+                	<sheet style="width: 10%%,height:10%%">
+	                	<div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+	                	</div>
+	                	<group colspan="4" col="4">
+	                		<field name="subject_id" options="{'no_create': True, 'no_open': True}" required="1" 
+	                			attrs="{'readonly':[('state', '!=', 'draft')]}" string="Course Name"/>
+	                		<field name="class_id" options="{'no_create': True, 'no_open': True}"
+	                			domain="[('subject_id', '=', subject_id)]" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" string="Intake"/>
+	                		<field name="session_id" options="{'no_create': True, 'no_open': True}"
+	                			domain="[('class_id', '=', class_id)]" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" string="Class Name"/>
+	                	</group>
+	                	<notebook>
+	                		<page string="Attendances">
+	                			<field name="attendance_ids" attrs="{'readonly':[('state', '!=', 'draft')]}">
+	                				<tree editable="bottom">
+                                        <field name="teacher_id" options="{'no_create': True, 'no_open': True}"
+                            required="1"/>
+	                					<field name="gender" invisible="1"/>
+                                        <field name="present_ok"/>
+                                        <field name="absent_ok"/>
+                                        <field name="leave"/>
+                                        <field name="mc"/>
+                                        <field name="late_ok" invisible="1"/>
+                                        <field name="makeup_ok" invisible="1"/>
+                                        <field name="credits_deduct" invisible="1"/>
+	                				</tree>
+	                				<form create="false">
+	                					<group>
+                                            <field name="teacher_id" options="{'no_create': True, 'no_open': True}"
+                            required="1" />
+	                						<field name="gender" invisible="1"/>
+                                            <field name="present_ok"/>
+                                            <field name="absent_ok"/>
+                                            <field name="leave"/>
+                                            <field name="mc"/>
+                                            <field name="late_ok" invisible="1"/>
+                                            <field name="makeup_ok" invisible="1"/>
+                                            <field name="credits_deduct" invisible="1"/>
+	                					</group>
+	                				</form>
+	                			</field>
+	                		</page>
+	                	</notebook>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_teacher_attendance_tree" model="ir.ui.view">
+    		<field name="name">teacher.attendance.tree</field>
+            <field name="model">teacher.attendance</field>
+            <field name="arch" type="xml">
+                <tree string="Attendance">
+                	<field name="name"/>
+                	<field name="subject_id" string="Course Name"/>
+                	<field name="class_id" string="Intake"/>
+                	<field name="session_id" string="Class Name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_teacher_attendance" model="ir.actions.act_window">
+            <field name="name">Teacher Attendance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">teacher.attendance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+		
+		<record id="view_teacher_attendance_line_tree" model="ir.ui.view">
+    		<field name="name">teacher.attendance.line.tree</field>
+            <field name="model">teacher.attendance.line</field>
+            <field name="arch" type="xml">
+                <tree string="Teacher Attendances" create="false">
+                	<field name="name"/>
+                	<field name="teacher_id" options="{'no_create': True, 'no_open': True}"
+                            required="1" />
+                    <field name="gender" invisible="1"/>
+                    <field name="present_ok"/>
+                    <field name="absent_ok"/>
+                    <field name="leave"/>
+                    <field name="mc"/>
+                	<field name="subject_id"/>
+                	<field name="class_id"/>
+                	<field name="session_id"/>
+                	<field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_teacher_attendance_line" model="ir.actions.act_window">
+            <field name="name">Teacher Attendances</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">teacher.attendance.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[('state', '=', 'posted')]</field>
+        </record>
+        
+<!-- 		<menuitem id="menu_teacher_attendance" parent="school_attendance.menu_attendance" action="action_teacher_attendance" sequence="5"
+			groups="school_management.group_school_admin,school_management.group_school_teacher"/>
+		<menuitem id="menu_teacher_attendance_line" parent="school_attendance.menu_attendance" action="action_teacher_attendance_line" sequence="5"
+			groups="school_management.group_school_admin,school_management.group_school_student,school_management.group_school_student,school_management.group_school_parent"/> -->
+        
+    <!-- Report Attendances -->
+    
+<template id="report_attendance_document">
+    <t t-call="report.external_layout">
+    <t t-foreach="docs" t-as="doc">
+        <div class="page">
+            <br/>
+            <br/>
+            <br/>
+            <div class="col-xs-12">
+                <span style="font-weight:bold;font-size:30px;">Attendance Report</span>
+                <br/>
+                <span style="font-weight:bold">Name: <span t-esc="doc.name"/></span>
+                <br/>
+                <span>Date Issued: <span t-field="doc.current_date"/> </span>
+            </div>
+            <table class="table table-condensed mt48">
+                <thead>
+                    <tr>
+                        <th><strong>Date</strong></th>
+                        <th><strong>Subject</strong></th>
+                        <th><strong>Class</strong></th>
+                        <th><strong>Session</strong></th>
+                        <th><strong>Action</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="doc.att_lines" t-as="move">
+                        <td><span t-field="move.session_id.date_start"/> - <span t-field="move.session_id.date_end"/></td>
+                        <td><span t-field="move.subject_id"/></td>
+                        <td><span t-field="move.class_id"/></td>
+                        <td><span t-field="move.session_id"/></td>
+                        <td>
+                        <span t-if="move.present_ok"> Present </span>
+                        <span t-if="move.absent_ok"> Absent </span>
+                        <span t-if="move.leave"> Leave </span>
+                        <span t-if="move.mc"> MC </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </t>
+    </t>
+</template>
+
+<!-- QWeb Reports -->
+        <!-- <report  -->
+            <!-- id="attendance_teacher_report" -->
+            <!-- model="school.teacher" -->
+            <!-- string="Report Attendance" -->
+            <!-- report_type="qweb-pdf" -->
+            <!-- name="boston_modifier_status.report_attendance_document" -->
+            <!-- file="boston_modifier_status.report_attendance_document" -->
+        <!-- /> -->
+
+<template id="report_attendance_student_document">
+    <t t-call="report.external_layout">
+    <t t-foreach="docs" t-as="doc">
+        <div class="page">
+            <br/>
+            <br/>
+            <br/>
+            <div class="col-xs-12">
+                <span style="font-weight:bold;font-size:30px;">Attendance Report</span>
+                <br/>
+                <span style="font-weight:bold">Name: <span t-esc="doc.name"/></span>
+                <br/>
+                <span>Date Issued: <span t-field="doc.current_date"/> </span>
+            </div>
+            <table class="table table-condensed mt48">
+                <thead>
+                    <tr>
+                        <th><strong>Date</strong></th>
+                        <th><strong>Subject</strong></th>
+                        <th><strong>Class</strong></th>
+                        <th><strong>Session</strong></th>
+                        <th><strong>Action</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="doc.att_lines" t-as="move">
+                        <td><span t-field="move.session_id.date_start"/> - <span t-field="move.session_id.date_end"/></td>
+                        <td><span t-field="move.subject_id"/></td>
+                        <td><span t-field="move.class_id"/></td>
+                        <td><span t-field="move.session_id"/></td>
+                        <td>
+                        <span t-if="move.present_ok"> Present </span>
+                        <span t-if="move.absent_ok"> Absent </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </t>
+    </t>
+</template>
+
+<!-- QWeb Reports -->
+        <report 
+            id="attendance_student_report"
+            model="school.student"
+            string="Report Attendance"
+            report_type="qweb-pdf"
+            name="boston_modifier_status.report_attendance_student_document"
+            file="boston_modifier_status.report_attendance_student_document"
+        />
+        
+<!-- Report Warning Letter -->
+    <template id="report_school_warning_letter">
+		<t t-foreach="docs" t-as="o">
+            <t t-call="report.external_layout">
+		    <div class="page">
+                <br/>
+                <br/>
+                <br/>
+		        <div class="oe_structure"/>
+		            <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <span style="font-weight:bold;font-size:35px;"> WARNING LETTER </span>
+                        </div>
+                        <div class="col-xs-12 text-left">
+                            <p>
+                                Dear <span  t-esc="o.name and o.name or ''"/>
+                            </p>
+                            <p>
+                                This is to inform you that you are going against the policies of this institution. You have already being told about all the rules and regulations but it seems like you took them for granted and therefore you are breaking the rules. Your class teacher has told me that you use your cell phone in class every time. This is one of the things that are not to be ignored. Using cell phones in class is strictly prohibited in classrooms. Several other students have also complained about you using your cell phone in class because it disturbs the whole class. Moreover, your rude behavior towards teachers and your fellow students is also not ignorable because it violates the standards set by the institution.
+                            </p>
+                            <p>
+                                You are highly advised not to use your cell phone in classroom again otherwise strict actions will be taken. Your cellphone will be confiscated and you will be suspended from the school because you have already been warned once. The goal of our institution is that we want a positive, friendly and disciplined environment and you are expected to join us in achieving this goal. You are also advised to meet me personally tomorrow in my office at 11:00 am so that we can discuss it further.
+                            </p>
+                            <p>
+                                Sincerely.
+                            </p>
+                        </div>
+		            </div>
+	        </div>
+            </t>
+	    </t>
+	</template>
+    
+    <report
+            id="action_boston_modifier_status"
+            model="school.student"
+            report_type="qweb-pdf"
+            string="Warning Letter"
+            name="boston_modifier_status.report_school_warning_letter"
+            file="boston_modifier_status.report_school_warning_letter"
+            />
+            
+    <!-- Report expulsion Letter -->
+    <template id="report_school_expulsion_letter">
+		<t t-foreach="docs" t-as="o">
+            <t t-call="report.external_layout">
+		    <div class="page">
+                <br/>
+                <br/>
+                <br/>
+		        <div class="oe_structure"/>
+		            <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <span style="font-weight:bold;font-size:35px;"> EXPULSION LETTER </span>
+                        </div>
+                        <div class="col-xs-12 text-left">
+                            <p>
+                                Dear <span  t-esc="o.name and o.name or ''"/>
+                            </p>
+                            <p>
+                                This is to inform you that you are going against the policies of this institution. You have already being told about all the rules and regulations but it seems like you took them for granted and therefore you are breaking the rules. Your class teacher has told me that you use your cell phone in class every time. This is one of the things that are not to be ignored. Using cell phones in class is strictly prohibited in classrooms. Several other students have also complained about you using your cell phone in class because it disturbs the whole class. Moreover, your rude behavior towards teachers and your fellow students is also not ignorable because it violates the standards set by the institution.
+                            </p>
+                            <p>
+                                You are highly advised not to use your cell phone in classroom again otherwise strict actions will be taken. Your cellphone will be confiscated and you will be suspended from the school because you have already been warned once. The goal of our institution is that we want a positive, friendly and disciplined environment and you are expected to join us in achieving this goal. You are also advised to meet me personally tomorrow in my office at 11:00 am so that we can discuss it further.
+                            </p>
+                            <p>
+                                Sincerely.
+                            </p>
+                        </div>
+		            </div>
+	        </div>
+            </t>
+	    </t>
+	</template>
+    
+    <report
+            id="action_boston_modifier_status_expulsion_letter"
+            model="school.student"
+            report_type="qweb-pdf"
+            string="Expulsion Letter"
+            name="boston_modifier_status.report_school_expulsion_letter"
+            file="boston_modifier_status.report_school_expulsion_letter"
+            />
+    
+    <!-- Email template -->
+        <record id="email_template_missing_three_times" model="email.template">
+            <field name="name">Missing 3 times to Admin</field>
+            <field name="model_id" ref="boston_modifier_status.model_school_student"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_from">admin@example.com</field>
+            <field name="email_to">${(object.user_id != False and object.user_id.email)|safe}</field>
+            <field name="subject"> Expulsion Letter </field>
+            <!-- <field name="report_template" ref="action_boston_modifier_status_expulsion_letter"/> -->
+            <!-- <field name="report_name">Expulsion Letter</field> -->
+            <field name="body_html"><![CDATA[<p> Student ${object.name} is missing for 3 consecutive times</p>]]></field>
+        </record>
+        
+        <record id="email_template_student_announcement" model="email.template">
+            <field name="name">Student Announcements</field>
+            <field name="model_id" ref="school_announcement.model_school_announcement"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_from">${(user.email or '')|safe}</field>
+            <field name="email_to">${(object.recipient and object.recipient.email or '')|safe}</field>
+            <field name="subject"> Student Announcement </field>
+            <field name="body_html"><![CDATA[
+<p> Dear ${object.recipient.name}, </p>
+<p>
+The <strong> ${object.course_id.name} </strong> in class <strong> ${object.class_id.name} </strong> is an important campus resource you should know
+about. We can guide you through the process to prepare for your career from helping
+you choose the major that fits your interests to teaching you how to interview to get the
+job you want. We can general list of services, e.g., review your resume, critique your
+cover letter, quiz you in a mock interview. And all majors are welcome! 
+</p>
+<br/>
+<p> Thank you </p>
+<p> Best Regards </p>
+]]></field>
+        </record>
+    
+    <!-- Attendance Slip -->
+<template id="report_attendance_slip_document">
+    <t t-call="report.external_layout">
+    <t t-foreach="docs" t-as="doc">
+        <div class="page">
+            <br/>
+            <br/>
+            <br/>
+            <div class="col-xs-12">
+                <span style="font-weight:bold;font-size:30px;">Attendance Slip Report</span>
+                <br/>
+                <span style="font-weight:bold">Name: <span t-esc="doc.name"/></span>
+                <br/>
+                <span>Date Issued: <span t-field="doc.current_date"/> </span>
+            </div>
+            <table class="table table-condensed mt48">
+                <thead>
+                    <tr>
+                        <th><strong>Class</strong></th>
+                        <th><strong>Monday</strong></th>
+                        <th><strong>Tuesday</strong></th>
+                        <th><strong>‎Wednesday</strong></th>
+                        <th><strong>Thursday</strong></th>
+                        <th><strong>Friday</strong></th>
+                        <th><strong>Saturday</strong></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </t>
+    </t>
+</template>
+
+<!-- QWeb Reports -->
+        <!-- <report  -->
+            <!-- id="report_attendance_slip_document_teacher_report" -->
+            <!-- model="school.teacher" -->
+            <!-- string="Report Attendance Slip" -->
+            <!-- report_type="qweb-pdf" -->
+            <!-- name="boston_modifier_status.report_attendance_slip_document" -->
+            <!-- file="boston_modifier_status.report_attendance_slip_document" -->
+        <!-- /> -->
+        
+<!-- == FOR STUDENT  ==-->
+<template id="report_attendance_slip_document_student">
+    <t t-call="report.external_layout">
+    <t t-foreach="docs" t-as="doc">
+        <div class="page">
+            <br/>
+            <br/>
+            <br/>
+            <div class="col-xs-12">
+                <span style="font-weight:bold;font-size:30px;">Attendance Slip Report</span>
+                <br/>
+                <span style="font-weight:bold">Name: <span t-esc="doc.name"/></span>
+                <br/>
+                <span>Date Issued: <span t-field="doc.current_date"/> </span>
+            </div>
+            <table class="table table-condensed mt48">
+                <thead>
+                    <tr>
+                        <th><strong>Class</strong></th>
+                        <th><strong>Monday</strong></th>
+                        <th><strong>Tuesday</strong></th>
+                        <th><strong>‎Wednesday</strong></th>
+                        <th><strong>Thursday</strong></th>
+                        <th><strong>Friday</strong></th>
+                        <th><strong>Saturday</strong></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </t>
+    </t>
+</template>
+
+<!-- QWeb Reports -->
+        <report 
+            id="report_attendance_slip_document_student_report"
+            model="school.student"
+            string="Report Attendance Slip"
+            report_type="qweb-pdf"
+            name="boston_modifier_status.report_attendance_slip_document_student"
+            file="boston_modifier_status.report_attendance_slip_document_student"
+        />
+<!-- End attendance slip -->
+        <!-- change the menu and action in school module -->
+        
+        <record id="school_management.action_school_subject" model="ir.actions.act_window">
+            <field name="name">Course</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.school</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        
+        <record id="school_management.action_school_class" model="ir.actions.act_window">
+            <field name="name">Intake</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.class</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        
+        <record id="school_management.action_school_session" model="ir.actions.act_window">
+            <field name="name">Class</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.session</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">calendar,tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        
+		<menuitem id="school_management.menu_school_subject" parent="school_management.menu_subject_class" action="school_management.action_school_subject" sequence="1"
+			groups="school_management.group_school_admin" name="Course"/>
+		<menuitem id="school_management.menu_school_class" parent="school_management.menu_subject_class" action="school_management.action_school_class" sequence="2"
+			groups="school_management.group_school_admin" name="Intake"/>
+		<menuitem id="school_management.menu_school_session" name="Class" parent="school_management.menu_subject_class" action="school_management.action_school_session" sequence="3"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent"/>
+        
+        <!-- change subject into course tree -->
+        <record id="view_school_subject_course_inherit" model="ir.ui.view">
+            <field name="name">view.school.school.course.inherit</field>
+            <field name="model">school.school</field>
+            <field name="inherit_id" ref="school_management.view_school_subject_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="string"> Course Name </attribute>
+                </xpath>
+            </field>
+        </record>
+        <!-- change subject into course form -->
+        <record id="view_school_subject_course_inherit_form" model="ir.ui.view">
+            <field name="name">view.school.school.course.inherit.form</field>
+            <field name="model">school.school</field>
+            <field name="inherit_id" ref="school_management.view_school_subject_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="replace">
+                       <field name="name"  string="Course Name"/>
+                       <field name="code"/>
+                       <field name="cer_ib"/>
+                       <field name="cer_quali"/>
+                </xpath>    
+                <xpath expr="//field[@name='description']" position="replace">
+                    <field name="description" string="Program Developed by"/>
+                    <field name="entry_req"/>
+                </xpath>
+                <xpath expr="//page[@string='Classes']" position="replace">
+                    <page string="Intake">
+                        <group colspan="4" col="2">
+                            <field name="class_ids" nolabel="1" context="{'default_subject_id': active_id}">
+                                <tree>
+                                    <field name="name" string="Intake"/>
+                                    <field name="location"/>
+                                    <field name="teacher_id"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        <!-- change class into batches tree -->
+        <record id="view_school_class_batches_inherit" model="ir.ui.view">
+            <field name="name">view.school.class.batches.inherit</field>
+            <field name="model">school.class</field>
+            <field name="inherit_id" ref="school_management.view_school_class_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="string"> Intake </attribute>
+                </xpath>
+                <xpath expr="//field[@name='subject_id']" position="attributes">
+                    <attribute name="string"> Course Name </attribute>
+                </xpath>                
+            </field>
+        </record>
+        <!-- change class into batches form -->
+        <record id="view_school_class_batches_inherit_form" model="ir.ui.view">
+            <field name="name">view.school.class.batches.inherit.form</field>
+            <field name="model">school.class</field>
+            <field name="inherit_id" ref="school_management.view_school_class_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="string"> Intake </attribute>
+                </xpath>
+                <xpath expr="//field[@name='subject_id']" position="attributes">
+                    <attribute name="string"> Course Name </attribute>
+                </xpath>
+                <xpath expr="//field[@name='teacher_id']" position="replace">
+                    <field name="start_date"/>
+                    <field name="en_start"/>
+                    <field name="end_date"/>
+                    <field name="en_end"/>
+                    <field name="teacher_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//page[@string='Sessions']" position="replace">
+                    <page string="Class">
+                        <field name="session_ids" nolabel="1" context="{'default_class_id': active_id, 'default_teacher_id': teacher_id}">
+                            <tree>
+                                <field name="name" string="Class Name"/>
+                                <field name="date_start"/>
+                                <field name="date_end"/>
+                                <field name="session_location"/>
+                                <field name="teacher_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_school_class_tab_inherit_form" model="ir.ui.view">
+            <field name="name">view.school.class.tab.inherit.form</field>
+            <field name="model">school.class</field>
+            <field name="inherit_id" ref="school_billing.view_school_class_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Deposits']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//page[@string='Fees']" position="replace">
+                    <page string="Fees">
+                        <group>
+                            <field name="enroll_fee_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="category_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                    <field name="fee_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}" domain="[('category_id', '=', category_id)]"/>
+                                    <field name="amount" required="1" sum="Total"/>
+                                </tree>
+                            </field>
+                            <field name="enroll_fee_total" invisible="1"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_school_session_class_inherit" model="ir.ui.view">
+            <field name="name">view.school.session.class.inherit</field>
+            <field name="model">school.session</field>
+            <field name="inherit_id" ref="school_management.view_school_session_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="string"> Class Name </attribute>
+                </xpath>
+                <xpath expr="//field[@name='class_id']" position="attributes">
+                    <attribute name="string"> Intake </attribute>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_school_session_class_inherit_form" model="ir.ui.view">
+            <field name="name">view.school.session.class.inherit.form</field>
+            <field name="model">school.session</field>
+            <field name="inherit_id" ref="school_management.view_school_session_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='class_id']" position="attributes">
+                    <attribute name="string"> Intake </attribute>
+                </xpath>
+                <xpath expr="//field[@name='session_location']" position="replace">
+                    <field name="classroom_id"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="name" invisible="1"/>
+                    <field name="module_id"/>
+                </xpath>    
+                <xpath expr="//field[@name='starting_no']" position="replace"/>
+                <xpath expr="//label[@for='starting_no']" position="replace"/>
+            </field>
+        </record>
+        
+        <record id="view_school_session_class_inherit_calendar" model="ir.ui.view">
+            <field name="name">view.school.session.class.inherit.calendar</field>
+            <field name="model">school.session</field>
+            <field name="inherit_id" ref="school_management.view_school_session_calendar"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="module_id"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Update for enroll -->
+        <record id="view_student_enroll_batch_inherit" model="ir.ui.view">
+            <field name="name">view.student.enroll.batch.inherit</field>
+            <field name="model">student.enroll</field>
+            <field name="inherit_id" ref="school_enroll.view_student_enroll_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='class_id']" position="attributes">
+                    <attribute name="string"> Intake </attribute>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_student_enroll_batch_tree_inherit" model="ir.ui.view">
+            <field name="name">view.student.enroll.tree.batch.inherit</field>
+            <field name="model">student.enroll</field>
+            <field name="inherit_id" ref="school_enroll.view_student_enroll_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='class_id']" position="attributes">
+                    <attribute name="string"> Intake </attribute>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Announcement object -->
+        <record id="view_school_announcement_inherit" model="ir.ui.view">
+            <field name="name">view.school.session.class.inherit</field>
+            <field name="model">school.announcement</field>
+            <field name="inherit_id" ref="school_announcement.view_school_announcement_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='title']" position="before">
+                    <field name="recipient" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='title']" position="after">
+                    <field name="course_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="batch_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="class_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                </xpath>
+                <xpath expr="//sheet[@style='width: 10%,height:10%']" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_school_student_inherit_managent" model="ir.ui.view">
+            <field name="name">view.school.student.inherit.management</field>
+            <field name="model">school.student</field>
+            <field name="inherit_id" ref="school_billing.view_school_student_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Credits']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//page[@string='Deposits']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <notebook>
+                    <page string="Payment History">
+                        <field name="payment_ids" nolabel="1" colspan="4" readonly="1"/>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="view_school_student_parent_inherit_managent" model="ir.ui.view">
+            <field name="name">view.school.student.parent.inherit.management</field>
+            <field name="model">school.student</field>
+            <field name="inherit_id" ref="school_management.view_school_parent_form"/>
+            <field name="arch" type="xml">
+                <notebook>
+                    <page string="Payment History">
+                        <field name="payment_ids" nolabel="1" colspan="4" readonly="1"/>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="view_school_student_exam_inherit_managent" model="ir.ui.view">
+            <field name="name">view.school.student.exam.inherit.management</field>
+            <field name="model">school.student</field>
+            <field name="inherit_id" ref="school_enroll.view_school_student_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='enroll_ids']" position="replace">
+                    <field name="enroll_ids">
+                        <tree string="Enroll">
+                            <field name="name"/>
+                            <field name="class_id" invisible="1"/>
+                            <field name="course_id"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- School Student Invoice -->
+        <record id="view_student_invoice_inherit_invinfo" model="ir.ui.view">
+            <field name="name">view.student.invoice.inherit.invoice.info</field>
+            <field name="model">student.invoice</field>
+            <field name="inherit_id" ref="school_billing.view_student_invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='refund_ok']" position="before">
+                    <field name="invoice_id"/>
+                    <field name="insu_poli"/>
+                    <field name="enroll_no"/>
+                    <field name="src_code"/>
+                    <field name="special_dip"/>
+                    <field name="cer_issue"/>
+                    <field name="qualification"/>
+                    <field name="intake"/>
+                    <field name="fdate_issue"/>
+                    <field name="tdate_issue"/>
+                    <field name="company_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='session_qty']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='session_qty_paid']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//group[@class='oe_subtotal_footer oe_right']" position="replace">
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="untax_amount" widget="monetary"/>
+                        <field name="tax_amount" widget="monetary"/>
+                        <div>
+                            <label for="amount_total"/>
+                            <button name="button_reset_taxes" states="draft,proforma2"
+                                string="(update)" class="oe_link oe_edit_only"
+                                type="object" help="Recompute taxes and total"/>
+                        </div>
+                        <field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary" nolabel="1"/>
+                        <field name="tender_amount" widget="monetary"/>
+                        <field name="amount_paid" readonly="1" attrs="{'invisible': [('state', 'in', ('draft', 'cancel'))]}"/>                        
+                        <field name="amount_balance" attrs="{'invisible': [('state', 'in', ('draft', 'cancel'))]}"/>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='invoice_lines']/tree/field[@name='price_unit']" position="after">
+                    <field name="std_invoice_line_tax_id" widget="many2many_tags" context="{'type':'out_invoice'}"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_lines']" position="after">
+                    <group col="4" colspan="4">
+                        <field name="payment_term_id" class="oe_inline"/>
+                    </group>
+                            <div class="oe_clear">
+                                <label for="remarks"/>
+                            </div>
+                            <field name="remarks" class="oe_inline" placeholder="Remarks..."/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- remove required in description -->
+        
+        <record id="view_class_assignment_inherit_remove_required" model="ir.ui.view">
+            <field name="name">view.class.assignment.inherit.remove.required</field>
+            <field name="model">class.assignment</field>
+            <field name="inherit_id" ref="school_assignment.view_class_assignment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='description']" position="replace">
+                    <field name="description" required="0" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- change assignment setting can filter base on course and assignment -->
+        <record id="view_assignment_grade_config_tree" model="ir.ui.view">
+    		<field name="name">assignment.grade.config.tree</field>
+            <field name="model">assignment.grade.config</field>
+            <field name="arch" type="xml">
+                <tree string="Grades Setting">
+                	<field name="course_id"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_assignment_grade_config_inherit" model="ir.ui.view">
+            <field name="name">view.assignment.grade.config.inherit</field>
+            <field name="model">assignment.grade.config</field>
+            <field name="inherit_id" ref="school_assignment.view_grade_config"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='grade_ids']" position="before">
+                    <group colspan="2" col="4">
+                        <field name="course_id" required="1"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="school_assignment.action_grade_config" model="ir.actions.act_window">
+            <field name="name">Grade Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">assignment.grade.config</field>
+            <field name="view_id" ref="view_assignment_grade_config_tree"/>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        
+        <record id="view_class_assignment_form_inherit" model="ir.ui.view">
+            <field name="name">view.class.assignment.form.inherit</field>
+            <field name="model">class.assignment</field>
+            <field name="inherit_id" ref="school_assignment.view_class_assignment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='student_assign_ids']" position="replace">
+                    <field name="student_assign_ids" nolabel="1" colspan="4">
+                        <tree editable="bottom" delete="false">
+                            <field name="student_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="attachment_result" filename="file_result" readonly="1"/>
+                            <field name="marks" attrs="{'readonly': [('state', '!=', 'submitted')]}"/>
+                            <field name="grade_id"/>
+                            <field name="state" readonly="1"/>
+                            <field name="file_result" invisible="1"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_student_payment_insu_form_inherit" model="ir.ui.view">
+            <field name="name">view.student.payment.insu.form.inherit</field>
+            <field name="model">student.payment</field>
+            <field name="inherit_id" ref="school_billing.view_student_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_method_id']" position="after">
+                    <field name="insu_poli"/>
+                    <field name="company_id" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Offer Report -->
+        
+        <record id="view_offer_report_wizard_form" model="ir.ui.view">
+            <field name="name">view.offer.report.wizard.form</field>
+            <field name="model">report.offer.wizard</field>
+            <field name="arch" type="xml">
+                <form string="OFFER OF ADMISSION">
+                    <sheet>
+                    <group>
+                        <group>
+                            <field name="name" invisible="1"/>
+                            <field name="student_id"/>
+                            <field name="issued_date"/>
+                            <field name="course_id"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    </sheet>
+                    <footer>
+                    	<button name="print_report" string="Print" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <act_window id="action_view_offer_report_wizard_form"
+            name="OFFER OF ADMISSION"
+            key2="client_print_multi" 
+            res_model="report.offer.wizard" 
+            src_model="school.student"
+            view_mode="form" 
+            target="new" 
+            context="{'student_id': active_id}"
+            view_type="form"
+            view_id="view_offer_report_wizard_form"/>
+            
+            
+        <!--
+            STUDENT CONTRACT REPORT
+        -->
+        <record id="view_student_contract_report_wizard_form" model="ir.ui.view">
+            <field name="name">view.report.student.contract.wizard.form</field>
+            <field name="model">report.student.contract.wizard</field>
+            <field name="arch" type="xml">
+                <form string="OFFER OF ADMISSION">
+                    <sheet>
+                    <group>
+                        <group>
+                            <field name="name" invisible="1"/>
+                            <field name="student_id"/>
+                            <field name="issued_date"/>
+                            <field name="course_id"/>
+                            <field name="fulltime"/>
+                            <field name="parttime"/>
+                            <field name="intake"/>
+                            <field name="instart"/>
+                            <field name="inend"/>
+                            <field name="cissued_by"/>
+                            <field name="ccer_qua"/>
+                        </group>
+                    </group>
+                    </sheet>
+                    <footer>
+                    	<button name="print_report" string="Print" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <act_window id="action_student_contract_report_wizard_form"
+            name="STUDENT CONTRACT"
+            key2="client_print_multi" 
+            res_model="report.student.contract.wizard" 
+            src_model="school.student"
+            view_mode="form" 
+            target="new" 
+            context="{'student_id': active_id}"
+            view_type="form"
+            view_id="view_student_contract_report_wizard_form"/>       
+            
+       <!-- ===  
+       MAKING THE REPORT FOR OFFER REPORT
+       -->
+       
+<template id="external_layout_offer">
+    <t t-if="not o and doc">
+        <t t-set="o" t-value="docs"/>
+    </t>
+    <t t-if="o and 'company_id' in o">
+        <t t-set="company" t-value="o.company_id"></t>
+    </t>
+    <t t-if="not o or not 'company_id' in o">
+        <t t-set="company" t-value="res_company"></t>
+    </t>
+
+    <t t-call="boston_modifier_status.external_layout_header_offer" />
+    <t t-raw="0" />
+    <t t-call="boston_modifier_status.external_layout_footer_offer" />
+</template>
+
+<template id="boston_modifier_status.external_layout_header_offer">
+     <div class="header" style=" background-image: url('/boston_modifier_status/static/description/content.png'); background-size: cover; background-repeat: no-repeat; height:140px">
+        <div class="row">
+        </div>
+    </div>
+</template>
+
+<template id="boston_modifier_status.external_layout_footer_offer">
+    <div class="footer" style=" background-image: url('/boston_modifier_status/static/description/footer.png'); background-size: cover; background-repeat: no-repeat; height:80px">
+         <div class="row">
+         	<div class="col-xs-9 text-left">
+            </div>
+         </div>
+    </div>      
+</template>
+       
+       <!-- Report expulsion Letter -->
+    <template id="report_offer_letter_document">
+		<t t-foreach="docs" t-as="o">
+            <t t-call="boston_modifier_status.external_layout_offer">
+		    <div class="page">
+		        <div class="oe_structure"/>
+		            <div class="row">
+                        <div class="col-xs-12 text-left">
+<br/>
+<span t-esc="issued_date"/> 
+<br/>
+<span t-esc="o.title_id.name"/> 
+<span t-esc="o.name"/> 
+<span t-esc="o.l_name"/> 
+<br/>
+<span t-field="o.oversea_add"/>
+<br/>
+Dear <strong><span  t-esc="o.name and o.name or ''"/></strong>
+<br/>
+<br/>
+<span style="font-weight:bold;font-size:15px;"> OFFER OF ADMISSION </span>
+<br/>
+COURSE: <strong><span t-esc="course_id[1]"/></strong>
+<br/>
+<br/>
+<strong> 1.    Offer of Admission </strong>
+<br/>
+We are pleased to inform that you have been successful in your application for admission to the <span t-esc="course_id[1]"/>. 
+<br/>
+<br/>
+<strong> 2.    Acceptance of Offer </strong>
+<br/>
+If you wish to proceed with your enrolment, please complete and sign the following documents: 
+<br/>
+<div class="col-xs-12 text-left">
+a.    <u> Advisory Note to Students</u>. This is to acknowledge that you reviewed all our policies and procedures and agreed to the terms and conditions of the Standard PEI-Student Contract. 
+<br/>
+<br/>
+b.    <u> Standard PEI-Student Contract</u>. This is a legal document which lays out terms and conditions governing the relationship between Boston Business School and you. It serves to minimise future disputes. The contract contains the following key information:
+<br/>
+<div style="padding-left:30px;">
+•    Course information
+<br/>
+•    Detailed breakdown of total fees payable by you together with exact due date for each payment installment
+<br/>
+•    Refund policy
+<br/>
+•    Additional information to guide students on what to do and where to go if there is a dispute with Boston Business School and other relevant matters.
+</div>
+</div>
+<br/>
+All documents must be returned to Boston Business School. If we do not receive your completed and signed documents by <u> 2 WEEKS AFTER <span t-esc="issued_date"/> </u>, it will be assumed that you do not wish to accept the offer and the offer will be deemed withdrawn.
+<br/>
+<br/>
+<strong> 3.</strong>    We hope that you will take time to consider this offer and we certainly would like to welcome you to Boston Business School. 
+<br/>
+Yours faithfully
+<br/>
+<br/>
+<br/>
+<strong> S Sivabaloo </strong>
+<br/>
+Academic Manager
+<br/>
+Enc. – 	1) Advisory Note to Students
+<br/>
+	2) Standard PEI-Student Contract	
+
+                        </div>
+		            </div>
+	        </div>
+            </t>
+	    </t>
+	</template>
+    
+    <report
+            id="action_boston_report_offer_letter_document"
+            model="school.student"
+            report_type="qweb-pdf"
+            menu="False"
+            string="OFFER OF ADMISSION"
+            name="boston_modifier_status.report_offer_letter_document"
+            file="boston_modifier_status.report_offer_letter_document"
+            />
+            
+    <!-- 
+        STUDENT CONTRACT
+    -->
+    <template id="report_student_contract_document">
+		<t t-foreach="docs" t-as="o">
+             <t t-call="boston_modifier_status.external_layout_offer">
+		    <div class="page">
+		        <div class="oe_structure"/>
+		            <div class="row">
+                        <div class="col-xs-12 text-left">
+<br/>
+PRIVATE EDUCATION INSTITUTION-STUDENT CONTRACT
+<br/>
+This Contract binds both the Private Education Institution (PEI) and the Student once both parties sign this Contract. If the Student is under eighteen (18) years of age, the Student will be represented by the Parent/Legal Guardian.
+<br/>
+This Contract is made between:
+<br/>
+(1)	Registered Name of PEI	:	Boston Business School
+<br/>	Registration Number	:	200405229G
+<br/>
+(2)	Full Name of Student	:	STUDENT NAME
+<br/>
+	(as in NRIC for Singapore Citizen (SC) and Permanent Resident (PR) / as in passport for international student)*
+<br/>
+	NRIC Number(for SC/PR)*	:	NRIC/FIN NO
+<br/>
+	Student’s Pass Number (if available)/
+Passport Number (for international student)*	:	PASSPORT NO
+<br/>
+(3)	Full Name of Parent/Legal Guardian*
+<br/>
+(if Student is under eighteen (18) years of age)	:	FULL NAME (IN PARENT’S PARTICULARS TAB)
+<br/>
+	NRIC/Passport Number*	:	NRIC/PASSPORT NO (IN PARENT’S PARTICULARS TAB)
+<br/>
+1.	COURSE INFORMATION AND FEES
+<br/>
+1.1	The PEI will deliver the Course as set out in Schedule A to the Student, towards conferment of the stated qualification upon successful Course completion.
+<br/>
+1.2	The PEI confirms that the Course has been permitted by the Council for Private Education (CPE) and no amendments have been made to the Course as set out in Schedule A, unless otherwise permitted by CPE.
+<br/>
+1.3
+<br/>
+1.4	The Course Fees payable are set out in Schedule B and the optional Miscellaneous Fees in Schedule C.
+<br/>
+The PEI considers payment made 7 days/month* after the scheduled due date(s) in Schedule B as late.
+<br/>
+The PEI will explain to the Student its policy for late payment of Course Fees, including any late payment fee charged in Schedule C (if applicable) and any impact on Course/module completion (if applicable) 
+<br/>
+2.	REFUND POLICY
+<br/>
+2.1	Refund for Withdrawal Due to Non-Delivery of Course:
+<br/>
+The PEI will notify the Student within three (3) working days upon knowledge of any of the following:
+<br/>
+(i)	It does not commence the Course on the Course Commencement Date;
+<br/>
+(ii)	It terminates the Course before the Course Commencement Date;  
+<br/>
+(iii)	It does not complete the Course by the Course Completion Date; 
+<br/>
+(iv)	It terminates the Course before the Course Completion Date;
+<br/>
+(v)	It has not ensured that the Student meets the course entry or matriculation requirement as set by the organisation stated in Schedule A within any stipulated timeline set by CPE; or
+<br/>
+(vi)	The Student’s Pass application is rejected by Immigration and Checkpoints Authority (ICA).
+	
+
+                        </div>
+		            </div>
+	        </div>
+            </t>
+	    </t>
+	</template>
+    
+    <report
+            id="action_boston_report_student_contract_document"
+            model="school.student"
+            report_type="qweb-pdf"
+            menu="False"
+            string="STUDENT CONTRACT"
+            name="boston_modifier_status.report_student_contract_document"
+            file="boston_modifier_status.report_student_contract_document"
+            />
+        
+  </data>
+</openerp>
