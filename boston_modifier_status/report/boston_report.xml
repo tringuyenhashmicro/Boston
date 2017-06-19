@@ -24,7 +24,7 @@
      <div class="header">
         <div class="row">
             <div class="col-xs-6">
-                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height: 120px;width: 200px;"/>
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height: 120px;"/>
             </div>            
             <span class="col-xs-6 text-right" style="font-size:10pt;">Co. Reg. No. : 200405229G</span>
             <span class="col-xs-12 text-center" style="font-size:15pt;"><b> CREDIT NOTE </b></span>
@@ -46,12 +46,16 @@
             <div class="col-xs-5">
                 <table style="border-spacing: 50px;">
                     <tr>
-                        <td style="font-weight:bold" class="text-right">Credit Note No </td>
-                        <td style="font-weight:bold">: <span t-esc="docs.name"/> </td>
+                        <td style="font-weight:bold;white-space:nowrap;" class="text-right">Credit Note No </td>
+                        <td style="font-weight:bold;padding-left:40px;white-space:nowrap;">: <span t-esc="docs.name"/> </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
+                        <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
                     </tr>
                     <tr>
                         <td style="font-weight:bold" class="text-right">Date</td>
-                        <td style="font-weight:bold">: <span t-field="docs.date" t-esc-options='{"format": "dd/MM/yyyy"}'/></td>
+                        <td style="font-weight:bold;padding-left:40px;white-space:nowrap;">: <span t-field="docs.date" t-esc-options='{"format": "dd/MM/yyyy"}'/></td>
                     </tr>
                 </table>
             </div>
@@ -69,7 +73,7 @@
                 <br/> <span style="font-size:11px;"> Tel: 6238 7638 Fax: 6238 8178 enquire@bostonbiz.edu.sg www.bostonbiz.edu.sg </span>
             </div>
             <strong> <span t-field="docs.create_uid.partner_id.name"/></strong>
-            <div class="col-xs-3 text-left" style="border-top: 1px solid black;">
+            <div class="col-xs-3 text-left" style="border-top: 1px solid black;padding-left:0">
          		 <strong> Issued by </strong>
             </div>
          </div>
@@ -99,7 +103,7 @@
             <br/>
             <br/>
             <br/>
-            <div style="border:1px solid black;height:500px;">
+            <div style="border:1px solid black;height:500px;overflow:hidden;">
             <table class="table table-condensed"  style="border-collapse:collapse;">
                 <thead>
                         <th class="text-left" style="border-right:1px solid black;border-bottom:1px solid black;"><strong>Item</strong></th>
@@ -108,8 +112,8 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="width:10%;"/>
-                        <td style="width:60%;" class="text-left">
+                        <td style="width:10%;border:none;border-right:1px solid black;"/>
+                        <td style="width:60%;border:none;border-right:1px solid black;" class="text-left">
                             <span> Enrolment No: </span> <span t-esc="doc.enroll_no"/>
                             <br/>
                             <span> Course Code: </span> <span t-esc="doc.src_code"/>
@@ -125,20 +129,31 @@
                             <span> From: </span> <span t-field="doc.fdate_issue" t-esc-options='{"format": "dd/MM/yyyy"}'/> To: <span t-field="doc.tdate_issue" t-esc-options='{"format": "dd/MM/yyyy"}'/>
                             <br/>
                         </td>
-                        <td style="width:30%;"/>
+                        <td style="width:30%;border:none;"/>
                     </tr>
                     <tr t-foreach="doc.invoice_lines" t-as="line">
-                        <td style="width:10%;" class="text-left">
+                        <td style="width:10%;border:none;border-right:1px solid black;" class="text-left">
                             <span><span t-esc="count"/> </span>
                             <t t-set="count" t-value="count + 1"/>
                         </td>                        
-                        <td style="width:60%;" class="text-left">
+                        <td style="width:60%;border:none;border-right:1px solid black;" class="text-left">
                             <span t-esc="line.name"/>
                         </td>
-                        <td class="text-right" style="width:30%;">
+                        <td class="text-right" style="width:30%;border:none;">
                             <span t-field="line.subtotal" 
                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/>
                         </td>                        
+                    </tr>
+                    <tr t-foreach="range(0,15)" t-as="line">
+                        <td class="text-center" style="border:none;color:white;border-right:1px solid black;">
+                            <span>test</span>
+                        </td>
+                        <td style="border:none;color:white;border-right:1px solid black;">
+                            <span>test</span>
+                        </td>
+                        <td class="text-right" style="border:none;color:white;">
+                            <span>test</span>
+                        </td>
                     </tr>
                </tbody>
                </table>
@@ -147,29 +162,29 @@
                <table class="table table-condensed"  style="border-collapse: collapse;margin-top:0px;">
                     <tbody>
                     <tr>
-                        <td style="width:10%;border-left:1px solid black;"></td>
-                        <th style="width:60%;border-right:1px solid black;" class="text-right">
+                        <td style="width:10%;border:none;border-left:1px solid black;"></td>
+                        <th style="width:60%;border:none;border-right:1px solid black;" class="text-right">
                            <strong>Credit Note Amount before GST</strong>
                         </th>
-                        <td style="width:30%;border-right:1px solid black;" class="text-right">
+                        <td style="width:30%;border:none;border-right:1px solid black;" class="text-right">
                             <strong><span t-field="doc.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:10%;border-left:1px solid black;"></td>
-                        <th style="width:60%;border-right:1px solid black;" class="text-right">
+                        <td style="width:10%;border:none;border-left:1px solid black;"></td>
+                        <th style="width:60%;border:none;border-right:1px solid black;" class="text-right">
                            <strong>Credit Note GST Amount</strong>     
                         </th>
-                        <td style="width:30%;border-right:1px solid black;" class="text-right">
+                        <td style="width:30%;border:none;border-right:1px solid black;" class="text-right">
                             <strong><span t-field="doc.tax_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
                         </td>                        
                     </tr>
                     <tr>
-                        <td style="width:10%;border-bottom:1px solid black;border-left:1px solid black;"></td>
-                        <th style="width:60%;border-right:1px solid black;border-bottom:1px solid black;" class="text-right">
+                        <td style="width:10%;border:none;border-bottom:1px solid black;border-left:1px solid black;"></td>
+                        <th style="width:60%;border:none;border-right:1px solid black;border-bottom:1px solid black;" class="text-right">
                            <strong>Credit Note Total Amount</strong>
                         </th>
-                        <td style="width:30%;border-bottom:1px solid black;border-right:1px solid black;" class="text-right">
+                        <td style="width:30%;border:none;border-bottom:1px solid black;border-right:1px solid black;" class="text-right">
                             <strong><span t-field="doc.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
                         </td>
                     </tr>
@@ -179,24 +194,24 @@
             <div class="col-xs-6">
                 <table>
                     <tr>
-                        <td style="font-weight:bold">Invoice ID </td>
-                        <td style="font-weight:bold"> : <span t-esc="doc.invoice_id and doc.invoice_id.name or ''"/> </td>
+                        <td style="font-weight:bold;">Invoice ID : </td>
+                        <td style="font-weight:bold;padding-left:25px;"><span t-esc="doc.invoice_id and doc.invoice_id.name or ''"/> </td>
                     </tr>
                     <tr>
-                        <td style="font-weight:bold"> Total Invoice Amount</td>
-                        <td style="font-weight:bold"> : SGD<span t-field="doc.invoice_id.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></td>
+                        <td style="font-weight:bold;"> Total Invoice Amount : </td>
+                        <td style="font-weight:bold;padding-left:25px;">SGD<span t-field="doc.invoice_id.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></td>
                     </tr>
                 </table>
             </div>
             <div class="col-xs-6">
                 <table style="border-spacing:50px;">
                     <tr>
-                        <td style="font-weight:bold">Invoice Date</td>
-                        <td style="font-weight:bold"> : <span t-if="doc.invoice_id" t-field="doc.invoice_id.date" t-esc-options='{"format": "dd/MM/yyyy"}'/></td>
+                        <td style="font-weight:bold;">Invoice Date : </td>
+                        <td style="font-weight:bold;padding-left:25px;"><span t-if="doc.invoice_id" t-field="doc.invoice_id.date" t-esc-options='{"format": "dd/MM/yyyy"}'/></td>
                     </tr>
                 </table>
             </div>
-            <div class="col-xs-12">
+            <div class="col-xs-12" style="">
                 <p>
                     Remarks: <span t-field="doc.remarks" />
                 </p>
@@ -241,7 +256,7 @@
      <div class="header">
         <div class="row">
             <div class="col-xs-6">
-                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height: 120px;width: 200px;"/>
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height: 120px;"/>
             </div>            
             <span class="col-xs-6 text-right" style="font-size:10pt;">Co. Reg. No. : 200405229G</span>
             <span class="col-xs-12 text-center" style="font-size:15pt;"><b> TAX INVOICE </b></span>
@@ -260,17 +275,21 @@
                         </td>
                     </tr>
                 </table>
-                <p> <span style="font-weight:bold"> Insurance Policy No :</span> <span t-esc="docs.insu_poli"/> </p>
+                <!-- <p> <span style="font-weight:bold"> Insurance Policy No :</span> <span t-esc="docs.insu_poli"/> </p> -->
             </div>
             <div class="col-xs-4">
-                <table style="border-spacing: 50px;">
+                <table style="border-spacing:50px;">
                     <tr>
-                        <td style="font-weight:bold"> Invoice No </td>
-                        <td style="font-weight:bold">: <span t-esc="docs.name"/> </td>
+                        <td style="font-weight:bold;white-space:nowrap;"> Invoice No </td>
+                        <td style="font-weight:bold;padding-left:40px;white-space:nowrap;">: <span t-esc="docs.name"/> </td>
                     </tr>
                     <tr>
-                        <td style="font-weight:bold">Date</td>
-                        <td style="font-weight:bold">: <span t-field="docs.date" t-esc-options='{"format": "dd/MM/yyyy"}'/></td>
+                        <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
+                        <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;white-space:nowrap;">Date</td>
+                        <td style="font-weight:bold;padding-left:40px;white-space:nowrap;">: <span t-field="docs.date" t-esc-options='{"format": "dd/MM/yyyy"}'/></td>
                     </tr>
                 </table>
             </div>            
@@ -316,7 +335,7 @@
                         <br/>
                             <br/>
                                 <br/>
-            <div style="border:1px solid black;height:400px;">
+            <div style="border:1px solid black;height:400px;overflow:hidden;">
             <table class="table table-condensed"  style="border-collapse: collapse;">
                 <thead>
                     
@@ -326,8 +345,8 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="width:10%;"/>
-                        <td style="width:60%;" class="text-left">
+                        <td style="width:10%;border:none;border-right:1px solid black;"/>
+                        <td style="width:60%;border:none;border-right:1px solid black;" class="text-left">
                             <span> Enrolment No: </span> <span t-esc="doc.enroll_no"/>
                             <br/>
                             <span> Course Code: </span> <span t-esc="doc.src_code"/>
@@ -343,19 +362,30 @@
                             <span> From: </span> <span t-field="doc.fdate_issue" t-esc-options='{"format": "dd/MM/yyyy"}'/> To: <span t-field="doc.tdate_issue" t-esc-options='{"format": "dd/MM/yyyy"}'/>
                             <br/>
                         </td>
-                        <td style="width:30%;"/>
+                        <td style="width:30%;border:none;"/>
                     </tr>
                     <tr t-foreach="doc.invoice_lines" t-as="line">
-                        <td class="text-center">
+                        <td class="text-center" style="border:none;border-right:1px solid black;">
                             <span><span t-esc="count"/> </span>
                             <t t-set="count" t-value="count + 1"/>
                         </td>                        
-                        <td>
+                        <td style="border:none;border-right:1px solid black;">
                             <span t-esc="line.name"/>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right" style="border:none;">
                             <span t-field="line.subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/>
                         </td>                        
+                    </tr>
+                    <tr t-foreach="range(0,15)" t-as="line">
+                        <td class="text-center" style="border:none;color:white;border-right:1px solid black;">
+                            <span>test</span>
+                        </td>
+                        <td style="border:none;color:white;border-right:1px solid black;">
+                            <span>test</span>
+                        </td>
+                        <td class="text-right" style="border:none;color:white;">
+                            <span>test</span>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -363,7 +393,7 @@
             <table class="table table-condensed"  style="border-collapse: collapse;">
                 <tbody>
                     <tr>
-                        <td style="width:30%;border:1px solid white;"> All pricing in Singapore </td>
+                        <td style="width:30%;border:1px solid white;"> All pricing in Singapore Dollar</td>
                         <th style="width:40%;border:1px solid white;" class="text-right">
                            <strong>Sub Total</strong>
                         </th>
@@ -443,14 +473,14 @@
      <div class="header">
         <div class="row">
             <div class="col-xs-6">
-                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height: 120px;width: 200px;"/>
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height: 120px;"/>
             </div>            
             <span class="col-xs-6 text-right" style="font-size:12pt;">Co. Reg. No. : 200405229G</span>
             <span class="col-xs-12 text-center" style="font-size:15pt;"><b> RECEIPT </b></span>
         </div>
         <div class="row" style="font-size:12px;">
             <div class="col-xs-8">
-                <p> <span style="font-weight:bold">Payer :</span> </p>
+                <p> <span style="font-weight:bold">Received From :</span> </p>
                 <table>
                     <tr>
                         <td style="font-weight:bold"></td>
@@ -469,12 +499,16 @@
             <div class="col-xs-4">
                 <table style="border-spacing: 50px;">
                     <tr>
-                        <td style="font-weight:bold"> Receipt No </td>
-                        <td style="font-weight:bold">: <span t-esc="docs.name"/> </td>
+                        <td style="font-weight:bold;white-space:nowrap;"> Receipt No </td>
+                        <td style="font-weight:bold;padding-left:30px;white-space:nowrap;">: <span t-esc="docs.name"/> </td>
                     </tr>
                     <tr>
-                        <td style="font-weight:bold">Date</td>
-                        <td style="font-weight:bold">: <span t-field="docs.date" t-esc-options='{"format": "dd/MM/yyyy"}'/></td>
+                        <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
+                        <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;white-space:nowrap;">Date</td>
+                        <td style="font-weight:bold;padding-left:30px;white-space:nowrap;">: <span t-field="docs.date" t-esc-options='{"format": "dd/MM/yyyy"}'/></td>
                     </tr>
                 </table>
             </div>
@@ -485,12 +519,21 @@
 <template id="boston_modifier_status.external_layout_footer_receipt">
     <div class="footer">
          <div class="row">
-         	<div class="col-xs-12 text-left">
-                 GST Reg No: 200405229G 
-                <br/> <br/> <strong style="font-size:11px;"> Boston Business School </strong> 
-                <br/> <span style="font-size:11px;"> 520 North Bridge Road #03-01 Wisma Alsagoff Singapore 188742 </span>
-                <br/> <span style="font-size:11px;"> Tel: 6238 7638 Fax: 6238 8178 enquire@bostonbiz.edu.sg www.bostonbiz.edu.sg </span>
-            </div>
+              <div class="col-xs-12 text-left">
+                  <div class="col-xs-offset-8 col-xs-4 text-left" style="padding-left:0;">
+                     <strong style="font-size:11px;"> Corporal Karen Joy Basco </strong>
+                  </div>
+                  <div class="col-xs-offset-8 col-xs-4 text-left" style="border-top: 1px solid black;padding-left:0;">
+                     <strong style="font-size:11px;"> Received By </strong>
+                  </div>
+                  <div class="col-xs-12 text-center" style="margin-bottom:15px;margin-top:7px;">
+                      <span style="font-style:italic;font-size:11px;">**This is a computer-generated receipt. No signature is required**</span>
+                  </div>
+                  <br/> <br/> <strong style="font-size:11px;"> Boston Business School </strong>
+                  <br/> <span style="font-size:11px;"> 520 North Bridge Road #03-01 Wisma Alsagoff Singapore 188742 </span>
+                  <br/> <span style="font-size:11px;"> Tel: 6238 7638 Fax: 6238 8178 enquire@bostonbiz.edu.sg www.bostonbiz.edu.sg </span>
+              </div>
+
          </div>
          <!-- <div class="row"> -->
          	<!-- <div class="col-xs-12 text-center"> -->
@@ -513,13 +556,8 @@
     <t t-foreach="docs" t-as="doc">
 		<t t-set="count" t-value="1"/>        
         <div class="page">
-        <br/>
-            <br/>
-                <br/>
-                    <br/>
-                        <br/>
-                        <br/>
-            <div style="height:500px;border:1px solid black;">
+            <br/><br/><br/><br/><br/><br/><br/>
+            <div style="height:400px;border:1px solid black;overflow:hidden;margin-top:35px;">
             <table class="table table-condensed"  style="border-collapse: collapse;">
                 <thead>
                     
@@ -529,8 +567,8 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="width:10%;"/>
-                        <td style="width:60%;" class="text-left">
+                        <td style="width:10%;border:none;border-right:1px solid black;"/>
+                        <td style="width:60%;border:none;;border-right:1px solid black;" class="text-left">
                             <span> Enrolment No: </span> <span t-esc="doc.payment_lines[0].inv_id.enroll_no"/>
                             <br/>
                             <span> Course Code: </span> <span t-esc="doc.payment_lines[0].inv_id.src_code"/>
@@ -546,19 +584,30 @@
                             <span> From: </span> <span t-field="doc.payment_lines[0].inv_id.fdate_issue" t-esc-options='{"format": "dd/MM/yyyy"}'/> To: <span t-field="doc.payment_lines[0].inv_id.tdate_issue" t-esc-options='{"format": "dd/MM/yyyy"}'/>
                             <br/>
                         </td>
-                        <td style="width:30%;"/>
+                        <td style="width:30%;border:none;"/>
                     </tr>
                     <tr t-foreach="doc.payment_lines[0].inv_id.invoice_lines" t-as="line">
-                        <td class="text-center">
-                            <span><span t-esc="count"/> </span>
+                        <td class="text-center" style="border:none;border-right:1px solid black;">
+                            <span><span t-esc="count"/>  </span>
                             <t t-set="count" t-value="count + 1"/>
                         </td>                        
-                        <td>
+                        <td style="border:none;;border-right:1px solid black;">
                             <span t-esc="line.name"/>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right" style="border:none;">
                             <span t-field="line.subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/>
                         </td>                        
+                    </tr>
+                    <tr t-foreach="range(0,15)" t-as="line">
+                        <td class="text-center" style="border:none;color:white;border-right:1px solid black;">
+                            <span>test</span>
+                        </td>
+                        <td style="border:none;color:white;border-right:1px solid black;">
+                            <span>test</span>
+                        </td>
+                        <td class="text-right" style="border:none;color:white;">
+                            <span>test</span>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -578,7 +627,7 @@
                     <tr>
                         <td style="width:55%;border:1px solid white;"> <strong> Notes: </strong> </td>
                         <th style="width:25%;border:1px solid white;" class="text-right">
-                            <strong><span t-field="doc.payment_lines[0].inv_id.untax_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                            <strong><span>7.00% GST on </span><span t-field="doc.payment_lines[0].inv_id.untax_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
                         </th>
                         <td style="width:20%;border:1px solid white;" class="text-right">
                             <strong><span t-field="doc.payment_lines[0].inv_id.tax_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
@@ -611,28 +660,50 @@
                            <strong>Over Paid Amount</strong>
                         </th>
                         <td style="width:20%;border:1px solid white;" class="text-right">
-                            <span t-field="doc.payment_lines[0].inv_id.amount_balance" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/>
+                            <strong><span t-field="doc.payment_lines[0].inv_id.amount_balance" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
                         </td>
                     </tr>
                 </tbody>                
             </table>
-                <br/>
-                <div>
-                    <p> <strong> Remarks: </strong> </p>
-                </div>
+            <div>
+                <p> <strong> Remarks: </strong> </p>
+            </div>
+            <div class="col-xs-12" style="padding-left:0;margin-top:50px;">
+                GST Reg No: 200405229G
+            </div>
         </div>
     </t>
     </t>
 </template>
 
-    <report 
-            id="report_report_receipt_receipt"
-            string="Receipt"
-            model="student.payment" 
-            report_type="qweb-pdf"
-            file="boston_modifier_status.report_receipt_receipt" 
-            name="boston_modifier_status.report_receipt_receipt" 
-        />
+    <report
+        id="report_report_receipt_receipt"
+        string="Receipt"
+        model="student.payment"
+        report_type="qweb-pdf"
+        file="boston_modifier_status.report_receipt_receipt"
+        name="boston_modifier_status.report_receipt_receipt"
+    />
+
+    <record id="paperformat_receipt_receipt" model="report.paperformat">
+        <field name="name">Receipt Receipt Custom</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">35</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">15</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="boston_modifier_status.report_report_receipt_receipt" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="boston_modifier_status.paperformat_receipt_receipt"/>
+    </record>
         
 </data>
 </openerp>
