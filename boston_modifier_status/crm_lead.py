@@ -121,7 +121,7 @@ class school_student(osv.osv):
                         class_id.append(attendance.class_id)
                         if line.present_ok or line.late_ok or line.leave or line.mc:
                             count += 1
-            level = len(class_id) > 0 and (count / len(class_id) * 100) or 0
+            level = (len(class_id) > 0 and count) and (count / len(class_id) * 100) or 100
             res[record.id] = level
             if level < 91:
                 values = message_obj.onchange_template_id(cr, uid, ids, template_id, 'comment', 'crm.lead', ids[0])['value']
