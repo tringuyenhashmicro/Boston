@@ -24,12 +24,12 @@
      <div class="header">
         <div class="row">
             <div class="col-xs-6">
-                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height: 120px;"/>
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height:120px;"/>
             </div>            
             <span class="col-xs-6 text-right" style="font-size:10pt;">Co. Reg. No. : 200405229G</span>
-            <span class="col-xs-12 text-center" style="font-size:15pt;"><b> CREDIT NOTE </b></span>
+            <span class="col-xs-12 text-center" style="font-size:17pt;"><b> CREDIT NOTE </b></span>
         </div>
-        <div class="row" style="font-size:12px;">
+        <div class="row" style="font-size:10pt;">
             <div class="col-xs-7">
                 <table>
                     <tr>
@@ -43,13 +43,13 @@
                     </tr>
                 </table>
             </div>
-            <div class="col-xs-5">
-                <table style="border-spacing: 50px;">
+            <div class="col-xs-5" style="position:relative;">
+                <table style="border-spacing:50px;position:absolute;right:25px;">
                     <tr>
                         <td style="font-weight:bold;white-space:nowrap;" class="text-right">Credit Note No </td>
                         <td style="font-weight:bold;padding-left:40px;white-space:nowrap;">: <span t-esc="docs.name"/> </td>
                     </tr>
-                    <tr>
+                    <tr style="font-size:5pt;">
                         <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
                         <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
                     </tr>
@@ -104,7 +104,7 @@
             <br/>
             <br/>
             <div style="border:1px solid black;height:500px;overflow:hidden;">
-            <table class="table table-condensed"  style="border-collapse:collapse;">
+            <table class="table table-condensed"  style="border-collapse:collapse;font-size:10pt;">
                 <thead>
                         <th class="text-left" style="border-right:1px solid black;border-bottom:1px solid black;"><strong>Item</strong></th>
                         <th class="text-left" style="border-right:1px solid black;border-bottom:1px solid black;"><strong>Description</strong></th>
@@ -140,8 +140,7 @@
                             <span t-esc="line.name"/>
                         </td>
                         <td class="text-right" style="width:30%;border:none;">
-                            <span t-field="line.subtotal" 
-                             t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/>
+                            <span t-field="line.subtotal" />
                         </td>                        
                     </tr>
                     <tr t-foreach="range(0,15)" t-as="line">
@@ -162,36 +161,36 @@
                <table class="table table-condensed"  style="border-collapse: collapse;margin-top:0px;">
                     <tbody>
                     <tr>
-                        <td style="width:10%;border:none;border-left:1px solid black;"></td>
-                        <th style="width:60%;border:none;border-right:1px solid black;" class="text-right">
+                        <td style="width:10%;border:none;border-left:1px solid black;padding:2px"></td>
+                        <th style="width:60%;border:none;border-right:1px solid black;padding:2px" class="text-right">
                            <strong>Credit Note Amount before GST</strong>
                         </th>
-                        <td style="width:30%;border:none;border-right:1px solid black;" class="text-right">
-                            <strong><span t-field="doc.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                        <td style="width:30%;border:none;border-right:1px solid black;padding:2px" class="text-right">
+                            <strong><span t-field="doc.amount_total"/></strong>
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:10%;border:none;border-left:1px solid black;"></td>
-                        <th style="width:60%;border:none;border-right:1px solid black;" class="text-right">
+                        <td style="width:10%;border:none;border-left:1px solid black;padding:2px"></td>
+                        <th style="width:60%;border:none;border-right:1px solid black;padding:2px" class="text-right">
                            <strong>Credit Note GST Amount</strong>     
                         </th>
-                        <td style="width:30%;border:none;border-right:1px solid black;" class="text-right">
-                            <strong><span t-field="doc.tax_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                        <td style="width:30%;border:none;border-right:1px solid black;padding:2px" class="text-right">
+                            <strong><span t-field="doc.tax_amount"/></strong>
                         </td>                        
                     </tr>
                     <tr>
-                        <td style="width:10%;border:none;border-bottom:1px solid black;border-left:1px solid black;"></td>
-                        <th style="width:60%;border:none;border-right:1px solid black;border-bottom:1px solid black;" class="text-right">
+                        <td style="width:10%;border:none;border-bottom:1px solid black;border-left:1px solid black;padding:2px"></td>
+                        <th style="width:60%;border:none;border-right:1px solid black;border-bottom:1px solid black;padding:2px" class="text-right">
                            <strong>Credit Note Total Amount</strong>
                         </th>
-                        <td style="width:30%;border:none;border-bottom:1px solid black;border-right:1px solid black;" class="text-right">
-                            <strong><span t-field="doc.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                        <td style="width:30%;border:none;border-bottom:1px solid black;border-right:1px solid black;padding:2px" class="text-right">
+                            <strong><span t-field="doc.amount_total"/></strong>
                         </td>
                     </tr>
                 </tbody>                
             </table>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-6" style="padding:0;">
                 <table>
                     <tr>
                         <td style="font-weight:bold;">Invoice ID : </td>
@@ -199,7 +198,7 @@
                     </tr>
                     <tr>
                         <td style="font-weight:bold;"> Total Invoice Amount : </td>
-                        <td style="font-weight:bold;padding-left:25px;">SGD<span t-field="doc.invoice_id.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></td>
+                        <td style="font-weight:bold;padding-left:25px;">SGD<span t-field="doc.invoice_id.amount_total"/></td>
                     </tr>
                 </table>
             </div>
@@ -211,10 +210,8 @@
                     </tr>
                 </table>
             </div>
-            <div class="col-xs-12" style="">
-                <p>
-                    Remarks: <span t-field="doc.remarks" />
-                </p>
+            <div class="col-xs-12" style="margin-top:30px;padding:0;">
+                Remarks: <span t-field="doc.remarks" />
             </div>
         </div>
     </t>
@@ -259,11 +256,11 @@
                 <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height: 120px;"/>
             </div>            
             <span class="col-xs-6 text-right" style="font-size:10pt;">Co. Reg. No. : 200405229G</span>
-            <span class="col-xs-12 text-center" style="font-size:15pt;"><b> TAX INVOICE </b></span>
+            <span class="col-xs-12 text-center" style="font-size:17pt;"><b> TAX INVOICE </b></span>
         </div>
-        <div class="row" style="font-size:12px;">
+        <div class="row" style="font-size:10pt;">
             <div class="col-xs-8">
-                <p> <span style="font-weight:bold">Payer :</span> </p>
+                <p> <span style="font-weight:bold">Payer</span> </p>
                 <table>
                     <tr>
                         <td style="font-weight:bold"></td>
@@ -277,13 +274,13 @@
                 </table>
                 <!-- <p> <span style="font-weight:bold"> Insurance Policy No :</span> <span t-esc="docs.insu_poli"/> </p> -->
             </div>
-            <div class="col-xs-4">
-                <table style="border-spacing:50px;">
+            <div class="col-xs-4" style="position:relative;font-size:11pt;">
+                <table style="border-spacing:50px;position:absolute;right:25px;">
                     <tr>
                         <td style="font-weight:bold;white-space:nowrap;"> Invoice No </td>
                         <td style="font-weight:bold;padding-left:40px;white-space:nowrap;">: <span t-esc="docs.name"/> </td>
                     </tr>
-                    <tr>
+                    <tr style="font-size:5pt;">
                         <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
                         <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
                     </tr>
@@ -336,12 +333,11 @@
                             <br/>
                                 <br/>
             <div style="border:1px solid black;height:400px;overflow:hidden;">
-            <table class="table table-condensed"  style="border-collapse: collapse;">
+            <table class="table table-condensed"  style="border-collapse: collapse;font-size:10pt;">
                 <thead>
-                    
-                        <th class="text-center" style="width:10%;border:1px solid black;"><strong>S/No</strong></th>
-                        <th style="width:60%;border:1px solid black;"><strong>Description</strong></th>
-                        <th class="text-center" style="width:30%;border:1px solid black;"><strong>Amount ($)</strong></th>
+                    <th class="text-left" style="width:10%;border:1px solid black;"><strong>S/No</strong></th>
+                    <th style="width:60%;border:1px solid black;"><strong>Description</strong></th>
+                    <th class="text-center" style="width:30%;border:1px solid black;"><strong>Amount ($)</strong></th>
                 </thead>
                 <tbody>
                     <tr>
@@ -365,7 +361,7 @@
                         <td style="width:30%;border:none;"/>
                     </tr>
                     <tr t-foreach="doc.invoice_lines" t-as="line">
-                        <td class="text-center" style="border:none;border-right:1px solid black;">
+                        <td class="text-left" style="border:none;border-right:1px solid black;">
                             <span><span t-esc="count"/> </span>
                             <t t-set="count" t-value="count + 1"/>
                         </td>                        
@@ -373,7 +369,7 @@
                             <span t-esc="line.name"/>
                         </td>
                         <td class="text-right" style="border:none;">
-                            <span t-field="line.subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/>
+                            <span t-field="line.subtotal"/>
                         </td>                        
                     </tr>
                     <tr t-foreach="range(0,15)" t-as="line">
@@ -390,49 +386,48 @@
                 </tbody>
             </table>
             </div>
-            <table class="table table-condensed"  style="border-collapse: collapse;">
+            <table class="table table-condensed"  style="border-collapse:collapse;font-size:10pt;">
                 <tbody>
                     <tr>
                         <td style="width:30%;border:1px solid white;"> All pricing in Singapore Dollar</td>
-                        <th style="width:40%;border:1px solid white;" class="text-right">
+                        <th style="width:40%;border:1px solid white;padding-right:15px;" class="text-right">
                            <strong>Sub Total</strong>
                         </th>
                         <td style="width:30%;border:1px solid white;" class="text-right">
-                            <strong><span t-field="doc.untax_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                            <strong><span t-field="doc.untax_amount"/></strong>
                         </td>
                     </tr>
                     <tr>
                         <td style="width:30%;border:1px solid white;"></td>
-                        <th style="width:40%;border:1px solid white;" class="text-right">
-                           <strong>7.00% GST on <span t-field="doc.untax_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>     
+                        <th style="width:40%;border:1px solid white;padding-right:15px;" class="text-right">
+                           <strong>7.00% GST on $</strong>
                         </th>
                         <td style="width:30%;border:1px solid white;" class="text-right">
-                            <strong><span t-field="doc.tax_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                            <strong><span t-field="doc.tax_amount"/></strong>
                         </td>                        
                         
                     </tr>
                     <tr>
                         <td style="width:60%;border:1px solid white;"></td>
-                        <th style="width:60%;border:1px solid white;" class="text-right">
+                        <th style="width:60%;border:1px solid white;padding-right:15px;" class="text-right">
                            <strong>Total Payable</strong>
                         </th>
                         <td style="width:60%;border:1px solid white;" class="text-right">
-                            <strong><span t-field="doc.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                            <strong><span t-field="doc.amount_total"/></strong>
                         </td>
                     </tr>
                 </tbody>                
             </table>
-                <p> <strong> Notes: </strong></p>
-                <span> Local and International students must pay all fees directly into Boston Business School Pte Ltd. </span>
-                <br/>
-                <span> Boston Business School is a GST organisation and GST will be charged on the fees listed. Fees are subjected to change.</span>
-                <br/>
-                <span> For details of refund policy, refer to our website or student handbook. </span>
-                <div>
-                    <p> <strong> Remarks: </strong> </p>
-                    <span t-esc="doc.remarks"/>
-                </div>
-                
+            <p style="font-size:10pt;"> <strong> Notes: </strong></p>
+            <span style="font-size:10pt;"> Local and International students must pay all fees directly into Boston Business School Pte Ltd. </span>
+            <br/>
+            <span style="font-size:10pt;"> Boston Business School is a GST organisation and GST will be charged on the fees listed. Fees are subjected to change.</span>
+            <br/>
+            <span style="font-size:10pt;"> For details of refund policy, refer to our website or student handbook. </span>
+            <div style="font-size:10pt;">
+                <p> <strong> Remarks: </strong> </p>
+                <span t-esc="doc.remarks"/>
+            </div>
         </div>
     </t>
     </t>
@@ -475,11 +470,11 @@
             <div class="col-xs-6">
                 <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height: 120px;"/>
             </div>            
-            <span class="col-xs-6 text-right" style="font-size:12pt;">Co. Reg. No. : 200405229G</span>
-            <span class="col-xs-12 text-center" style="font-size:15pt;"><b> RECEIPT </b></span>
+            <span class="col-xs-6 text-right" style="font-size:10pt;">Co. Reg. No. : 200405229G</span>
+            <span class="col-xs-12 text-center" style="font-size:17pt;"><b> RECEIPT </b></span>
         </div>
-        <div class="row" style="font-size:12px;">
-            <div class="col-xs-8">
+        <div class="row">
+            <div class="col-xs-8" style="font-size:9pt;">
                 <p> <span style="font-weight:bold">Received From :</span> </p>
                 <table>
                     <tr>
@@ -492,21 +487,18 @@
                         </td>
                     </tr>
                 </table>
-                <p> <span style="font-weight:bold"> Insurance Policy No :</span>
-                <!--  <span t-esc="docs.insu_poli"/>  -->
-                </p>
             </div>
-            <div class="col-xs-4">
-                <table style="border-spacing: 50px;">
-                    <tr>
+            <div class="col-xs-4" style="position:relative;font-size:11pt;">
+                <table style="border-spacing:50px;position:absolute;right:25px;">
+                    <tr style="font-size:10pt;">
                         <td style="font-weight:bold;white-space:nowrap;"> Receipt No </td>
                         <td style="font-weight:bold;padding-left:30px;white-space:nowrap;">: <span t-esc="docs.name"/> </td>
                     </tr>
-                    <tr>
+                    <tr style="font-size:5pt;">
                         <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
                         <td style="font-weight:bold;white-space:nowrap;color:white;"> Receipt No </td>
                     </tr>
-                    <tr>
+                    <tr style="font-size:10pt;">
                         <td style="font-weight:bold;white-space:nowrap;">Date</td>
                         <td style="font-weight:bold;padding-left:30px;white-space:nowrap;">: <span t-field="docs.date" t-esc-options='{"format": "dd/MM/yyyy"}'/></td>
                     </tr>
@@ -556,14 +548,14 @@
     <t t-foreach="docs" t-as="doc">
 		<t t-set="count" t-value="1"/>        
         <div class="page">
-            <br/><br/><br/><br/><br/><br/><br/>
-            <div style="height:400px;border:1px solid black;overflow:hidden;margin-top:35px;">
-            <table class="table table-condensed"  style="border-collapse: collapse;">
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <span style="font-weight:bold;margin-top:10px;font-size:9pt;"> Insurance Policy No</span>
+            <div style="height:400px;border:1px solid black;overflow:hidden;">
+            <table class="table table-condensed"  style="border-collapse:collapse;font-size:9pt;">
                 <thead>
-                    
-                        <th class="text-center" style="width:10%;border:1px solid black;"><strong>S/No</strong></th>
-                        <th style="width:60%;border:1px solid black;"><strong>Description</strong></th>
-                        <th class="text-center" style="width:30%;border:1px solid black;"><strong>Amount (S$)</strong></th>
+                    <th class="text-left" style="width:10%;border:1px solid black;"><strong>S/No</strong></th>
+                    <th style="width:60%;border:1px solid black;"><strong>Description</strong></th>
+                    <th class="text-center" style="width:30%;border:1px solid black;"><strong>Amount (S$)</strong></th>
                 </thead>
                 <tbody>
                     <tr>
@@ -587,7 +579,7 @@
                         <td style="width:30%;border:none;"/>
                     </tr>
                     <tr t-foreach="doc.payment_lines[0].inv_id.invoice_lines" t-as="line">
-                        <td class="text-center" style="border:none;border-right:1px solid black;">
+                        <td class="text-left" style="border:none;border-right:1px solid black;">
                             <span><span t-esc="count"/>  </span>
                             <t t-set="count" t-value="count + 1"/>
                         </td>                        
@@ -595,7 +587,7 @@
                             <span t-esc="line.name"/>
                         </td>
                         <td class="text-right" style="border:none;">
-                            <span t-field="line.subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/>
+                            <span t-field="line.subtotal"/>
                         </td>                        
                     </tr>
                     <tr t-foreach="range(0,15)" t-as="line">
@@ -616,51 +608,51 @@
             <table class="table table-condensed"  style="border-collapse: collapse;">
                 <tbody>
                     <tr>
-                        <td style="width:65%;border:1px solid white;"> <strong> <span t-esc="doc.payment_method_id.name"/> - <span t-esc="sum([x.amount for x in doc.payment_lines])" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/>  </strong> </td>
-                        <th style="width:15%;border:1px solid white;" class="text-right">
+                        <td style="width:65%;border:1px solid white;padding:2px 0;"> <strong> <span t-esc="doc.payment_method_id.name"/> - <span t-esc="sum([x.amount for x in doc.payment_lines])" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/>  </strong> </td>
+                        <th style="width:15%;border:1px solid white;padding:2px 0;" class="text-right">
                            <strong>Sub Total</strong>
                         </th>
-                        <td style="width:20%;border:1px solid white;" class="text-right">
-                            <strong><span t-field="doc.payment_lines[0].inv_id.untax_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                        <td style="width:20%;border:1px solid white;padding:2px 0;" class="text-right">
+                            <strong><span t-field="doc.payment_lines[0].inv_id.untax_amount"/></strong>
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:55%;border:1px solid white;"> <strong> Notes: </strong> </td>
-                        <th style="width:25%;border:1px solid white;" class="text-right">
-                            <strong><span>7.00% GST on </span><span t-field="doc.payment_lines[0].inv_id.untax_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                        <td style="width:55%;border:1px solid white;padding:2px 0;"> <strong> Notes: </strong> </td>
+                        <th style="width:25%;border:1px solid white;padding:2px 0;" class="text-right">
+                            <strong><span>7.00% GST on $</span></strong>
                         </th>
-                        <td style="width:20%;border:1px solid white;" class="text-right">
-                            <strong><span t-field="doc.payment_lines[0].inv_id.tax_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                        <td style="width:20%;border:1px solid white;padding:2px 0;" class="text-right">
+                            <strong><span t-field="doc.payment_lines[0].inv_id.tax_amount"/></strong>
                         </td>                        
                     </tr>
                     <tr>
-                        <td style="width:65%;border:1px solid white;font-size:9pt;"> Invoice No: <span t-esc="doc.name"/>, Total Invoice Amount: 
-                        <strong><span t-field="doc.payment_lines[0].inv_id.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                        <td style="width:65%;border:1px solid white;font-size:9pt;padding:2px 0;"> Invoice No: <span t-esc="doc.name"/>, Total Invoice Amount:
+                        <strong><span t-field="doc.payment_lines[0].inv_id.amount_total"/></strong>
                         </td>
-                        <th style="width:15%;border:1px solid white;" class="text-right">
+                        <th style="width:15%;border:1px solid white;padding:2px 0;" class="text-right">
                            <strong>Total Payable</strong>
                         </th>
-                        <td style="width:20%;border:1px solid white;" class="text-right">
-                            <strong><span t-field="doc.payment_lines[0].inv_id.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                        <td style="width:20%;border:1px solid white;padding:2px 0;" class="text-right">
+                            <strong><span t-field="doc.payment_lines[0].inv_id.amount_total"/></strong>
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:65%;border:1px solid white;font-size:9pt;"> Total outstanding payable amount exclude payment advices/invoices issued: </td>
-                        <th style="width:15%;border:1px solid white;" class="text-right">
+                        <td style="width:65%;border:1px solid white;font-size:9pt;padding:2px 0;"> Total outstanding payable amount exclude payment advices/invoices issued: </td>
+                        <th style="width:15%;border:1px solid white;padding:2px 0;" class="text-right">
                            <strong>Tender Amount</strong>
                         </th>
-                        <td style="width:20%;border:1px solid white;" class="text-right">
-                            <strong><span t-field="doc.payment_lines[0].inv_id.tender_amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                        <td style="width:20%;border:1px solid white;padding:2px 0;" class="text-right">
+                            <strong><span t-field="doc.payment_lines[0].inv_id.tender_amount"/></strong>
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:65%;border:1px solid white;font-size:9pt;"> Amount:  SGD$0.00
+                        <td style="width:65%;border:1px solid white;font-size:9pt;padding:2px 0;"> Amount:  SGD$0.00
                 <br/> For details of refund policy, refer to our website or student handbook. </td>
-                        <th style="width:15%;border:1px solid white;" class="text-right">
+                        <th style="width:15%;border:1px solid white;padding:2px 0;" class="text-right">
                            <strong>Over Paid Amount</strong>
                         </th>
-                        <td style="width:20%;border:1px solid white;" class="text-right">
-                            <strong><span t-field="doc.payment_lines[0].inv_id.amount_balance" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.company_id.currency_id&quot;}"/></strong>
+                        <td style="width:20%;border:1px solid white;padding:2px 0;" class="text-right">
+                            <strong><span t-field="doc.payment_lines[0].inv_id.amount_balance"/></strong>
                         </td>
                     </tr>
                 </tbody>                

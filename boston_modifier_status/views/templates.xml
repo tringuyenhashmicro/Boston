@@ -940,10 +940,10 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
             <field name="inherit_id" ref="school_management.view_school_subject_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="replace">
-                       <field name="name"  string="Course Name"/>
+                       <field name="name" string="Course Name"/>
                        <field name="code"/>
-                       <field name="cer_ib"/>
                        <field name="cer_quali"/>
+                       <field name="cer_ib"/>                       
                 </xpath>    
                 <xpath expr="//field[@name='description']" position="replace">
                     <field name="description" string="Program Developed by"/>
@@ -1195,10 +1195,13 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                     <field name="special_dip"/>
                     <field name="cer_issue"/>
                     <field name="qualification"/>
-                    <field name="intake"/>
+                    <field name="intake" invisible="1"/>
                     <field name="fdate_issue"/>
                     <field name="tdate_issue"/>
                     <field name="company_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='class_id']" position="attributes">
+                    <attribute name="string">Intake</attribute>
                 </xpath>
                 <xpath expr="//field[@name='session_qty']" position="attributes">
                     <attribute name="invisible">1</attribute>

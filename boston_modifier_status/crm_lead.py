@@ -299,6 +299,28 @@ class student_enroll(osv.osv):
 
 from openerp import models, api, _, fields
 
+class student_enroll(models.Model):
+    _inherit = 'student.enroll'
+    
+    @api.onchange('class_id')
+    def _onchange_class_id(self):
+        if self.class_id:
+            print self.class_id.start_date and self.class_id.start_date or ''
+            print self.class_id.start_date and self.class_id.start_date or ''
+            self.date_start =  self.class_id.start_date and self.class_id.start_date or ''
+            self.date_end =  self.class_id.end_date and self.class_id.end_date or ''
+
+    @api.multi
+    def action_enroll(self):
+        super(student_enroll, self).action_enroll()
+
+        invoice_obj = self.env['student.invoice']
+        for line in self.line_ids:
+            invoices = invoice_obj.search([('student_id', '=', line.student_id.id)])
+            existed_invoice = invoices.filtered(lambda r: r.enroll_id == self)
+            if existed_invoice:
+                existed_invoice.enroll_no = '0'*(6 - len(str(len(invoices)))) + str(len(invoices))
+
 class SchoolClassroom(models.Model):
     _name = 'school.classroom'
     name = fields.Char('Classroom')
@@ -531,16 +553,24 @@ class teacher_attendance_line(models.Model):
             
 class student_invoice(models.Model):
     _inherit = 'student.invoice'
-    
+
+    @api.one
+    @api.depends('class_id')
+    def _compute_course(self):
+        self.special_dip = self.class_id.subject_id.name
+        self.src_code = self.class_id.subject_id.code
+        self.cer_issue = self.class_id.subject_id.cer_ib
+        self.qualification = self.class_id.subject_id.cer_quali
+
     insu_poli = fields.Char('Insurance Policy No', size=256)
     remarks = fields.Text('Remarks')
     payment_term_id = fields.Many2one('account.payment.term', 'Payment Term')
     company_id = fields.Many2one('res.company', string='Company', required=True, default=1)
     enroll_no = fields.Char('Enrolment No', size=256)
-    src_code = fields.Char('Course Code', size=256)
-    special_dip = fields.Char('Specialist Diploma in', size=256)
-    cer_issue = fields.Char('Certificate Issued By', size=256)
-    qualification = fields.Char('Certification/ Qualification', size=256)
+    src_code = fields.Char('Course Code', size=256, compute='_compute_course')
+    special_dip = fields.Char('Course Title', size=256, compute='_compute_course')
+    cer_issue = fields.Char('Certificate Issued By', size=256, compute='_compute_course')
+    qualification = fields.Char('Certification/ Qualification', size=256, compute='_compute_course')
     intake = fields.Many2one('school.class', 'Intake')
     fdate_issue = fields.Date('From')
     tdate_issue = fields.Date('To')
@@ -558,7 +588,38 @@ class student_invoice(models.Model):
         self.untax_amount = sum(line.subtotal for line in self.invoice_lines)
         self.tax_amount = sum(line.subtotal * sum([self.env['account.tax'].browse(l.id).amount for l in line.std_invoice_line_tax_id]) for line in self.invoice_lines if line.std_invoice_line_tax_id) or 0
         self.amount_total = self.untax_amount + self.tax_amount
-    
+
+    @api.onchange('class_id')
+    @api.depends('class_id')
+    def _onchange_class(self):
+        if self.class_id and self.class_id.subject_id:
+            self.special_dip = self.class_id.subject_id.name
+            self.src_code = self.class_id.subject_id.code
+            self.cer_issue = self.class_id.subject_id.cer_ib
+            self.qualification = self.class_id.subject_id.cer_quali
+            self.fdate_issue = self.class_id.start_date
+            self.tdate_issue = self.class_id.end_date
+
+    @api.onchange('fdate_issue')
+    @api.depends('fdate_issue', 'class_id')
+    def _onchange_fdate_issue(self):
+        if self.class_id:
+            if self.class_id.start_date:
+                start_date = datetime.datetime.strptime(self.class_id.start_date, '%Y-%m-%d')
+                from_date = datetime.datetime.strptime(self.fdate_issue, '%Y-%m-%d')
+                if from_date < start_date:
+                    raise osv.except_osv(_('Validation Error'),_('From date should be greater than or equal to %s' % (self.class_id.start_date)))
+
+    @api.onchange('tdate_issue')
+    @api.depends('tdate_issue', 'class_id')
+    def _onchange_tdate_issue(self):
+        if self.class_id:
+            if self.class_id.end_date:
+                end_date = datetime.datetime.strptime(self.class_id.end_date, '%Y-%m-%d')
+                to_date = datetime.datetime.strptime(self.tdate_issue, '%Y-%m-%d')
+                if to_date > end_date:
+                    raise osv.except_osv(_('Validation Error'),_('To date should be lower than or equal to %s' % (self.class_id.end_date)))
+
     invoice_id = fields.Many2one('student.invoice', string='Invoice Information')
     untax_amount = fields.Float('Untaxed Amount', compute='_compute_amount')
     tax_amount = fields.Float('Tax', compute='_compute_amount')
