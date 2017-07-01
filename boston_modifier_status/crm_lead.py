@@ -319,7 +319,7 @@ class student_enroll(models.Model):
             invoices = invoice_obj.search([('student_id', '=', line.student_id.id)])
             existed_invoice = invoices.filtered(lambda r: r.enroll_id == self)
             if existed_invoice:
-                existed_invoice.enroll_no = '0'*(6 - len(str(len(invoices)))) + str(len(invoices))
+                existed_invoice.enroll_no = self.env['ir.sequence'].get('enroll.no') or '/'
 
 class SchoolClassroom(models.Model):
     _name = 'school.classroom'

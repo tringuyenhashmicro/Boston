@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- Sequences for Student Enroll -->
+        <record id="seq_type_enroll_no" model="ir.sequence.type">
+            <field name="name">Enrolment No</field>
+            <field name="code">enroll.no</field>
+        </record>
+
+        <record id="seq_enroll_no" model="ir.sequence">
+            <field name="name">Enrolment No</field>
+            <field name="code">enroll.no</field>
+            <field name="prefix">EN</field>
+            <field name="padding">6</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">124078</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</openerp>

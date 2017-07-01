@@ -14,6 +14,7 @@ Leads From Contact Form
     'data': [
         'views/templates.xml',
         'report/boston_report.xml',
+        'sequence.xml',
     ],
     'installable': True,
     'auto_install': False,
