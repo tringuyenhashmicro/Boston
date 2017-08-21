@@ -1060,6 +1060,7 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                        <field name="name" string="Course Name"/>
                        <field name="code"/>
                        <field name="sequence"/>
+                       <field name="course_type"/>
                        <field name="cer_quali"/>
                        <field name="cer_ib"/>                       
                 </xpath>    
@@ -1522,8 +1523,6 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                     <field name="poli_date2" string="Insurance Policy End Date"/>
                     <field name="special_dip"/>
                     <field name="cer_issue"/>
-                    <field name="qualification"/>
-                    <field name="intake" invisible="1"/>
                     <field name="fdate_issue"/>
                     <field name="qualification"/>
                     <field name="tdate_issue"/>
@@ -1533,16 +1532,9 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                     <field name="session_qty" invisible="1"/>
                     <field name="session_qty_paid" invisible="1"/>
                 </xpath>
+                
                 <xpath expr="//field[@name='class_id']" position="replace">
                     <field name="class_id" string="Intake"/>
-                <xpath expr="//field[@name='class_id']" position="attributes">
-                    <attribute name="string">Intake</attribute>
-                </xpath>
-                <xpath expr="//field[@name='session_qty']" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath>
-                <xpath expr="//field[@name='session_qty_paid']" position="attributes">
-                    <attribute name="invisible">1</attribute>
                 </xpath>
                 <xpath expr="//group[@class='oe_subtotal_footer oe_right']" position="replace">
                     <group class="oe_subtotal_footer oe_right">
@@ -1784,6 +1776,14 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                             <field name="inend"/>
                             <field name="cissued_by"/>
                             <field name="ccer_qua"/>
+                            <field name="fee_enroll" colspan="1">
+                                <tree string="Miscellaneous Fees" editable="bottom">
+                                    <field name="category_id"/>
+                                    <field name="fee_id"/>
+                                    <field name="tax_ids"/>
+                                    <field name="amount"/>
+                                </tree>
+                            </field>
                         </group>
                     </group>
                     </sheet>
@@ -1901,12 +1901,14 @@ All documents must be returned to Boston Business School. If we do not receive y
 Yours faithfully
 <br/>
 <br/>
+<br/>
 <strong> S Sivabaloo </strong>
 <br/>
-<strong> Academic Manager </strong>
+Academic Manager
 <br/>
 Enc. – 	1) Advisory Note to Students
-<p style="margin-left:0.45in;">	2) Standard PEI-Student Contract </p>
+<br/>
+	2) Standard PEI-Student Contract	
 
                         </div>
 		            </div>
@@ -1978,15 +1980,15 @@ Enc. – 	1) Advisory Note to Students
 		            <div class="row">
                         <div class="col-xs-12">
 <br/>
-<div class="col-xs-12 text-center"> <span style="font-weight:bold;font-size:9pt;"> PRIVATE EDUCATION INSTITUTION-STUDENT CONTRACT </span> </div>
+<div class="col-xs-12 text-center"> <span style="font-weight:bold;font-size:10pt;"> PRIVATE EDUCATION INSTITUTION-STUDENT CONTRACT </span> </div>
 <br/>
 <br/>
-<p style="font-size:8.5pt;">
+<p style="font-size:10pt;">
 This Contract binds both the Private Education Institution (PEI) and the Student once both parties sign this Contract. If the Student is under eighteen (18) years of age, the Student will be represented by the Parent/Legal Guardian.
 </p>
 <br/>
 This Contract is made between:
-<table style="width:100%;font-size:8.5pt;">
+<table style="width:100%;font-size:10pt;">
     <tr style="height:23px;">
         <td style="width:8%;"> (1) </td>
      	<td style="width:46%;"> Registered Name of PEI	</td>
@@ -2032,8 +2034,8 @@ This Contract is made between:
         <td style="width:46%;border-bottom:1px solid black;">:	<span t-esc="o.pa_nric and o.pa_nric or 'NA'"/> </td>
     </tr>
 </table>
-<div style="padding-top:20px;"/>
-<table style="width:100%;font-size:9pt;text-align: justify; text-justify: inter-word;">
+<div style="padding-top:30px;"/>
+<table style="width:100%;font-size:10pt;text-align: justify; text-justify: inter-word;">
     <tr>
         <td style="width:5%;" class="text-left"> <strong> 1. </strong> </td>
         <td style="width:95%;"> <strong> COURSE INFORMATION AND FEES </strong> </td>
@@ -2056,8 +2058,8 @@ This Contract is made between:
 The PEI will explain to the Student its policy for late payment of Course Fees, including any late payment fee charged in Schedule C (if applicable) and any impact on Course/module completion (if applicable)  </td>
     </tr>
 </table>
-<div style="padding-top:20px;"/>
-<table style="width:100%;font-size:9pt;text-align: justify; text-justify: inter-word;">
+<div style="padding-top:30px;"/>
+<table style="width:100%;font-size:10pt;text-align: justify; text-justify: inter-word;">
     <tr>
         <td style="width:5%;" class="text-left"> <strong> 2. </strong> </td>
         <td style="width:95%;"> <strong> REFUND POLICY </strong> </td>
@@ -2106,8 +2108,7 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
         <td style="width:5%;" class="text-left"> <strong>  </strong> </td>
         <td style="width:95%;">  If the Student withdraws from the Course for any reason other than those stated in Clause 2.1, the PEI will, within seven (7) working days of receiving the Student’s written notice of withdrawal, refund to the Student an amount based on the table in Schedule D.    </td>
     </tr>
-
-<tr>
+    <tr>
         <td style="width:5%;" class="text-left"> <strong> 2.3 </strong> </td>
         <td style="width:95%;"> <u> Refund During Cooling-Off Period:  </u> </td>
     </tr>
@@ -2117,8 +2118,8 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
     </tr>
 </table>
 
-<div style="padding-top:20px;"/>
-<table style="width:100%;font-size:9pt;">
+<div style="padding-top:50px;"/>
+<table style="width:100%;font-size:10pt;">
     <tr>
         <td style="width:5%;" class="text-left"> <strong> 3. </strong> </td>
         <td style="width:95%;"> <strong> ADDITIONAL INFORMATION </strong> </td>
@@ -2132,15 +2133,15 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
         <td style="width:95%;">  If any part of this Contract is not valid for any reason under the law of Singapore, this will not affect any other part of this Contract.   </td>
     </tr>
 </table>    
+<br/>
 
-<div style="padding-top:20px;border-bottom:1px solid black;width:200px;"/>
+<div style="padding-top:30px;border-bottom:1px solid black;width:200px;"/>
     *Delete as appropriate by striking through.
 <br/>
     Where non-applicable, put “N.A.”. Leave no fields blank.
 <br/>
     State all dates in the format of DD/MM/YYYY.
-    
-<table style="width:100%;font-size:9pt;text-align: justify; text-justify: inter-word;">
+<table style="width:100%;font-size:10pt;text-align: justify; text-justify: inter-word;">
     <tr>
         <td style="width:5%;" class="text-left"> <strong> 3.3 </strong> </td>
         <td style="width:95%;">  If the Student and the PEI cannot settle a dispute using the way arranged by the PEI, the Student and the PEI may refer the dispute to the CPE Mediation-Arbitration Scheme (www.cpe.gov.sg).   </td>
@@ -2163,7 +2164,7 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
     </tr>
 </table>
 
-<div style="padding-top:640px;"/>
+<div style="padding-top:1000px;"/>
 <div class="col-xs-12 text-center" style="page-break-inside:avoid;">
 <span> <strong> SCHEDULE A </strong></span>
 <br/>
@@ -2181,7 +2182,7 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
  </tr>
  <tr style="height:36.9pt;border:1px solid black;">
   <td style="border:1px solid black;">
-  <p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;margin-left:.09in;"> 2)<span style="font:7.0pt &quot;Times New Roman&quot;"/></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Course Duration (in months)</span></p>
+  <p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;margin-left:.09in;"> 2)<span style="font:7.0pt &quot;Times New Roman&quot;"/></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;margin-left:.03in;">Course Duration (in months)</span></p>
   </td>
   <td style="width:299.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.9pt">
   <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">12 months
@@ -2224,7 +2225,7 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
  </tr>
  <tr style="height:36.65pt">
   <td style="width:163.2pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
-  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">6)<span style="font:7.0pt &quot;Times New Roman&quot;"/></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Date of Commencement of Studies</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;">6) <span style="font:7.0pt &quot;Times New Roman&quot;"/></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;margin-left:.03in;">Date of Commencement of Studies</span></p>
   <p style="margin-top:2.0pt;margin-right:   0in;margin-bottom:2.0pt;margin-left:.25in"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">(Date on which Student starts attending Course, if different from Course Commencement Date)</span></i></p>
   <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in"><i><span style="font-size:   10.0pt;font-family:&quot;Cambria&quot;,serif"/></i></p>
   </td>
@@ -2234,7 +2235,7 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
  </tr>
  <tr style="height:36.65pt">
   <td style="width:163.2pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
-  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">7)<span style="font:7.0pt &quot;Times New Roman&quot;"/></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Qualification</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;">7)<span style="font:7.0pt &quot;Times New Roman&quot;"/></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;margin-left:.03in;">Qualification</span></p>
   <p style="margin-top:2.0pt;margin-right:   0in;margin-bottom:2.0pt;margin-left:.25in"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">(Name of award to be conferred on the Student upon successful Course completion)</span></i></p>
   <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in"><span style="font-size:   10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
   </td>
@@ -2270,8 +2271,8 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
   <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">10)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Course entry requirement(s)</span></p>
   <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in"><span style="font-size:10.0pt;font-family:   &quot;Cambria&quot;,serif"/></p>
   </td>
-  <td style="width:344.0pt;border:solid windowtext 1.0pt;   border-left:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
-    <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif" t-field="course_id.entry_req"/></p>
+  <td style="width:344.0pt;border:solid windowtext 1.0pt;   border-left:none;padding:0in 5.4pt 0in 5.4pt;height:260.65pt">
+    <div style=" background-image: url('/boston_modifier_status/static/description/entry_req001.png'); background-size: cover; background-repeat: no-repeat; height:260pt;"/>
   </td>
  </tr>
  <tr style="height:36.65pt;page-break-inside:avoid;">
@@ -2307,7 +2308,7 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
   <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Refer to class timetable</span></p>
   </td>
  </tr>
- <tr style="height:36.65pt;page-break-inside:avoid;">
+ <tr style="height:36.65pt">
   <td style="width:151.9pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
   <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">14)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Expected examination results release date</span></p>
   <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in"><span style="font-size:   10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
@@ -2316,7 +2317,7 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
   <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Refer to class timetable </span></p>
   </td>
  </tr>
- <tr style="height:36.65pt;page-break-inside:avoid;">
+ <tr style="height:36.65pt">
   <td style="width:151.9pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
   <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">15)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Expected award conferment date</span></p>
   </td>
@@ -2327,10 +2328,8 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
 </table>
 </div>
 
-<div style="padding-top:300px;"/>
-
 <div class="col-xs-12" style="page-break-inside:avoid;">
-    <div class="text-center"> 
+    <div class="text-center" style="padding-top:75px;"> 
         <span> <strong> SCHEDULE B </strong></span>
         <br/>
         <span> <u> <strong> COURSE FEES </strong> </u> </span>
@@ -2389,9 +2388,9 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
  </tr>
 </table>
 
-<p> The prevailing Good and Services Tax (GST) is excluded in the Fee Protection Scheme (FPS).</p>
-<p> *Non-refundable after consumed </p>
-<p> **Non-refundable fees. </p>
+<p> <span style="margin-left:.09in;"> The prevailing Good and Services Tax (GST) is excluded in the Fee Protection Scheme (FPS). </span> </p>
+<p> <span style="margin-left:.09in;"> *Non-refundable after consumed </span> </p>
+<p> <span style="margin-left:.09in;"> **Non-refundable fees. </span> </p>
 </div>
 
 <br/><br/><br/><br/>
@@ -2419,7 +2418,7 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
   <p style="line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif">1<sup>st</sup></span> <span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif"> instalment </span> </p>
   </td>
   <td style="width:137.05pt;border:none;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:14.15pt">
-  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif;   color:black" t-esc="install_num and ((sum([x.amount for x in course_id.enroll_fee_ids if x.category_id.name == 'Course Fee']) + (sum([x.amount for x in course_id.enroll_fee_ids if (x.tax_ids and x.category_id.name == 'Course Fee')]) * 0.07)) / install_num) or (sum([x.amount for x in course_id.enroll_fee_ids if x.category_id.name == 'Course Fee']) + (sum([x.amount for x in course_id.enroll_fee_ids if (x.tax_ids and x.category_id.name == 'Course Fee')]) * 0.07))"></span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif;   color:black" t-esc="install_num and ((sum([x.amount for x in course_id.enroll_fee_ids if x.category_id.name == 'Course Fee']) + (sum([x.amount for x in course_id.enroll_fee_ids if (x.tax_ids and x.category_id.name == 'Course Fee')]) * 0.07)) / install_num) or (sum([x.amount for x in course_id.enroll_fee_ids if x.category_id.name == 'Course Fee']) + (sum([x.amount for x in course_id.enroll_fee_ids if (x.tax_ids and x.category_id.name == 'Course Fee')]) * 0.07))" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;course_id.company_id.currency_id&quot;}" ></span></p>
   </td>
   <td style="width:123.95pt;border:none;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:14.15pt">
   <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif;   color:black"></span></p>
@@ -2463,7 +2462,7 @@ The PEI will explain to the Student its policy for late payment of Course Fees, 
 
 <p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
 
-<p style="margin-left:7.1pt;text-align:justify;text-justify: inter-ideograph;text-indent:-7.1pt"><sup><span style="font-size: 10.0pt;font-family:&quot;Cambria&quot;,serif">%</span></sup><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Each instalment amount <u>shall not exceed </u> the following: </span></p>
+<p style="margin-left:7.1pt;text-align:justify;text-justify: inter-ideograph;text-indent:-7.1pt"><sup><span style="font-size: 10.0pt;font-family:&quot;Cambria&quot;,serif;margin-left:.09in;">%</span></sup><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Each instalment amount <u>shall not exceed </u> the following: </span></p>
 
 <p style="margin-left:25.1pt;text-align:justify; text-justify:inter-ideograph;text-indent:-.25in"><span style="font-size:10.0pt;font-family:Symbol">·<span style="font:7.0pt &quot;Times New Roman&quot;">
 </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">12
@@ -2480,7 +2479,7 @@ months’ worth of fees for non-EduTrust-certified PEIs without IWC*.</span></s>
 
 <p style="margin-left:7.1pt;text-align:justify;text-justify: inter-ideograph;text-indent:-7.1pt"><span style="font-size:10.0pt; font-family:&quot;Cambria&quot;,serif"/></p>
 
-<p style="margin-left:7.1pt;text-align:justify;text-justify: inter-ideograph;text-indent:-7.1pt"><span style="font-size:10.0pt; font-family:&quot;Cambria&quot;,serif">^ Each instalment after the first shall be
+<p style="margin-left:7.1pt;text-align:justify;text-justify: inter-ideograph;text-indent:-7.1pt"><span style="font-size:10.0pt; font-family:&quot;Cambria&quot;,serif;margin-left:.09in;">^ Each instalment after the first shall be
 collected within one week before the next payment scheduled.</span></p>
 
 <p style="text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
@@ -2514,14 +2513,14 @@ collected within one week before the next payment scheduled.</span></p>
  </tr>
  <tr>
   <td style="width:338.95pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt">
-      <t t-foreach="course_id.enroll_fee_ids" t-as="fee">
+      <t t-foreach="fee_enroll" t-as="fee">
           <t t-if="fee.category_id.name != 'Course Fee'">
               <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:2.0pt;margin-left:0in"><span style="font-size:10.0pt;font-family:   &quot;Cambria&quot;,serif"><span t-esc="fee.fee_id.name"/></span></p>
           </t>
       </t>
   </td>
   <td style="width:120.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
-    <t t-foreach="course_id.enroll_fee_ids" t-as="fee1">
+    <t t-foreach="fee_enroll" t-as="fee1">
           <t t-if="fee1.category_id.name != 'Course Fee'">
               <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"><span t-esc="fee1.amount" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;course_id.company_id.currency_id&quot;}"/></span></p>
               <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:2.0pt;margin-left:0in"><span style="font-size:10.0pt;font-family:   &quot;Cambria&quot;,serif"/></p>
@@ -3319,6 +3318,6 @@ collected within one week before the next payment scheduled.</span></p>
             name="boston_modifier_status.report_quarterly_report"
             file="boston_modifier_status.report_quarterly_report"
      />
-        
+    
   </data>
 </openerp>
