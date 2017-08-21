@@ -1522,6 +1522,8 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                     <field name="poli_date2" string="Insurance Policy End Date"/>
                     <field name="special_dip"/>
                     <field name="cer_issue"/>
+                    <field name="qualification"/>
+                    <field name="intake" invisible="1"/>
                     <field name="fdate_issue"/>
                     <field name="qualification"/>
                     <field name="tdate_issue"/>
@@ -1531,9 +1533,16 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                     <field name="session_qty" invisible="1"/>
                     <field name="session_qty_paid" invisible="1"/>
                 </xpath>
-                
                 <xpath expr="//field[@name='class_id']" position="replace">
                     <field name="class_id" string="Intake"/>
+                <xpath expr="//field[@name='class_id']" position="attributes">
+                    <attribute name="string">Intake</attribute>
+                </xpath>
+                <xpath expr="//field[@name='session_qty']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='session_qty_paid']" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </xpath>
                 <xpath expr="//group[@class='oe_subtotal_footer oe_right']" position="replace">
                     <group class="oe_subtotal_footer oe_right">
