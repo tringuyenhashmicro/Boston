@@ -2740,42 +2740,42 @@ collected within one week before the next payment scheduled.</span></p>
 		<t t-set="count" t-value="1"/>
         <div class="page">
             <div style="border:1px solid black;overflow:hidden;">
-            <table style="border-collapse:collapse;font-size:10pt;">
+            <table style="border-collapse:collapse;font-size:9pt;">
                 <thead>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>S/No</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Student Full Name</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>NRIC/Fin No</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Nationality</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Identify of Pass Type</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Gender</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Date of Birth</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Highest Academic Qualification</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Student Type</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Course Title</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Total Fees excluding 7% GST</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Course Commencement Date</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Status of Student</strong></th>
-                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Expected Graduation Date</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>S/No</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Student Full Name</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>NRIC/Fin No</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Nationality</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Identify of Pass Type</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Gender</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Date of Birth</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Highest Academic Qualification</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Student Type</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Course Title</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Total Fees excluding 7% GST</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Course Commencement Date</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Status of Student</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;"><br/><strong>Expected Graduation Date</strong></th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="width:10%;border:none;border-right:1px solid black;"> 
+                    <tr style="height:36.65pt;padding-top:10px;">
+                        <td class="text-center" style="border:none;border-right:1px solid black;"> 
                             <span> <span t-esc="count"/> </span>
                             <t t-set="count" t-value="count + 1"/> 
                         </td>
-                        <td style="border:none;border-right:1px solid black;"> <span t-esc="doc.l_name"/> <span t-esc="doc.name"/> </td>
-                        <td style="border:none;border-right:1px solid black;"> <span t-esc="doc.nric"/> </td>
-                        <td style="border:none;border-right:1px solid black;"> <span t-esc="doc.nationality and doc.nationality.name or ''"/> </td>
-                        <td style="border:none;border-right:1px solid black;"> </td>
-                        <td style="border:none;border-right:1px solid black;"> <span t-esc="doc.gender == 'male' and 'Male' or 'Female'"/> </td>
-                        <td style="border:none;border-right:1px solid black;"> <span t-field="doc.birth_date" t-esc-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/> </td>
-                        <td style="border:none;border-right:1px solid black;"> <span t-esc="get_highest_course and get_highest_course.name or ''"/> </td>
-                        <td style="border:none;border-right:1px solid black;"> <span t-esc="doc.type_std == 'internation' and 'Internation' or 'Local'"/> </td>
-                        <td style="border:none;border-right:1px solid black;"> </td>
-                        <td style="border:none;border-right:1px solid black;"> </td>
-                        <td style="border:none;border-right:1px solid black;"> </td>
-                        <td style="border:none;border-right:1px solid black;"> </td>
-                        <td style="border:none;border-right:1px solid black;"> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> <span t-esc="doc.l_name"/> <span t-esc="doc.name"/> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> <span t-esc="doc.nric"/> </td>
+                        <td style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;"> <span t-esc="doc.nationality and doc.nationality.name or ''"/> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> <span t-esc="doc.gender == 'male' and 'Male' or 'Female'"/> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> <span t-field="doc.birth_date" t-esc-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> <span t-esc="get_highest_course and get_highest_course.name or ''"/> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> <span t-esc="doc.type_std == 'internation' and 'Internation' or 'Local'"/> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> </td>
+                        <td class="text-center" style="border:none;border-right:1px solid black;padding:0in 5.4pt 0in 5.4pt;height:12pt;"> </td>
                     </tr>
                </tbody>
                </table>
@@ -2794,6 +2794,531 @@ collected within one week before the next payment scheduled.</span></p>
             name="boston_modifier_status.report_anual_report"
             file="boston_modifier_status.report_anual_report"
      /><!-- menu="False" -->
+     
+     <!-- FPS Report -->
+     <!-- Headers and Footers for Annual Report -->		
+    <template id="boston_modifier_status.external_layout_fps_report">
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc"/>
+        </t>
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"></t>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"></t>
+        </t>
+        <t t-call="boston_modifier_status.external_layout_fps_report_header" />
+        <t t-raw="0" />
+    </template>
+
+    <template id="boston_modifier_status.external_layout_fps_report_header">
+         <div class="header">
+            <div class="row">
+                <div class="col-xs-6">
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height:120px;"/>
+                </div>            
+                <span class="col-xs-6 text-right" style="font-size:10pt;">Co. Reg. No. : 200405229G</span>
+                <span class="col-xs-12 text-center" style="font-size:17pt;"><b> FPS REPORT </b></span>
+            </div>
+            <div class="row" style="font-size:10pt;">
+            </div>
+        </div>
+    </template>
+    
+     <template id="boston_modifier_status.report_fps_report">
+    <t t-foreach="docs" t-as="doc">
+    <t t-call="boston_modifier_status.external_layout_fps_report">
+		<t t-set="count" t-value="1"/>
+        <div class="page">
+            <div class="row">
+                <table border="1" style="width:100%;margin-left:5.4pt;">
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> PEI Name </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Boston Business School </span>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> FPS Provider Name </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Lonpac Insurance Bhd </span>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> STP Status </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="doc.type_std == 'local' and '2' or '1'"> </span>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Nationality </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="doc.nationality and doc.nationality.name or ''"> </span>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> NRIC Fin No </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="doc.nric and doc.nric or ''"> </span>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Student Name </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> <span t-esc="doc.l_name and doc.l_name or ''"/> <span t-esc="doc.name and doc.name or ''"/> </span>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Course Title </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <t t-foreach="doc.enroll_ids" t-as="course">
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="course.course_id.name"/>
+                                <br/>
+                            </t>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Date of Commencement of Study </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <t t-foreach="doc.enroll_ids" t-as="enroll1">
+                                <t t-set="date_start" t-value="enroll1.date_start.split('-')"/>
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> <t t-esc="date_start[2]"/>-<t t-esc="date_start[1]"/>-<t t-esc="date_start[0]"/></span>
+                                <br/>
+                            </t>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Course Completion Date </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <t t-foreach="doc.enroll_ids" t-as="enroll1">
+                                <t t-set="date_end" t-value="enroll1.date_end.split('-')"/>
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> <t t-esc="date_end[2]"/>-<t t-esc="date_end[1]"/>-<t t-esc="date_end[0]"/></span>
+                                <br/>
+                            </t>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Course Duration In Months </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"/>
+                                <br/>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Total Course Fees Payable </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <t t-foreach="doc.enroll_ids" t-as="enroll1">
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="enroll1.invoice_id.amount_total" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;enroll1.course_id.company_id.currency_id&quot;}"/>
+                                <br/>
+                            </t>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Fee Collection Cap </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                                <t t-foreach="doc.enroll_ids" t-as="enroll1">
+                                    <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="enroll1.invoice_id.amount_total" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;enroll1.course_id.company_id.currency_id&quot;}"/>
+                                    <br/>
+                                </t>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Escrow BRN Or Insurance Cert No </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <t t-foreach="doc.enroll_ids" t-as="enroll1">
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="enroll1.invoice_id.insu_poli"/>
+                                <br/>
+                            </t>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Protection Start Date </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <t t-foreach="doc.enroll_ids" t-as="enroll1">
+                                <t t-if="enroll1.invoice_id.date">
+                                <t t-set="date_inv" t-value="enroll1.invoice_id.date.split('-')"/>
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> <t t-esc="date_inv[2]"/>-<t t-esc="date_inv[1]"/>-<t t-esc="date_inv[0]"/></span>
+                                </t>
+                                <br/>
+                            </t>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Protection End Date </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <t t-foreach="doc.enroll_ids" t-as="enroll1">
+                                <t t-set="date_end" t-value="enroll1.date_end.split('-')"/>
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> <t t-esc="date_end[2]"/>-<t t-esc="date_end[1]"/>-<t t-esc="date_end[0]"/></span>
+                                <br/>
+                            </t>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Protection Amount </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"/>
+                                <br/>
+                            
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Amount Received From Student </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"/>
+                                <br/>
+                            
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Amount Received Date </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                            <t t-foreach="doc.enroll_ids" t-as="enroll1">
+                                <t t-if="enroll1.invoice_id.date">
+                                <t t-set="date_inv" t-value="enroll1.invoice_id.date.split('-')"/>
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> <t t-esc="date_inv[2]"/>-<t t-esc="date_inv[1]"/>-<t t-esc="date_inv[0]"/></span>
+                                </t>
+                                <br/>
+                            </t>
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Instalment ID </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"/>
+                                <br/>
+                            
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Scheduled Payment Amount </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"/>
+                                <br/>
+                            
+                          </td>
+                     </tr>
+                     <tr style="page-break-inside:avoid;height:16.65pt">
+                          <td style="width:120.05pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                          <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> Scheduled Payment Due Date </span>
+                          </td>
+                          <td style="width:328pt;padding:0in 5.4pt 0in 5.4pt;height:14.65pt">
+                                <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"/>
+                                <br/>
+                            
+                          </td>
+                     </tr>
+                 </table>
+            </div>               
+        </div>
+    </t>
+    </t>
+    </template>
+        
+     <report
+            id="action_boston_report_report_fps_report"
+            model="school.student"
+            report_type="qweb-pdf"
+            
+            string="FPS REPORT"
+            name="boston_modifier_status.report_fps_report"
+            file="boston_modifier_status.report_fps_report"
+     />
+     
+     <!-- Quaterly Report -->
+     <!-- Headers and Footers for Quaterly Report -->		
+    <template id="boston_modifier_status.external_layout_quarterly_report">
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc"/>
+        </t>
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"></t>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"></t>
+        </t>
+        <t t-call="boston_modifier_status.external_layout_quarterly_report_header" />
+        <t t-raw="0" />
+    </template>
+
+    <template id="boston_modifier_status.external_layout_quarterly_report_header">
+         <div class="header">
+            <div class="row" style="font-size:10pt;">
+                <br/>
+                <br/>
+                <span class="col-xs-3 text-left" style="font-size:10pt;"> <strong> PEI NAME: </strong> </span>
+                <span class="col-xs-9 text-left" style="font-size:10pt;">  BOSTON BUSINESS SCHOOL  </span>
+                <br/>
+                <span class="col-xs-3 text-left" style="font-size:10pt;"> <strong> PEI REGISTRATION NO.: </strong> </span>
+                <span class="col-xs-9 text-left" style="font-size:10pt;"> 200405229G </span>
+                <br/>
+                <span class="col-xs-3 text-left" style="font-size:10pt;"> <strong> REPORTING QUARTER: </strong> </span>
+                <span class="col-xs-9 text-left" style="font-size:10pt;"> Q </span>
+                <br/>
+            </div>
+        </div>
+    </template>
+    
+    <template id="boston_modifier_status.report_quarterly_report">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="boston_modifier_status.external_layout_quarterly_report">
+                <t t-set="count" t-value="1"/>
+                <div class="page">
+                    <div class="row">
+                        <p><u> INSTRUCTIONS </u></p>
+                        <p>1) Enter the consolidated enrolments in New Intake, Graduates and students Still Studying / Deferred in the grey cells for the stated reporting quarter.</p>
+                        <p>2) <strong> New Intake [A] </strong> refers to all students who commenced their courses in the <u> current </u> reporting quarter.</p>
+                        <p>3) <strong> Graduates [B] </strong> refers to all students who commenced their courses in <u> previous </u> reporting quarter(s) AND graduated from their courses in the current reporting quarter. These are students who passed final examinations and fulfilled all other course requirements. </p>							
+						<p>4) <strong>Still Studying / Deferred [C] </strong> refers to all students who commenced their courses in <u>previous </u> reporting quarter(s) AND who in the <u> current </u> reporting quarter (i) were <u> still studying </u> in their courses; or (ii) had <u> deferred </u> from their courses. </p>
+						<p>5) Please note that <strong> [A], [B] and [C] </strong> are mutually exclusive categories. </p>
+						<p>6) <strong> Total [D] </strong> is the sum of <strong> [A], [B] and [C] </strong>. The sum in these cells are automatically computed. </p>		
+						<p>7) All students who had left their courses before completion should be <strong> excluded </strong>. </p>
+                        <br/>
+                        <!-- <div style="border:1px solid black;overflow:hidden;"> -->
+                            <table style="width:100%;border-collapse:collapse;font-size:10pt;border:1px solid black;">
+                                <tr style="page-break-inside:avoid;height:16.65pt;border:1px solid black;border-bottom:1px solid white;vertical-align: middle;">
+                                    <td class="text-center" style="width:12.4%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;vertical-align: middle;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> COURSE TYPE </span>
+                                    </td>
+                                    <td class="text-center" style="width:22%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;vertical-align: middle;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> [A] NEW INTAKE </span>
+                                    </td>
+                                    <td class="text-center" style="width:21.75%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;vertical-align: middle;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> [B] GRADUATES </span>
+                                    </td>
+                                    <td class="text-center" style="width:21.85%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;vertical-align: middle;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> [C] STILL STUDYING / DEFERRED </span>
+                                    </td>
+                                    <td class="text-center" style="width:22%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;vertical-align: middle;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> [D] TOTAL </span>
+                                    </td>
+                                 </tr>
+                             </table>
+                             <table style="border-collapse:collapse;font-size:10pt;border:1px solid black;border-top:1px solid white;vertical-align: middle;">
+                                 <tr style="page-break-inside:avoid;height:16.65pt;border:1px solid black;">
+                                    <td class="text-center" style="width:16%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;">  </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> SINGAPORE CITIZEN(SC) </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> DEPARTMENT RESIDENT (PR) </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> OTHERS </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> SINGAPORE CITIZEN(SC) </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> DEPARTMENT RESIDENT (PR) </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> OTHERS </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> SINGAPORE CITIZEN(SC) </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> DEPARTMENT RESIDENT (PR) </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> OTHERS </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> SINGAPORE CITIZEN(SC) </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> DEPARTMENT RESIDENT (PR) </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> OTHERS </span>
+                                    </td>
+                                 </tr>
+                                 <tr style="page-break-inside:avoid;height:16.65pt">
+                                    <td class="text-center" style="width:16%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> BACHELOR </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;">0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                 </tr>
+                                 <tr style="page-break-inside:avoid;height:16.65pt;border:1px solid black;">
+                                    <td class="text-center" style="width:16%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> DIPLOMA (ARTICULATION) </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;">0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                 </tr>
+                                 <tr style="page-break-inside:avoid;height:16.65pt;border:1px solid black;">
+                                    <td class="text-center" style="width:16%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> DIPLOMA (NON-ARTICULATION) </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;">0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                    <td class="text-center" style="width:7%;padding:0in 5.4pt 0in 5.4pt;height:20pt;border:1px solid black;">
+                                      <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;"> 0 </span>
+                                    </td>
+                                 </tr>
+                            </table>
+                        <!-- </div> -->
+                        
+                        <br/>
+                        <p><sup>1</sup> Include all other Pass Types. </p>
+                        <p> <sup>2</sup> Non-WSQ Diploma courses that allow students to gain addmission to bachelor degree course that is offered in the PEI, in another PEI, or in a university located overseas. </p>
+                        <p> <sup>3</sup> Non-WSQ Diploma course that <u> do not </u> articulate into a bachelor degree course</p>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+    
+    <report
+            id="action_boston_report_report_quarterly_report"
+            model="school.student"
+            report_type="qweb-pdf"
+            string="QUARTERLY REPORT"
+            name="boston_modifier_status.report_quarterly_report"
+            file="boston_modifier_status.report_quarterly_report"
+     />
         
   </data>
 </openerp>
