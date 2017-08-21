@@ -41,10 +41,31 @@
             <field name="sequence">2</field>
             <field name="type">both</field>
         </record>
+        
+        <!-- Sequences for Student Enroll -->
+        <record id="seq_type_enroll_no" model="ir.sequence.type">
+            <field name="name">Enrolment No</field>
+            <field name="code">enroll.no</field>
+        </record>
+
+        <record id="seq_enroll_no" model="ir.sequence">
+            <field name="name">Enrolment No</field>
+            <field name="code">enroll.no</field>
+            <field name="prefix">EN</field>
+            <field name="padding">6</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">124078</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        
         <delete model="crm.case.stage" id="crm.stage_lead2"/>
         <delete model="ir.ui.menu" id="school_attendance.menu_student_attendance_line"/>
         <delete model="ir.ui.menu" id="school_management.menu_school_teacher"/>
         <delete model="ir.ui.menu" id="school_management.menu_school_parent"/>
+        <delete model="ir.ui.menu" id="school_billing.menu_school_config"/>
+        <delete model="ir.ui.menu" id="school_billing.menu_deposit"/>
+        <delete model="ir.ui.menu" id="school_billing.menu_student_deposit"/>
         
         <!-- Sequences for student.announcement -->
         <record id="seq_type_student_announcement" model="ir.sequence.type">
@@ -60,9 +81,25 @@
             <field name="company_id" eval="False"/>
         </record>
         
+        <record id="seq_type_student_receipt1" model="ir.sequence.type">
+            <field name="name">Student Receipt Bill To</field>
+            <field name="code">stud.payment.bill</field>
+        </record>
+
+        <record id="seq_student_receipt1" model="ir.sequence">
+            <field name="name">Student Receipt Bill To</field>
+            <field name="code">stud.payment.bill</field>
+            <field name="prefix">RCPT</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+
+        
     </data>
 
   <data>
+    <!-- <function model="school.student" name="update_invoice_payment"/> -->
     <template id="assets_frontend_stock" inherit_id="website.assets_frontend" name="Stock">
       <xpath expr="." position="inside">
           <link rel='stylesheet' href='/boston_modifier_status/static/src/css/website_file_upload.css'/>
@@ -199,9 +236,9 @@
             <field name="model">crm.lead</field>
             <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='email_from']" position="before">
-                    <field name="state" invisible="1"/>
-                </xpath>
+                <!-- <xpath expr="//field[@name='email_from']" position="before"> -->
+                    <!-- <field name="state" invisible="1"/> -->
+                <!-- </xpath> -->
                 <xpath expr="//button[@name='%(crm.action_crm_lead2opportunity_partner)d']" position="replace">
                 	<button name="btn_offer" states="applied" string="Offer" type="object" help="Change status to Offer" class="oe_highlight"/>
                     <button name="btn_accept" states="offered" string="Accept" type="object" help="Change status to Accept" class="oe_highlight"/>
@@ -248,8 +285,8 @@
             <field name="inherit_id" ref="school_attendance.view_student_attendance_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='subject_id']" position="replace">
-                    <field name="subject_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly':[('state', '!=', 'draft')]}" invisible="1"/>
                     <field name="course_id" options="{'no_create': True, 'no_open': True}" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" string="Course Name"/>
+                    <field name="subject_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly':[('state', '!=', 'draft')]}" invisible="1"/>
                 </xpath>
                 <xpath expr="//field[@name='class_id']" position="replace">
                     <field name="class_id" options="{'no_create': True, 'no_open': True}" domain="[('subject_id', '=', course_id)]" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" string="Intake"/>
@@ -261,6 +298,7 @@
                     <tree editable="bottom">
                         <field name="student_id" options="{'no_create': True, 'no_open': True}"
                             required="1" domain="[('is_parent', '=', False)]"/>
+                        <field name="passport"/>
                         <field name="gender" invisible="1"/>
                         <field name="present_ok"/>
                         <field name="absent_ok"/>
@@ -279,8 +317,8 @@
             <field name="model">student.attendance</field>
             <field name="inherit_id" ref="school_attendance.view_student_attendance_tree"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='subject_id']" position="attributes">
-                    <attribute name="string">Course Name</attribute>
+                <xpath expr="//field[@name='subject_id']" position="replace">
+                    <field name="course_id" string="Course Name" />
                 </xpath>
                 <xpath expr="//field[@name='class_id']" position="attributes">
                     <attribute name="string">Intake</attribute>
@@ -305,42 +343,65 @@
                     <group colspan="4" col="4">
                         <group colspan="4" col="4">
                     <!-- <div class="oe_right oe_button_box" name="button_box"> -->
-                            <field name="title_id"/>
+                            <field name="std_idd"/>
                             <field name="date_progressed"/>
+                            <field name="title_id"/>
                             <field name="date_completed"/>
-                            <field name="date_graduated"/>
                             <field name="date_withdrawn"/>
                             <field name="date_expelled"/>
+                            <field name="date_graduated" invisible="1"/>
                         </group>
                     <!-- </div> -->
                     </group>
                 </notebook>
                 <xpath expr="//field[@name='occupation']" position="replace"/>
                 <xpath expr="//field[@name='address']" position="replace"/>
-                <xpath expr="//field[@name='handfone']" position="after">
-                    <field name="age" widget="interger"/>
-                    <field name="insu_policy"/>
+                <xpath expr="//field[@name='nric']" position="replace"/>
+                <xpath expr="//field[@name='gender']" position="replace"/>
+                <xpath expr="//field[@name='email']" position="replace"/>
+                <xpath expr="//field[@name='user_id']" position="replace"/>
+                <xpath expr="//field[@name='handfone']" position="replace"/>
+                <xpath expr="//field[@name='home_tel']" position="replace"/>
+                <xpath expr="//field[@name='office_tel']" position="replace"/>
+                <xpath expr="//field[@name='birth_date']" position="replace">
+                    <field name="nric" required="1"/>
                     <field name="passport_no"/>
-                    <field name="employer" />
-                    <field name="pass_exp"/>
-                    <field name="src_info"/>
-                    <field name="crs_consul"/>
-                    <field name="wk_pass_issue"/>
-                    <field name="wk_pass_exp"/>
-                    <field name="att_rate"/>
-                    <field name="oversea_add"/>
+                    <field name="type_std"/>
+                    <field name="gender" required="1"/>
+                    <field name="birth_date" required="1"/>
+                    <field name="age" widget="interger"/>
+                </xpath>
+                <xpath expr="//field[@name='married']" position="after">
                     <field name="occupation"/>
+                    <field name="email" required="1"/>
+                    <field name="handfone" />
+                    <field name="home_tel"/>
                     <group colspan="2" col="1" string="Singapore Address">
-                    <field name="street" placeholder="Street..." nolabel="1"/>
                     <div class="address_format">
                         <field name="blk" placeholder="Blk" style="width: 20%"/>
-                        <field name="unit" class="oe_no_button" placeholder="Unit" style="width: 30%"/>
+                        <field name="street" placeholder="Street..." nolabel="1" style="width: 80%"/>
+                    </div>
+                    <div class="address_format">
+                        <field name="unit" class="oe_no_button" placeholder="Unit" style="width: 50%"/>
                         <field name="postcode" placeholder="Postcode" style="width: 50%"/>
                     </div>
                     <field name="country_id" placeholder="Country" class="oe_no_button" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" nolabel="1"/>
                     </group>
-                    <field name="address" invisible="1"/>
-                </xpath>                
+                    <field name="oversea_tel" attrs="{'invisible':[('type_std','!=','international')]}"/>
+                    <field name="oversea_add" attrs="{'invisible':[('type_std','!=','international')]}"/>
+                    <field name="insu_policy"/>
+                    <field name="att_rate"/>
+                    <field name="pass_issue"/>
+                    <field name="pass_exp"/>
+                    <field name="employer" />
+                    <separator string="" colspan="2"/>
+                    <field name="wk_pass_issue"/>
+                    <field name="wk_pass_exp"/>                    
+                    <field name="crs_consul"/>
+                    <field name="src_info"/>
+                    <field name="user_id" readonly="1" invisible="1"/>
+                </xpath>
+                
                 <xpath expr="//form[@string='Students']" position="inside">
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
@@ -369,13 +430,13 @@
                         <field name="pa_fullname"/>
                         <field name="pa_nationality"/>
                         <field name="pa_nric"/>
-                        <field name="pa_poscode"/>
-                        <field name="pa_relation"/>
                         <field name="pa_office_tel"/>
-                        <field name="pa_handphone"/>
+                        <field name="pa_relation"/>
                         <field name="pa_email"/>
-                        <field name="pa_address"/>
+                        <field name="pa_handphone"/>
                         <field name="pa_occupation"/>
+                        <field name="pa_address"/>
+                        <field name="pa_poscode" invisible="1"/>
                         </group>
                         </group>                        
                     </page>
@@ -402,8 +463,8 @@
             <field name="model">school.module</field>
             	<field name="arch" type="xml">
                 <tree string="Module">
+                    <field name="code"/>
                     <field name="name"/>
-                    <field name="description"/>
                     <field name="theory_ok"/>
                     <field name="practical_ok"/>
                     <!-- <field name="prerequisite"/> -->
@@ -419,20 +480,16 @@
                     <sheet>
                         <group>
                             <field name="name"/>
+                            <field name="code"/>
                             <field name="description"/>
                             <field name="theory_ok"/>
                             <field name="practical_ok"/>
-                            <!-- <field name="prerequisite"> -->
-                                <!-- <form string="Prerequisite"> -->
-                                    <!-- <sheet> -->
-                                        <!-- <group> -->
-                                            <!-- <field name="name"/> -->
-                                            <!-- <field name="description"/> -->
-                                        <!-- </group> -->
-                                    <!-- </sheet> -->
-                                <!-- </form> -->
-                            <!-- </field> -->
                         </group>
+                        <notebook>
+                            <page string="Courses">
+                                <field name="shool_course_ids" readonly="1"/>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
@@ -449,6 +506,36 @@
         </record>
         
         <menuitem id="menu_action_school_module" parent="school_management.menu_subject_class" action="action_school_module" sequence="0"/>
+        
+        
+        <record id="student_invoice_view_search" model="ir.ui.view">
+            <field name="name">student.invoice.search.view</field>
+            <field name="model">student.invoice</field>
+            <field eval="10" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Student Invoice Search">
+                    <group expand="0" string="Group By">
+						<filter name="group_status" string="Status" context="{'group_by':'state'}"/>
+                        <filter name="group_intake" string="Intake" context="{'group_by':'class_id'}"/>
+					</group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="student_enroll_view_search" model="ir.ui.view">
+            <field name="name">student.enroll.search.view</field>
+            <field name="model">student.enroll</field>
+            <field eval="10" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Student Invoice Search">
+                    <field name="nric"/>
+                    <field name="stdidd"/>
+                    <field name="fullname"/>
+                    
+                </search>
+            </field>
+        </record>
+        
         <!-- Teacher Attendance --> 
         <record id="view_teacher_attendance_form" model="ir.ui.view">
     		<field name="name">teacher.attendance.form</field>
@@ -565,6 +652,23 @@
             <field name="domain">[('state', '=', 'posted')]</field>
         </record>
         
+        <record id="view_hr_holidays_boston_form_inherit" model="ir.ui.view">
+            <field name="name">hr.holidays.boston.form.inherit</field>
+            <field name="model">hr.holidays</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_new"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@col='3']" position="replace">
+                        <field name="date_from" nolabel="1" on_change="onchange_date_from(date_to, date_from)" attrs="{'required':[('type', '=', 'remove')]}" class="oe_inline" widget="date"/><label string="-" class="oe_inline" attrs="{'invisible':[('type','=','add')]}"/>
+                        <field name="date_to" nolabel="1" on_change="onchange_date_to(date_to, date_from)" attrs="{'required':[('type', '=', 'remove')],'invisible':[('type','=','add')]}" class="oe_inline"/>
+                        <br/>
+                        <label for="is_public"/>
+                        <field name="is_public"/>
+                        <br/>
+                        <field name="public_date" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+                
 <!-- 		<menuitem id="menu_teacher_attendance" parent="school_attendance.menu_attendance" action="action_teacher_attendance" sequence="5"
 			groups="school_management.group_school_admin,school_management.group_school_teacher"/>
 		<menuitem id="menu_teacher_attendance_line" parent="school_attendance.menu_attendance" action="action_teacher_attendance_line" sequence="5"
@@ -922,15 +1026,28 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
 		<menuitem id="school_management.menu_school_session" name="Class" parent="school_management.menu_subject_class" action="school_management.action_school_session" sequence="3"
 			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent"/>
         
+        <record id="view_fees_category_form_inherit" model="ir.ui.view">
+            <field name="name">fees.category.form.inherit.</field>
+            <field name="model">fees.category</field>
+            <field name="inherit_id" ref="school_billing.view_fees_category_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="tax_ids"/>
+                </xpath>
+            </field>
+        </record>
+        
         <!-- change subject into course tree -->
         <record id="view_school_subject_course_inherit" model="ir.ui.view">
             <field name="name">view.school.school.course.inherit</field>
             <field name="model">school.school</field>
             <field name="inherit_id" ref="school_management.view_school_subject_tree"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='name']" position="attributes">
-                    <attribute name="string"> Course Name </attribute>
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="name" string="Course Name"/>
+                    <field name="code"/>
                 </xpath>
+                <xpath expr="//field[@name='objective']" position="replace"/>
             </field>
         </record>
         <!-- change subject into course form -->
@@ -940,14 +1057,15 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
             <field name="inherit_id" ref="school_management.view_school_subject_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="replace">
-                       <field name="name"  string="Course Name"/>
+                       <field name="name" string="Course Name"/>
                        <field name="code"/>
-                       <field name="cer_ib"/>
+                       <field name="sequence"/>
                        <field name="cer_quali"/>
+                       <field name="cer_ib"/>                       
                 </xpath>    
                 <xpath expr="//field[@name='description']" position="replace">
                     <field name="description" string="Program Developed by"/>
-                    <field name="entry_req"/>
+                    <field name="entry_req" widget="html"/>
                 </xpath>
                 <xpath expr="//page[@string='Classes']" position="replace">
                     <page string="Intake">
@@ -962,20 +1080,53 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                         </group>
                     </page>
                 </xpath>
+                <xpath expr="//notebook" position="inside">
+                	<page string="Modules">
+                        <field name="shool_module_ids"/>
+                    </page>
+                    <page string="Fees">
+	                		<group>
+		                		<field name="enroll_fee_ids" nolabel="1">
+		                			<tree editable="bottom">
+		                				<field name="category_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+		                				<field name="fee_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}" domain="[('category_id', '=', category_id)]"/>
+                                        <field name="tax_ids" widget="many2many_tags"/>
+		                				<field name="amount" required="1" sum="Total"/>
+		                			</tree>
+		                		</field>
+		                	</group>
+                	</page>
+                </xpath>
             </field>
         </record>
         <!-- change class into batches tree -->
+        <record id="school_class_view_search" model="ir.ui.view">
+            <field name="name">school.class.search.view</field>
+            <field name="model">school.class</field>
+            <field eval="10" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Intake Search">
+                    <group expand="0" string="Group By">
+						<filter name="group_module" string="Module" context="{'group_by':'module_id'}"/>
+					</group>
+                </search>
+            </field>
+        </record>
+        
         <record id="view_school_class_batches_inherit" model="ir.ui.view">
             <field name="name">view.school.class.batches.inherit</field>
             <field name="model">school.class</field>
             <field name="inherit_id" ref="school_management.view_school_class_tree"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='name']" position="attributes">
-                    <attribute name="string"> Intake </attribute>
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="name" string="Intake" />
+                    <field name="module_id" invisible="1"/>
+                    <field name="module_id1" invisible="1"/>
+                    <!-- <field name="module_id" invisible="1"/> -->
                 </xpath>
                 <xpath expr="//field[@name='subject_id']" position="attributes">
                     <attribute name="string"> Course Name </attribute>
-                </xpath>                
+                </xpath>
             </field>
         </record>
         <!-- change class into batches form -->
@@ -984,8 +1135,8 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
             <field name="model">school.class</field>
             <field name="inherit_id" ref="school_management.view_school_class_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='name']" position="attributes">
-                    <attribute name="string"> Intake </attribute>
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="name" string="Intake" />
                 </xpath>
                 <xpath expr="//field[@name='subject_id']" position="attributes">
                     <attribute name="string"> Course Name </attribute>
@@ -995,13 +1146,21 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                     <field name="en_start"/>
                     <field name="end_date"/>
                     <field name="en_end"/>
-                    <field name="teacher_id" invisible="1"/>
+                    <!-- <field name="teacher_id" invisible="1"/> -->
+                </xpath>
+                <xpath expr="//field[@name='location']" position="after">
+                    <group colspan="2" col="2">
+                        <field name="full_time"/>
+                        <field name="part_time"/>
+                        <field name="teacher_id" invisible="1"/>
+                    </group>
                 </xpath>
                 <xpath expr="//page[@string='Sessions']" position="replace">
                     <page string="Class">
                         <field name="session_ids" nolabel="1" context="{'default_class_id': active_id, 'default_teacher_id': teacher_id}">
                             <tree>
-                                <field name="name" string="Class Name"/>
+                                <field name="name" string="Class Name" invisible="1"/>
+                                <field name="module_id"/>
                                 <field name="date_start"/>
                                 <field name="date_end"/>
                                 <field name="session_location"/>
@@ -1013,6 +1172,34 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
             </field>
         </record>
         
+        
+        <record id="view_school_class_form_inherit1" model="ir.ui.view">
+            <field name="name">view.school.class.form.inherit1</field>
+            <field name="model">school.class</field>
+            <field name="inherit_id" ref="school_enroll.view_school_class_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='student_ids']" position="replace">
+                    <field name="student_ids">
+                        <tree string="Students">
+                            <field name="name"/>
+                            <field name="l_name" string="Last Name"/>
+                            <field name="std_idd"/>
+                        </tree>
+                    </field>
+                </xpath>
+                <xpath expr="//field[@name='enroll_ids']" position="replace">
+                    <field name="enroll_ids">
+                        <tree string="Enroll">
+                            <field name="name" invisible="1"/>
+                            <field name="stdidd"/>
+                            <field name="fullname"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                </xpath>
+                </field>
+                </record>
+        
         <record id="view_school_class_tab_inherit_form" model="ir.ui.view">
             <field name="name">view.school.class.tab.inherit.form</field>
             <field name="model">school.class</field>
@@ -1021,20 +1208,22 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                 <xpath expr="//page[@string='Deposits']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
-                <xpath expr="//page[@string='Fees']" position="replace">
-                    <page string="Fees">
-                        <group>
-                            <field name="enroll_fee_ids" nolabel="1">
-                                <tree editable="bottom">
-                                    <field name="category_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"/>
-                                    <field name="fee_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}" domain="[('category_id', '=', category_id)]"/>
-                                    <field name="amount" required="1" sum="Total"/>
-                                </tree>
-                            </field>
-                            <field name="enroll_fee_total" invisible="1"/>
-                        </group>
-                    </page>
+                <xpath expr="//page[@string='Fees']" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </xpath>
+            </field>
+        </record>
+
+        <record id="school_session_view" model="ir.ui.view">
+            <field name="name">school.session.search.view</field>
+            <field name="model">school.session</field>
+            <field eval="10" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="School session Search">
+                    <group expand="0" string="Group By">
+						<filter name="group_session_module" string="Module" icon="terp-partner" context="{'group_by':'module_id'}"/>
+					</group>
+                </search>
             </field>
         </record>
         
@@ -1066,7 +1255,14 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                 <xpath expr="//field[@name='name']" position="replace">
                     <field name="name" invisible="1"/>
                     <field name="module_id"/>
-                </xpath>    
+                </xpath>  
+                <xpath expr="//field[@name='rrule_type']" position="after">
+                	<br/>
+                    <field name="exclude_weekend"  class="oe_inline"/>
+                    <label for="exclude_weekend"  class="oe_inline"/>                    
+                    <field name="exclude_public"  class="oe_inline"/>
+                    <label for="exclude_public"  class="oe_inline"/>
+                </xpath>
                 <xpath expr="//field[@name='starting_no']" position="replace"/>
                 <xpath expr="//label[@for='starting_no']" position="replace"/>
             </field>
@@ -1080,6 +1276,9 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                 <xpath expr="//field[@name='name']" position="replace">
                     <field name="module_id"/>
                 </xpath>
+                <xpath expr="//field[@name='teacher_id']" position="before">
+                    <field name="classroom_id"/>
+                </xpath>
             </field>
         </record>
         
@@ -1092,6 +1291,26 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                 <xpath expr="//field[@name='class_id']" position="attributes">
                     <attribute name="string"> Intake </attribute>
                 </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='student_id']" position="after">
+                    <field name="std_idd"/>
+                    <field name="install_num"/>
+                </xpath>
+                <notebook>
+                    <page string="Leave/MC Summary">
+                        <field name="leave_ids" nolabel="1" colspan="4" readonly="1">
+                            <tree string="Leave/MC Summary">
+                                <field name="student_id"/>
+                                <field name="present_ok"/>
+                                <field name="absent_ok"/>
+                                <field name="leave"/>
+                                <field name="mc"/>
+                                <field name="late_ok" invisible="1"/>
+                                <field name="makeup_ok" invisible="1"/>
+                                <field name="credits_deduct" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
             </field>
         </record>
         
@@ -1100,9 +1319,15 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
             <field name="model">student.enroll</field>
             <field name="inherit_id" ref="school_enroll.view_student_enroll_tree"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='class_id']" position="attributes">
-                    <attribute name="string"> Intake </attribute>
+                <xpath expr="//field[@name='class_id']" position="replace">
+                    <field name="class_id" string="Intake" />
+                    <field name="nric" string="NRIC/FIN" />
+                    <field name="stdidd" />
+                    <field name="fullname" invisible="0" />
+                    
+                    
                 </xpath>
+                
             </field>
         </record>
         
@@ -1144,6 +1369,39 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                     <page string="Payment History">
                         <field name="payment_ids" nolabel="1" colspan="4" readonly="1"/>
                     </page>
+                    <page string="Leave/MC Summary">
+                        <field name="leave_ids" nolabel="1" colspan="4" readonly="1">
+                            <tree string="Leave/MC Summary">
+                                <field name="class_id" string="Intake"/>
+                                <field name="course_id"/>
+                                <field name="session_id" string="Class"/>
+                                <field name="present_ok"/>
+                                <field name="absent_ok"/>
+                                <field name="leave"/>
+                                <field name="mc"/>
+                                <field name="late_ok" invisible="1"/>
+                                <field name="makeup_ok" invisible="1"/>
+                                <field name="credits_deduct" invisible="1"/>
+                            </tree>
+                            <form string="Leave/MC Summary">
+                            <group>
+                                <group>
+                                <field name="class_id" string="Intake"/>                                
+                                <field name="course_id"/>
+                                <field name="present_ok"/>
+                                <field name="absent_ok"/>
+                                <field name="leave"/>
+                                <field name="mc"/>
+                                <field name="late_ok" invisible="1"/>
+                                <field name="makeup_ok" invisible="1"/>
+                                <field name="credits_deduct" invisible="1"/>
+                                </group>
+                                </group>
+                            </form>
+                        </field>
+                    </page>
+                    
+                    
                 </notebook>
             </field>
         </record>
@@ -1164,47 +1422,118 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
         <record id="view_school_student_exam_inherit_managent" model="ir.ui.view">
             <field name="name">view.school.student.exam.inherit.management</field>
             <field name="model">school.student</field>
+            <field name="inherit_id" ref="school_exam.view_school_student_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Exam History']" position="replace"/>
+            </field>
+        </record>
+        
+        <record id="view_school_student_enrollexam_inherit_managent" model="ir.ui.view">
+            <field name="name">view.school.student.enrollexam.inherit.management</field>
+            <field name="model">school.student</field>
             <field name="inherit_id" ref="school_enroll.view_school_student_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='enroll_ids']" position="replace">
-                    <field name="enroll_ids">
+                <xpath expr="//page[@string='Enrolment History']" position="replace"/>
+                <xpath expr="//page[@string='Emergency Contact Information']" position="after">
+                    <page string="Enrolment History">
+                    <field name="enroll_ids" readonly="1">
                         <tree string="Enroll">
-                            <field name="name"/>
-                            <field name="class_id" invisible="1"/>
+                            <field name="enroll_id"/>
                             <field name="course_id"/>
                             <field name="date_start"/>
-                            <field name="date_end"/>
+                            <field name="date_end" string="Graduation Date"/>
                             <field name="state"/>
                         </tree>
                     </field>
+                    </page>
+                    <page string="Exam History">
+                		<field name="exam_ids" readonly="1">
+                			<tree editable="bottom">
+                				<field name="test_id"/>
+                				<field name="class_id"/>
+                				<field name="session_id"/>
+                				<field name="date"/>
+                				<field name="grade_id"/>
+                			</tree>
+                		</field>
+                	</page>
                 </xpath>
             </field>
         </record>
         
         <!-- School Student Invoice -->
+        
+        
+        
+        <record id="view_student_invoice_inherit_invtree" model="ir.ui.view">
+            <field name="name">view.student.invoice.inherit.invoice.tree</field>
+            <field name="model">student.invoice</field>
+            <field name="inherit_id" ref="school_billing.view_student_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree[@string='Invoices']" position="replace">
+                    <tree string="Invoices">
+                        <field name="date"/>
+                        <field name="name"/>
+                        <field name="enroll_no"/>
+                        <field name="bill_to"/>
+                        <field name="student_id"/>
+                        <field name="inv_stdidd"/>
+                        <field name="amount_total" string="Invoice Amount"/>
+                        <field name="state"/>
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+        
+        
+        <record id="view_student_invoice_inherit_button" model="ir.ui.view">
+            <field name="name">view.student.invoice.inherit.invoice.button</field>
+            <field name="model">student.invoice</field>
+            <field name="inherit_id" ref="school_billing.view_student_invoice_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@string='Register Payment']" position="replace">
+                    <button name="%(school_billing.action_student_invoice_payment)d" type="action" states="open" string="Register Payment" context="{'default_student_id': student_id, 'default_bill_to':bill_to, 'inv_id': active_id, 'default_amount': amount_balance}" class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+        
         <record id="view_student_invoice_inherit_invinfo" model="ir.ui.view">
             <field name="name">view.student.invoice.inherit.invoice.info</field>
             <field name="model">student.invoice</field>
             <field name="inherit_id" ref="school_billing.view_student_invoice_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='refund_ok']" position="before">
-                    <field name="invoice_id"/>
+                <xpath expr="//button[@name='make_refund']" position="replace">
+                    <button name="make_refund" type="object" attrs="{'invisible': ['|',('state','not in',['open','paid']), ('invoice_id','!=',False)]}" string="Refund" class="oe_highlight"/>
+                </xpath>                
+                <xpath expr="//field[@name='date']" position="after">
+                    <field name="inv_stdidd"/>
+                </xpath>
+                <xpath expr="//field[@name='student_id']" position="replace">
+                    <field name="bill_to"/>
+                    <field name="student_id" attrs="{'invisible':[('bill_to','!=',False)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='session_qty']" position="replace"/>
+                <xpath expr="//field[@name='session_qty_paid']" position="replace"/>
+                <xpath expr="//field[@name='refund_ok']" position="replace">
                     <field name="insu_poli"/>
                     <field name="enroll_no"/>
+                    <field name="poli_date1" string="Insurance Policy Start Date"/>
                     <field name="src_code"/>
+                    <field name="poli_date2" string="Insurance Policy End Date"/>
                     <field name="special_dip"/>
                     <field name="cer_issue"/>
-                    <field name="qualification"/>
-                    <field name="intake"/>
                     <field name="fdate_issue"/>
+                    <field name="qualification"/>
                     <field name="tdate_issue"/>
+                    <field name="refund_ok" invisible="1"/>
+                    <field name="invoice_id" invisible="1"/>
                     <field name="company_id" invisible="1"/>
+                    <field name="session_qty" invisible="1"/>
+                    <field name="session_qty_paid" invisible="1"/>
                 </xpath>
-                <xpath expr="//field[@name='session_qty']" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath>
-                <xpath expr="//field[@name='session_qty_paid']" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                
+                <xpath expr="//field[@name='class_id']" position="replace">
+                    <field name="class_id" string="Intake"/>
                 </xpath>
                 <xpath expr="//group[@class='oe_subtotal_footer oe_right']" position="replace">
                     <group class="oe_subtotal_footer oe_right">
@@ -1217,13 +1546,20 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                                 type="object" help="Recompute taxes and total"/>
                         </div>
                         <field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary" nolabel="1"/>
-                        <field name="tender_amount" widget="monetary"/>
-                        <field name="amount_paid" readonly="1" attrs="{'invisible': [('state', 'in', ('draft', 'cancel'))]}"/>                        
+                        <field name="amount_paid" readonly="1" attrs="{'invisible': [('state', 'in', ('draft', 'cancel'))]}" string="Tender Amount"/>                        
                         <field name="amount_balance" attrs="{'invisible': [('state', 'in', ('draft', 'cancel'))]}"/>
                     </group>
                 </xpath>
-                <xpath expr="//field[@name='invoice_lines']/tree/field[@name='price_unit']" position="after">
+                <xpath expr="//field[@name='invoice_lines']/tree/field[@name='price_unit']" position="replace">
+                    <field name="cunit_price" required="1"/>
+                    <field name="price_unit" invisible="1"/>
                     <field name="std_invoice_line_tax_id" widget="many2many_tags" context="{'type':'out_invoice'}"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_lines']/tree/field[@name='student_id']" position="replace">
+                    <field name="student_id" invisible="1" required="0"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_lines']" position="attributes">
+                    <attribute name="context">{'student_id':student_id}</attribute>
                 </xpath>
                 <xpath expr="//field[@name='invoice_lines']" position="after">
                     <group col="4" colspan="4">
@@ -1234,6 +1570,24 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                             </div>
                             <field name="remarks" class="oe_inline" placeholder="Remarks..."/>
                 </xpath>
+                <notebook>
+                    <page string="Payments">
+                        <field name="payment_line_ids" readonly="1">
+                            <tree readonly="1" create="false">
+                                <field name="inv_id" invisible="1"/>
+                                <field name="payment_id"/>
+                                <field name="class_id" required="1" string="Intake"/>
+                                <field name="date" invisible="1" required="1"/>
+                                <field name="invoice_amount" invisible="0" readonly="1"/>
+                                <field name="balance" readonly="1"/>
+                                <field name="price_unit" invisible="1"/>
+                                <field name="amount" required="1" sum="Total"/>
+                                <button name="print_report" type="object" string="Print" class="oe_highlight"/>
+                                
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
             </field>
         </record>
         
@@ -1303,6 +1657,39 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
             </field>
         </record>
         
+        
+        <record id="view_student_payment_insu_tree_inherit" model="ir.ui.view">
+            <field name="name">view.student.payment.insu.tree.inherit</field>
+            <field name="model">student.payment</field>
+            <field name="inherit_id" ref="school_billing.view_student_payment_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree[@string='Payment']" position="replace">
+                    <tree string="Payment">
+                        <field name="date" string="Receipt Date"/>
+                        <field name="name" string="Receipt Number"/>
+                        <field name="enroll_no"/>
+                        <field name="bill_to"/>
+                        <field name="student_id"/>
+                        <field name="inv_stdidd"/>
+                        <field name="amount" sum="Total" string="Paid Amount"/>
+                        <field name="state"/>
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_student_payment_form_inherit11" model="ir.ui.view">
+            <field name="name">view.student.payment.form.inherit11</field>
+            <field name="model">student.payment</field>
+            <field name="inherit_id" ref="school_billing.view_student_invoice_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='student_id']" position="replace">
+                    <field name="bill_to"/>
+                    <field name="student_id"/>
+                </xpath>
+            </field>
+        </record>
+        
         <record id="view_student_payment_insu_form_inherit" model="ir.ui.view">
             <field name="name">view.student.payment.insu.form.inherit</field>
             <field name="model">student.payment</field>
@@ -1311,6 +1698,18 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                 <xpath expr="//field[@name='payment_method_id']" position="after">
                     <field name="insu_poli"/>
                     <field name="company_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='student_id']" position="replace">
+                    <field name="bill_to"/>
+                    <field name="student_id"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_lines']/tree/field[@name='balance']" position="replace"/>
+                <xpath expr="//field[@name='payment_lines']/tree/field[@name='amount']" position="replace">
+                    <field name="amount" string="Paid" required="1"/>
+                    <field name="balance" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_lines']/tree/field[@name='invoice_amount']" position="attributes">
+                    <attribute name="string">Total Amount</attribute>
                 </xpath>
             </field>
         </record>
@@ -1326,7 +1725,7 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                     <group>
                         <group>
                             <field name="name" invisible="1"/>
-                            <field name="student_id"/>
+                            <field name="student_id" invisible="1"/>
                             <field name="issued_date"/>
                             <field name="course_id"/>
                             <field name="note"/>
@@ -1366,12 +1765,12 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                     <group>
                         <group>
                             <field name="name" invisible="1"/>
-                            <field name="student_id"/>
-                            <field name="issued_date"/>
+                            <field name="student_id" invisible="1"/>
+                            <field name="issued_date" string="Issue Date"/>
                             <field name="course_id"/>
-                            <field name="fulltime"/>
-                            <field name="parttime"/>
                             <field name="intake"/>
+                            <field name="fulltime"/>
+                            <field name="parttime"/>                            
                             <field name="instart"/>
                             <field name="inend"/>
                             <field name="cissued_by"/>
@@ -1443,22 +1842,21 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
 		        <div class="oe_structure"/>
 		            <div class="row">
                         <div class="col-xs-12 text-left">
-<br/>
+                        <br/>
 <span t-esc="issued_date"/> 
 <br/>
-<span t-esc="o.title_id.name"/> 
+<span t-field="o.title_id"/> 
 <span t-esc="o.name"/> 
 <span t-esc="o.l_name"/> 
 <br/>
-<span t-field="o.oversea_add"/>
+<p t-field="o.oversea_add" style="width:200px;"/>
+
 <br/>
 Dear <strong><span  t-esc="o.name and o.name or ''"/></strong>
 <br/>
-<br/>
 <span style="font-weight:bold;font-size:15px;"> OFFER OF ADMISSION </span>
 <br/>
-COURSE: <strong><span t-esc="course_id[1]"/></strong>
-<br/>
+<strong><span t-esc="course_id[1]"/></strong>
 <br/>
 <strong> 1.    Offer of Admission </strong>
 <br/>
@@ -1486,7 +1884,7 @@ b.    <u> Standard PEI-Student Contract</u>. This is a legal document which lays
 </div>
 </div>
 <br/>
-All documents must be returned to Boston Business School. If we do not receive your completed and signed documents by <u> 2 WEEKS AFTER <span t-esc="issued_date"/> </u>, it will be assumed that you do not wish to accept the offer and the offer will be deemed withdrawn.
+All documents must be returned to Boston Business School. If we do not receive your completed and signed documents by <u> <span t-esc="end_date"/> </u>, it will be assumed that you do not wish to accept the offer and the offer will be deemed withdrawn.
 <br/>
 <br/>
 <strong> 3.</strong>    We hope that you will take time to consider this offer and we certainly would like to welcome you to Boston Business School. 
@@ -1494,14 +1892,12 @@ All documents must be returned to Boston Business School. If we do not receive y
 Yours faithfully
 <br/>
 <br/>
-<br/>
 <strong> S Sivabaloo </strong>
 <br/>
-Academic Manager
+<strong> Academic Manager </strong>
 <br/>
 Enc. – 	1) Advisory Note to Students
-<br/>
-	2) Standard PEI-Student Contract	
+<p style="margin-left:0.45in;">	2) Standard PEI-Student Contract </p>
 
                         </div>
 		            </div>
@@ -1523,74 +1919,765 @@ Enc. – 	1) Advisory Note to Students
     <!-- 
         STUDENT CONTRACT
     -->
+    
+    <template id="external_layout_stdcon">
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="docs"/>
+        </t>
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"></t>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"></t>
+        </t>
+
+        <t t-call="boston_modifier_status.external_layout_header_stdcon" />
+        <t t-raw="0" />
+        <t t-call="boston_modifier_status.external_layout_footer_stdcon" />
+    </template>
+
+    <template id="boston_modifier_status.external_layout_header_stdcon">
+            <div class="header">
+                <div style="height:30px;"/>
+                <div class="col-xs-7 text-left"/>
+                <div class="col-xs-5 text-left">
+                    <span style="font-color:grey;font-size:11.5px;"> Standard PEI-Student Contract Version 3.1 </span>
+                </div>
+            </div>
+    </template>
+    
+    <template id="boston_modifier_status.external_layout_footer_stdcon">
+        <div class="footer">
+             <div class="row">
+                <div class="text-center" style="float:center">
+                    <ul class="list-inline">
+                        <li>Page:</li>
+                        <li><span class="page"/></li>
+                        <li>of</li>
+                        <li><span class="topage"/></li>
+                    </ul>
+                </div>
+             </div>
+        </div>      
+    </template>
+    
     <template id="report_student_contract_document">
 		<t t-foreach="docs" t-as="o">
-             <t t-call="boston_modifier_status.external_layout_offer">
+             <t t-call="boston_modifier_status.external_layout_stdcon">
 		    <div class="page">
 		        <div class="oe_structure"/>
 		            <div class="row">
-                        <div class="col-xs-12 text-left">
+                        <div class="col-xs-12">
 <br/>
-PRIVATE EDUCATION INSTITUTION-STUDENT CONTRACT
+<div class="col-xs-12 text-center"> <span style="font-weight:bold;font-size:9pt;"> PRIVATE EDUCATION INSTITUTION-STUDENT CONTRACT </span> </div>
 <br/>
+<br/>
+<p style="font-size:8.5pt;">
 This Contract binds both the Private Education Institution (PEI) and the Student once both parties sign this Contract. If the Student is under eighteen (18) years of age, the Student will be represented by the Parent/Legal Guardian.
+</p>
 <br/>
 This Contract is made between:
-<br/>
-(1)	Registered Name of PEI	:	Boston Business School
-<br/>	Registration Number	:	200405229G
-<br/>
-(2)	Full Name of Student	:	STUDENT NAME
-<br/>
-	(as in NRIC for Singapore Citizen (SC) and Permanent Resident (PR) / as in passport for international student)*
-<br/>
-	NRIC Number(for SC/PR)*	:	NRIC/FIN NO
-<br/>
-	Student’s Pass Number (if available)/
-Passport Number (for international student)*	:	PASSPORT NO
-<br/>
-(3)	Full Name of Parent/Legal Guardian*
-<br/>
-(if Student is under eighteen (18) years of age)	:	FULL NAME (IN PARENT’S PARTICULARS TAB)
-<br/>
-	NRIC/Passport Number*	:	NRIC/PASSPORT NO (IN PARENT’S PARTICULARS TAB)
-<br/>
-1.	COURSE INFORMATION AND FEES
-<br/>
-1.1	The PEI will deliver the Course as set out in Schedule A to the Student, towards conferment of the stated qualification upon successful Course completion.
-<br/>
-1.2	The PEI confirms that the Course has been permitted by the Council for Private Education (CPE) and no amendments have been made to the Course as set out in Schedule A, unless otherwise permitted by CPE.
-<br/>
-1.3
-<br/>
-1.4	The Course Fees payable are set out in Schedule B and the optional Miscellaneous Fees in Schedule C.
-<br/>
-The PEI considers payment made 7 days/month* after the scheduled due date(s) in Schedule B as late.
-<br/>
-The PEI will explain to the Student its policy for late payment of Course Fees, including any late payment fee charged in Schedule C (if applicable) and any impact on Course/module completion (if applicable) 
-<br/>
-2.	REFUND POLICY
-<br/>
-2.1	Refund for Withdrawal Due to Non-Delivery of Course:
-<br/>
-The PEI will notify the Student within three (3) working days upon knowledge of any of the following:
-<br/>
-(i)	It does not commence the Course on the Course Commencement Date;
-<br/>
-(ii)	It terminates the Course before the Course Commencement Date;  
-<br/>
-(iii)	It does not complete the Course by the Course Completion Date; 
-<br/>
-(iv)	It terminates the Course before the Course Completion Date;
-<br/>
-(v)	It has not ensured that the Student meets the course entry or matriculation requirement as set by the organisation stated in Schedule A within any stipulated timeline set by CPE; or
-<br/>
-(vi)	The Student’s Pass application is rejected by Immigration and Checkpoints Authority (ICA).
-	
+<table style="width:100%;font-size:8.5pt;">
+    <tr style="height:23px;">
+        <td style="width:8%;"> (1) </td>
+     	<td style="width:46%;"> Registered Name of PEI	</td>
+        <td style="width:46%;border-bottom:1px solid black;">:	Boston Business School </td>
+    </tr>
+    <tr style="height:23px;"> 
+        <td style="width:8%;"/>
+        <td style="width:46%;"> Registration Number </td>
+        <td style="width:46%;border-bottom:1px solid black;">:	200405229G </td>
+    </tr>
+    <br/>
+    <tr style="height:23px;">
+        <td style="width:8%;"> (2) </td>
+     	<td style="width:46%;"> Full Name of Student </td>
+        <td style="width:46%;border-bottom:1px solid black;">: <span t-esc="o.l_name"/> <span t-esc="o.name"/> </td>
+    </tr>
+    <tr style="height:23px;">
+        <td style="width:8%;">  </td>
+     	<td style="width:46%;"> (as in NRIC for Singapore Citizen (SC) and Permanent <br/> student)*</td>
+        <td style="width:46%;"> Resident (PR) / as in passport for international  </td>
+        </tr>
+    <tr style="height:23px;"> 
+        <td style="width:8%;"/>
+        <td style="width:46%;"> NRIC Number(for SC/PR)* </td>
+        <td style="width:46%;border-bottom:1px solid black;">: <span t-esc="(o.type_std == 'international') and 'NA' or o.nric"/> </td>
+    </tr>
+    <tr style="height:23px;"> 
+        <td style="width:8%;"/>
+        <td style="width:46%;"> Student’s Pass Number (if available)/
+        <br/> Passport Number (for international student)* </td>        
+        <td style="width:46%;border-bottom:1px solid black;"><br/>: <span t-esc="(o.type_std == 'international') and (o.nric + ' / ' + o.passport_no) or o.passport_no"/> </td>
+    </tr>
+    <br/>
+    <tr style="height:23px;"> 
+        <td style="width:8%;">(3)	</td>
+        <td style="width:46%;"> Full Name of Parent/Legal Guardian*
+        <br/> (if Student is under eighteen (18) years of age)        </td>
+        <td style="width:46%;border-bottom:1px solid black;"><br/>: <span t-esc="o.pa_fullname and o.pa_fullname or 'NA'"/> </td>
+    </tr>
+    <tr style="height:23px;"> 
+        <td style="width:8%;">	</td>
+        <td style="width:46%;"> NRIC/Passport Number * </td>
+        <td style="width:46%;border-bottom:1px solid black;">:	<span t-esc="o.pa_nric and o.pa_nric or 'NA'"/> </td>
+    </tr>
+</table>
+<div style="padding-top:20px;"/>
+<table style="width:100%;font-size:9pt;text-align: justify; text-justify: inter-word;">
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 1. </strong> </td>
+        <td style="width:95%;"> <strong> COURSE INFORMATION AND FEES </strong> </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 1.1 </strong> </td>
+        <td style="width:95%;">  The PEI will deliver the Course as set out in Schedule A to the Student, towards conferment of the stated qualification upon successful Course completion.  </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 1.2 </strong> </td>
+        <td style="width:95%;">  The PEI confirms that the Course has been permitted by the Council for Private Education (CPE) and no amendments have been made to the Course as set out in Schedule A, unless otherwise permitted by CPE.  </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 1.3 </strong> </td>
+        <td style="width:95%;"> The Course Fees payable are set out in Schedule B and the optional Miscellaneous Fees in Schedule C.  </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 1.4 </strong> </td>
+        <td style="width:95%;">  The PEI considers payment made 7 days/month* after the scheduled due date(s) in Schedule B as late.
+The PEI will explain to the Student its policy for late payment of Course Fees, including any late payment fee charged in Schedule C (if applicable) and any impact on Course/module completion (if applicable)  </td>
+    </tr>
+</table>
+<div style="padding-top:20px;"/>
+<table style="width:100%;font-size:9pt;text-align: justify; text-justify: inter-word;">
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 2. </strong> </td>
+        <td style="width:95%;"> <strong> REFUND POLICY </strong> </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 2.1 </strong> </td>
+        <td style="width:95%;"> <strong> <u> Refund for Withdrawal Due to Non-Delivery of Course: </u> </strong>  </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong>  </strong> </td>
+        <td style="width:95%;">  The PEI will notify the Student within three (3) working days upon knowledge of any of the following:  </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> </strong> </td>
+        <td style="width:95%;"> (i)	It does not commence the Course on the Course Commencement Date;  </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> </strong> </td>
+        <td style="width:95%;">  (ii)	It terminates the Course before the Course Commencement Date;    </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> </strong> </td>
+        <td style="width:95%;">  (iii)	It does not complete the Course by the Course Completion Date;     </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> </strong> </td>
+        <td style="width:95%;">  (iv)	It terminates the Course before the Course Completion Date;     </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> </strong> </td>
+        <td style="width:95%;">  (v)	It has not ensured that the Student meets the course entry or matriculation requirement as set by the organisation stated in Schedule A within any stipulated timeline set by CPE; or    </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> </strong> </td>
+        <td style="width:95%;">  (vi)	The Student’s Pass application is rejected by Immigration and Checkpoints Authority (ICA).     </td>
+    </tr>       
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> </strong> </td>
+        <td style="width:95%;">  The Student should be informed in writing of alternative study arrangements (if any), and also be entitled to a refund of the entire Course Fees and Miscellaneous Fees already paid should the Student decide to withdraw, within seven (7) working days of the above notice.     </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 2.2 </strong> </td>
+        <td style="width:95%;"> <u>  Refund for Withdrawal Due to Other Reasons:   </u>  </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong>  </strong> </td>
+        <td style="width:95%;">  If the Student withdraws from the Course for any reason other than those stated in Clause 2.1, the PEI will, within seven (7) working days of receiving the Student’s written notice of withdrawal, refund to the Student an amount based on the table in Schedule D.    </td>
+    </tr>
 
-                        </div>
+<tr>
+        <td style="width:5%;" class="text-left"> <strong> 2.3 </strong> </td>
+        <td style="width:95%;"> <u> Refund During Cooling-Off Period:  </u> </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong>  </strong> </td>
+        <td style="width:95%;">  The PEI will provide the Student with a cooling-off period of seven (7) working days after the date that the Contract has been signed by both parties. The Student will be refunded the highest percentage(stated in Schedule D)of the fees already paid if the Student submits a written notice of withdrawal to the PEI within the cooling-off period, regardless of whether the Student has started the course or not.   </td>
+    </tr>
+</table>
+
+<div style="padding-top:20px;"/>
+<table style="width:100%;font-size:9pt;">
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 3. </strong> </td>
+        <td style="width:95%;"> <strong> ADDITIONAL INFORMATION </strong> </td>
+    </tr>
+        <tr style="text-align: justify; text-justify: inter-word;">
+        <td style="width:5%;" class="text-left"> <strong> 3.1 </strong> </td>
+        <td style="width:95%;">  The laws of Singapore will apply to how this Contract will be read and to the rights the parties have under this Contract.   </td>
+    </tr>
+    <tr style="text-align: justify; text-justify: inter-word;">
+        <td style="width:5%;" class="text-left"> <strong> 3.2 </strong> </td>
+        <td style="width:95%;">  If any part of this Contract is not valid for any reason under the law of Singapore, this will not affect any other part of this Contract.   </td>
+    </tr>
+</table>    
+
+<div style="padding-top:20px;border-bottom:1px solid black;width:200px;"/>
+    *Delete as appropriate by striking through.
+<br/>
+    Where non-applicable, put “N.A.”. Leave no fields blank.
+<br/>
+    State all dates in the format of DD/MM/YYYY.
+    
+<table style="width:100%;font-size:9pt;text-align: justify; text-justify: inter-word;">
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 3.3 </strong> </td>
+        <td style="width:95%;">  If the Student and the PEI cannot settle a dispute using the way arranged by the PEI, the Student and the PEI may refer the dispute to the CPE Mediation-Arbitration Scheme (www.cpe.gov.sg).   </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 3.4 </strong> </td>
+        <td style="width:95%;">  All information given by the Student to the PEI will not be given by the PEI to anyone else, unless the Student signs in writing that he agrees or unless the PEI is allowed to give the information by law.   </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 3.5 </strong> </td>
+        <td style="width:95%;">  Any agreement other than this Contract is invalid if it is administered without the written permission of CPE. If there is any other agreement between the PEI and the Student that is different from the terms in this Contract, then the terms in this Contract will apply.   </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 3.6 </strong> </td>
+        <td style="width:95%;">  If the Student or the PEI does not exercise or delay exercising any right granted by this Contract, the Student and the PEI will still be able to exercise the same type of right under this Contract during the rest of the time the Contract continues.   </td>
+    </tr>
+    <tr>
+        <td style="width:5%;" class="text-left"> <strong> 3.7 </strong> </td>
+        <td style="width:95%;">  If this Contract is also signed or translated in any language other than English and there is a difference from the English language copy of this Contract, the English language copy will apply.   </td>
+    </tr>
+</table>
+
+<div style="padding-top:640px;"/>
+<div class="col-xs-12 text-center" style="page-break-inside:avoid;">
+<span> <strong> SCHEDULE A </strong></span>
+<br/>
+<span> <strong> COURSE DETAILS </strong></span>
+
+
+<table style="border:1px solid black;border-collapse:collapse;width:100%">
+ <tr style="height:26.9pt;border:1px solid black;">
+  <td style="border:1px solid black;">
+  <p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;margin-left:0.09in;"> 1) </span> <span style="font:7.0pt &quot;Times New Roman&quot;"> </span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Course Title</span></p>
+  </td>
+  <td style="border:1px solid black;">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;text-align:justify;text-justify:inter-ideograph"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;margin-left:0.09in;" t-esc="course_id.name"/></i></p>
+  </td>
+ </tr>
+ <tr style="height:36.9pt;border:1px solid black;">
+  <td style="border:1px solid black;">
+  <p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;margin-left:.09in;"> 2)<span style="font:7.0pt &quot;Times New Roman&quot;"/></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Course Duration (in months)</span></p>
+  </td>
+  <td style="width:299.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.9pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">12 months
+  (CPE Registered Duration: 6 months + * IA Duration: 6 months) </span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">*Industrial
+  Attachment (IA) subject to eligibility and approval of Training Work Permit
+  for international students.</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Students who
+  are not eligible for IA or granted a Training Work Permit by the Ministry of
+  Manpower (Singapore) can complete the course by writing a Student Report
+  based on knowledge gained during their theory component of the course. The
+  report must have a word count of 3000 +/- 5%. </span></p>
+  </td>
+  </tr>
+  <tr style="height:20.9pt">
+  <td style="width:163.2pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:20.9pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">3)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Full-time or Part-time Course</span></p>
+  </td>
+  <td style="width:299.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:20.9pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="fulltime and 'Full-time' or 'Part-time'"/></i></p>
+  </td>
+ </tr>
+ <tr style="height:20.65pt">
+  <td style="width:163.2pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:20.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">4)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Course Commencement Date</span></p>
+  </td>
+  <td style="width:299.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:20.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;color:black;" t-esc="instart"> </span></i></p>
+  </td>
+ </tr>
+ <tr style="height:20.65pt">
+  <td style="width:163.2pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:20.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">5)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Course Completion Date</span></p>
+  </td>
+  <td style="width:299.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:20.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;color:black;" t-esc="inend"/></i></p>
+  </td>
+ </tr>
+ <tr style="height:36.65pt">
+  <td style="width:163.2pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">6)<span style="font:7.0pt &quot;Times New Roman&quot;"/></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Date of Commencement of Studies</span></p>
+  <p style="margin-top:2.0pt;margin-right:   0in;margin-bottom:2.0pt;margin-left:.25in"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">(Date on which Student starts attending Course, if different from Course Commencement Date)</span></i></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in"><i><span style="font-size:   10.0pt;font-family:&quot;Cambria&quot;,serif"/></i></p>
+  </td>
+  <td style="width:299.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+ </tr>
+ <tr style="height:36.65pt">
+  <td style="width:163.2pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">7)<span style="font:7.0pt &quot;Times New Roman&quot;"/></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Qualification</span></p>
+  <p style="margin-top:2.0pt;margin-right:   0in;margin-bottom:2.0pt;margin-left:.25in"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">(Name of award to be conferred on the Student upon successful Course completion)</span></i></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in"><span style="font-size:   10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+  <td style="width:299.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="course_id and course_id.name or ''"/></i></p>
+  </td>
+ </tr>
+ <tr style="height:36.65pt">
+  <td style="width:163.2pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">8)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Organisation which develops the Course</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in"><span style="font-size:   10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+  <td style="width:299.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="cissued_by and cissued_by or ''"/></i></p>
+  </td>
+ </tr>
+ <tr style="height:36.65pt;page-break-inside:avoid;">
+  <td style="width:163.2pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">9)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Organisation which awards/ confers the qualification</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in"><span style="font-size:10.0pt;font-family:   &quot;Cambria&quot;,serif"/></p>
+  </td>
+  <td style="width:299.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="course_id.cer_ib and course_id.cer_ib or ''"/></i></p>
+  </td>
+ </tr>
+  <!-- /table -->
+  
+  
+    <!-- div style="padding-top:330px;"/ -->
+  <!-- table style="width:100%;border-collapse:collapse;border:1;" -->
+ <tr style="height:58.65pt;page-break-inside:avoid;">
+  <td style="width:151.9pt;border:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">10)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Course entry requirement(s)</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in"><span style="font-size:10.0pt;font-family:   &quot;Cambria&quot;,serif"/></p>
+  </td>
+  <td style="width:344.0pt;border:solid windowtext 1.0pt;   border-left:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+    <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif" t-field="course_id.entry_req"/></p>
+  </td>
+ </tr>
+ <tr style="height:36.65pt;page-break-inside:avoid;">
+  <td style="width:151.9pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">11)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Course schedule with modules and/or subjects</span></p>
+  </td>
+  <td style="width:344.0pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;color:black">Refer to class timetable</span></p>
+  </td>
+ </tr>
+
+ <tr style="height:36.65pt;page-break-inside:avoid;">
+  <td style="width:151.9pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">12)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Scheduled holidays (public and school) and/or semester/term break for course</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in"><span style="font-size:   10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+  <td style="width:344.0pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;color:black">Refer to
+  class timetable</span></p>
+  </td>
+ </tr> 
+<!-- /table>
+
+< div style="padding-top:70px;"/ >
+
+<table style="width:100%;border-collapse:collapse;border:1;" -->
+    <tr style="height:36.65pt;border:1px solid black;page-break-inside:avoid;">
+  <td style="width:151.9pt;border-top:1px solid black;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">13)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Examination and/or other assessment period</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in"><span style="font-size:   10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+  <td style="width:344.0pt;border-top:1px solid black;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Refer to class timetable</span></p>
+  </td>
+ </tr>
+ <tr style="height:36.65pt;page-break-inside:avoid;">
+  <td style="width:151.9pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">14)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Expected examination results release date</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in"><span style="font-size:   10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+  <td style="width:344.0pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Refer to class timetable </span></p>
+  </td>
+ </tr>
+ <tr style="height:36.65pt;page-break-inside:avoid;">
+  <td style="width:151.9pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">15)<span style="font:7.0pt &quot;Times New Roman&quot;"> </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Expected award conferment date</span></p>
+  </td>
+  <td style="width:344.0pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:36.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph"><i><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;" t-esc="inend and (inend.split('/')[0] + '/' + str(int(inend.split('/')[1]) + 3) + '/' + inend.split('/')[2]) or ''"/></i></p>
+  </td>
+ </tr>
+</table>
+</div>
+
+<div style="padding-top:300px;"/>
+
+<div class="col-xs-12" style="page-break-inside:avoid;">
+    <div class="text-center"> 
+        <span> <strong> SCHEDULE B </strong></span>
+        <br/>
+        <span> <u> <strong> COURSE FEES </strong> </u> </span>
+    </div>
+    <div style="padding-top:40px;"/>
+
+<table style="width:100%;margin-left:5.4pt;border-collapse:collapse;border:1">
+ <tr style="page-break-inside:avoid;height:16.65pt">
+  <td style="width:338.95pt;border:solid windowtext 1.0pt;   background:silver;padding:0in 5.4pt 0in 5.4pt;height:16.65pt">
+  <span style="font-family:&quot;Cambria&quot;,serif">Fees Breakdown</span>
+  </td>
+  <td style="width:120.05pt;border:solid windowtext 1.0pt;   border-left:none;background:silver;padding:0in 5.4pt 0in 5.4pt;height:16.65pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Total Payable</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">(S$)</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+ </tr>
+ <tr style="height:155.5pt">
+  <td style="width:338.95pt;border-top:none;border-left:solid windowtext 1.0pt;   border-bottom:none;border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt;   height:155.5pt">
+  <t t-set="count" t-value="1"/>
+  <t t-foreach="course_id.enroll_fee_ids" t-as="fee">
+      <t t-if="fee.category_id.name == 'Course Fee'">
+          <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;   font-family:&quot;Cambria&quot;,serif;color:black"> <span t-esc="str(count)+ '.'"/> <span style="font:7.0pt &quot;Times New Roman&quot;">
+          </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;   color:black"> <span t-esc="fee.fee_id.name"/> </span></p>
+          <t t-set="count" t-value="count + 1"/>
+      </t>
+  </t>
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:.25in;text-indent:-.25in"><span style="font-size:10.0pt;   font-family:&quot;Cambria&quot;,serif;color:black"> <span t-esc="str(count)+ '.'"/> <span style="font:7.0pt &quot;Times New Roman&quot;">
+          </span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;   color:black"> GST charges for items 1 -  <span t-esc="len(course_id.enroll_fee_ids)"/> </span></p>
+  </td>
+  <td style="width:120.05pt;border:none;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:155.5pt">
+    <t t-foreach="course_id.enroll_fee_ids" t-as="fee1">
+      <t t-if="fee1.category_id.name == 'Course Fee'">
+          <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;color:black"><span t-esc="fee1.amount" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;course_id.company_id.currency_id&quot;}"/></span></p>
+      </t>
+  </t>
+    <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;color:black"><span t-esc="sum([x.amount for x in course_id.enroll_fee_ids if (x.tax_ids and x.category_id.name == 'Course Fee')]) * 0.07" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;course_id.company_id.currency_id&quot;}"/></span></p>
+  </td>
+ </tr>
+ <tr style="height:24.8pt">
+  <td style="width:338.95pt;border:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:24.8pt">
+  <h2><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;   font-style:normal">Total Course Fees Payable:</span></h2>
+  </td>
+  <td style="width:120.05pt;border:solid windowtext 1.0pt;border-left:   none;padding:0in 5.4pt 0in 5.4pt;height:24.8pt">
+  <p style="text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;color:black"><span t-esc="sum([x.amount for x in course_id.enroll_fee_ids if x.category_id.name == 'Course Fee']) + (sum([x.amount for x in course_id.enroll_fee_ids if (x.tax_ids and x.category_id.name == 'Course Fee')]) * 0.07)" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;course_id.company_id.currency_id&quot;}"/></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style="width:338.95pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt">
+  <p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+  <p><b><span style="font-size:10.0pt;font-family:   &quot;Cambria&quot;,serif">No of Instalments:</span></b></p>
+  </td>
+  <td style="width:120.05pt;border-top:none;border-left:none;   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif" t-esc="install_num"> </span></p>
+  </td>
+ </tr>
+</table>
+
+<p> The prevailing Good and Services Tax (GST) is excluded in the Fee Protection Scheme (FPS).</p>
+<p> *Non-refundable after consumed </p>
+<p> **Non-refundable fees. </p>
+</div>
+
+<br/><br/><br/><br/>
+
+<div class="col-xs-12 text-center" style="page-break-inside:avoid;">
+<span> <u> <strong> INSTALMENT SCHEDULE </strong> </u> </span>
+<br/><br/>
+
+<table style="width:100%;margin-left:5.4pt;border-collapse:collapse;border:1">
+ <tr style="page-break-inside:avoid;height:26.9pt">
+  <td style="width:189.0pt;border:solid windowtext 1.0pt;background:   silver;padding:0in 5.4pt 0in 5.4pt;height:26.9pt">
+  <span style="font-family:&quot;Cambria&quot;,serif">Instalment %  Schedule</span>
+  </td>
+  <td style="width:137.05pt;border:solid windowtext 1.0pt;border-left:   none;background:silver;padding:0in 5.4pt 0in 5.4pt;height:26.9pt">
+  <p style="text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Amount (with GST, if
+  any)</span></p>
+  <p style="text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">(S$)</span></p>
+  </td>
+  <td style="width:123.95pt;border:solid windowtext 1.0pt;border-left:   none;background:silver;padding:0in 5.4pt 0in 5.4pt;height:26.9pt">
+  <p style="text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Date Due^</span></p>
+  </td>
+ </tr>
+ <tr style="height:14.15pt">
+  <td style="width:189.0pt;border-top:none;border-left:   solid windowtext 1.0pt;border-bottom:none;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:14.15pt">
+  <p style="line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif">1<sup>st</sup></span> <span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif"> instalment </span> </p>
+  </td>
+  <td style="width:137.05pt;border:none;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:14.15pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif;   color:black" t-esc="install_num and ((sum([x.amount for x in course_id.enroll_fee_ids if x.category_id.name == 'Course Fee']) + (sum([x.amount for x in course_id.enroll_fee_ids if (x.tax_ids and x.category_id.name == 'Course Fee')]) * 0.07)) / install_num) or (sum([x.amount for x in course_id.enroll_fee_ids if x.category_id.name == 'Course Fee']) + (sum([x.amount for x in course_id.enroll_fee_ids if (x.tax_ids and x.category_id.name == 'Course Fee')]) * 0.07))"></span></p>
+  </td>
+  <td style="width:123.95pt;border:none;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:14.15pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif;   color:black"></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style="width:189.0pt;border-top:none;border-left:   solid windowtext 1.0pt;border-bottom:none;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
+  <p style="line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+  <td style="width:137.05pt;border:none;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
+  <p style="text-align:center;line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+  <td style="width:123.95pt;border:none;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
+  <p style="text-align:center;line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+ </tr>
+ <tr>
+  <td style="width:189.0pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt">
+  <p style="line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+  <td style="width:137.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+  <td style="width:123.95pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+ </tr>
+ <tr style="height:12.25pt">
+  <td style="width:189.0pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt;height:12.25pt">
+  <p style="line-height:150%"><b><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif">Total
+  Course Fees Payable:</span></b></p>
+  </td>
+  <td style="width:137.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt;height:12.25pt">
+  <p style="text-align:center;line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif;   color:black"><span t-esc="sum([x.amount for x in course_id.enroll_fee_ids if x.category_id.name == 'Course Fee']) + (sum([x.amount for x in course_id.enroll_fee_ids if (x.tax_ids and x.category_id.name == 'Course Fee')]) * 0.07)" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;course_id.company_id.currency_id&quot;}"/></span></p>
+  </td>
+  <td style="width:123.95pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   background:#B3B3B3;padding:0in 5.4pt 0in 5.4pt;height:12.25pt">
+  <p style="text-align:center;line-height:150%"><span style="font-size:10.0pt;line-height:150%;font-family:&quot;Cambria&quot;,serif"/></p>
+  </td>
+ </tr>
+</table>
+
+<p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+
+<p style="margin-left:7.1pt;text-align:justify;text-justify: inter-ideograph;text-indent:-7.1pt"><sup><span style="font-size: 10.0pt;font-family:&quot;Cambria&quot;,serif">%</span></sup><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Each instalment amount <u>shall not exceed </u> the following: </span></p>
+
+<p style="margin-left:25.1pt;text-align:justify; text-justify:inter-ideograph;text-indent:-.25in"><span style="font-size:10.0pt;font-family:Symbol">·<span style="font:7.0pt &quot;Times New Roman&quot;">
+</span></span><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">12
+months’ worth of fees for EduTrust certified PEIs*; or</span></p>
+
+<p style="margin-left:25.1pt;text-align:justify; text-justify:inter-ideograph;text-indent:-.25in"><s><span style="font-size:10.0pt;font-family:Symbol">·<span style="font:7.0pt &quot;Times New Roman&quot;">
+</span></span></s><s><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">6
+months’ worth of fees for non-EduTrust-certified PEIs with Industry Wide
+Coverage (IWC)*; or</span></s></p>
+
+<p style="margin-left:25.1pt;text-align:justify; text-justify:inter-ideograph;text-indent:-.25in"><s><span style="font-size:10.0pt;font-family:Symbol">·<span style="font:7.0pt &quot;Times New Roman&quot;">
+</span></span></s><s><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">2
+months’ worth of fees for non-EduTrust-certified PEIs without IWC*.</span></s></p>
+
+<p style="margin-left:7.1pt;text-align:justify;text-justify: inter-ideograph;text-indent:-7.1pt"><span style="font-size:10.0pt; font-family:&quot;Cambria&quot;,serif"/></p>
+
+<p style="margin-left:7.1pt;text-align:justify;text-justify: inter-ideograph;text-indent:-7.1pt"><span style="font-size:10.0pt; font-family:&quot;Cambria&quot;,serif">^ Each instalment after the first shall be
+collected within one week before the next payment scheduled.</span></p>
+
+<p style="text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+
+<p style="text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+
+<b><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"><br style="page-break-before:always"/>
+</span></b>
+
+<p style="margin-top:2.0pt;margin-right:0in;margin-bottom:2.0pt; margin-left:0in"><b><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></b></p>
+</div>
+
+<br/><br/><br/><br/>
+
+<div class="col-xs-12 text-center" style="page-break-inside:avoid;">
+<span> <strong> SCHEDULE C </strong></span>
+<br/>
+<p style="margin-top:2.0pt;margin-right:0in;margin-bottom:2.0pt;margin-left:0in;text-align:center"><a name="_DV_M27"/><b><u><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">MISCELLANEOUS FEES<a href="#_ftn2" name="_ftnref2" title=""><span><span><b><u><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">[1]</span></u></b></span></span></a></span></u></b></p>
+
+<div style="padding-top:60px;"/>
+<table style="width:100%;margin-left:5.4pt;border-collapse:collapse;border:1">
+ <tr> 
+  <td style="width:338.95pt;border:solid windowtext 1.0pt;   background:silver;padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Purpose of Fee</span></p>
+  </td>
+  <td style="width:120.05pt;border:solid windowtext 1.0pt;   border-left:none;background:silver;padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Amount (with GST, if
+  any)</span></p>
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">(S$)</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style="width:338.95pt;border:solid windowtext 1.0pt;   border-top:none;padding:0in 5.4pt 0in 5.4pt">
+      <t t-foreach="course_id.enroll_fee_ids" t-as="fee">
+          <t t-if="fee.category_id.name != 'Course Fee'">
+              <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:2.0pt;margin-left:0in"><span style="font-size:10.0pt;font-family:   &quot;Cambria&quot;,serif"><span t-esc="fee.fee_id.name"/></span></p>
+          </t>
+      </t>
+  </td>
+  <td style="width:120.05pt;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
+    <t t-foreach="course_id.enroll_fee_ids" t-as="fee1">
+          <t t-if="fee1.category_id.name != 'Course Fee'">
+              <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"><span t-esc="fee1.amount" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;course_id.company_id.currency_id&quot;}"/></span></p>
+              <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:2.0pt;margin-left:0in"><span style="font-size:10.0pt;font-family:   &quot;Cambria&quot;,serif"/></p>
+          </t>
+      </t>
+  </td>
+ </tr>
+</table>
+
+<br/><br/><br/>
+
+<div style="border-top:1px solid black;width:200px;"/>
+
+<br/>
+ [1]Miscellaneous Fees refer to any optional fees which the students pay only when applicable. Such fees are normally collected by the PEI when the need arises.
+ <br/><br/> <br/><br/> <br/> <br/><br/><br/> 
+ 
+ <p style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">SCHEDULE D</span></b></p>
+
+<p style="text-align:center"><b><u><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">REFUND TABLE</span></u></b></p>
+
+<p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+
+<p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+
+<table style="width:100%;margin-left:-.05in;border-collapse:collapse;border:none">
+ <tr>
+  <td style="width:2.75in;border:solid windowtext 1.0pt;   background:silver;padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:120%"><span style="font-size:10.0pt;line-height:120%;font-family:&quot;Cambria&quot;,serif">%
+  of [the amount of fees paid under Schedules B and C]</span></p>
+  </td>
+  <td style="width:3.75in;border:solid windowtext 1.0pt;   border-left:none;background:silver;padding:0in 5.4pt 0in 5.4pt">
+  <p style="text-align:justify;text-justify:inter-ideograph;line-height:120%;"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif;font-weight:normal">If
+  Student’s written notice of withdrawal is received:</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style="width:2.75in;border:solid windowtext 1.0pt;border-top:   none;padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:120%"><span style="font-size:10.0pt;line-height:120%;font-family:&quot;Cambria&quot;,serif;   color:black">[90%]</span></p>
+  </td>
+  <td style="width:3.75in;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph;   line-height:120%"><span style="font-size:10.0pt;line-height:120%;   font-family:&quot;Cambria&quot;,serif">more than14 days before the Course Commencement
+  Date</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style="width:2.75in;border:solid windowtext 1.0pt;border-top:   none;padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:120%"><span style="font-size:10.0pt;line-height:120%;font-family:&quot;Cambria&quot;,serif;   color:black">[75%]</span></p>
+  </td>
+  <td style="width:3.75in;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph;   line-height:120%"><span style="font-size:10.0pt;line-height:120%;   font-family:&quot;Cambria&quot;,serif">before, but not more than 14 days before the
+  Course Commencement Date</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style="width:2.75in;border:solid windowtext 1.0pt;border-top:   none;padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:120%"><span style="font-size:10.0pt;line-height:120%;font-family:&quot;Cambria&quot;,serif;   color:black">[30%]</span></p>
+  </td>
+  <td style="width:3.75in;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph;   line-height:120%"><span style="font-size:10.0pt;line-height:120%;   font-family:&quot;Cambria&quot;,serif">after, but not more than 7 days after the Course
+  Commencement Date</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style="width:2.75in;border:solid windowtext 1.0pt;border-top:   none;padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;   margin-bottom:2.0pt;margin-left:0in;text-align:center;line-height:120%"><span style="font-size:10.0pt;line-height:120%;font-family:&quot;Cambria&quot;,serif;   color:black">[0%]</span></p>
+  </td>
+  <td style="width:3.75in;border-top:none;border-left:   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;   padding:0in 5.4pt 0in 5.4pt">
+  <p style="margin-top:2.0pt;margin-right:0in;margin-bottom:   2.0pt;margin-left:0in;text-align:justify;text-justify:inter-ideograph;   line-height:120%"><span style="font-size:10.0pt;line-height:120%;   font-family:&quot;Cambria&quot;,serif">more than 7 days after the Course Commencement
+  Date</span></p>
+  </td>
+ </tr>
+</table>
+</div>
+
+<br/><br/><br/>
+
+<div class="col-xs-12 text-center" style="page-break-inside:avoid;">
+
+<p style="text-align:center"><u><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"><span style="text-decoration:  none"/></span></u></p>
+
+<div style="border:none;border-bottom:solid windowtext 1.5pt;padding:0in 0in 1.0pt 0in">
+
+<p style="border:none;padding:0in"><u><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"><span style="text-decoration:  none"/></span></u></p>
+
+<p style="border:none;padding:0in"><u><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"><span style="text-decoration:  none"/></span></u></p>
+
+<p style="border:none;padding:0in"><u><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"><span style="text-decoration:  none"/></span></u></p>
+
+<p style="border:none;padding:0in"><u><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"><span style="text-decoration:  none"/></span></u></p>
+
+</div>
+
+<p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+
+<p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+<br/><br/>
+<p style="text-align:justify;text-justify:inter-ideograph"><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">The parties hereby acknowledge and agree to the terms stated in this Contract.</span></p>
+
+<p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+
+<p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"/></p>
+
+<p><span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">SIGNED by the PEI</span></p>
+
+<br/> <br/> <br/> <br/>
+
+<table style="width:600px;boder:none">
+<tr>
+<td style="width:240px;border-bottom:1px solid black;"/>
+<td style="width:60px;border-bottom:1px solid white;"/>
+<td style="width:250px;border-bottom:1px solid black;"/>
+</tr>
+</table>
+
+<table style="width:600px;boder:none">
+<tr>
+<td style="width:240px;"> <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"> Authorised Signatory of the PEI </span> 
+<br/>
+<span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"> Name: Karen Basco </span>
+<br/>
+<span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"> Date: <i><span t-esc="issued_date"/></i></span>
+</td>
+<td style="width:60px;"/>
+<td style="width:250px;"> <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Seal of PEI </span></td>
+</tr>
+</table>
+
+<br/> <br/> <br/> <br/>
+
+<table style="width:740px;boder:none">
+<tr>
+<td style="width:240px;"> <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"> SIGNED by the Student </span> </td>
+<td style="width:90px;"/>
+<td style="width:410px;"> <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">SIGNED by the Student’s parent or legal guardian (if the student is under eighteen (18) years of age) </span> </td>
+</tr>
+</table>
+
+<br/> <br/> <br/> <br/>
+<table style="width:600px;boder:none">
+<tr>
+<td style="width:240px;border-bottom:1px solid black;"/>
+<td style="width:60px;border-bottom:1px solid white;"/>
+<td style="width:250px;border-bottom:1px solid black;"/>
+</tr>
+</table>
+
+<table style="width:600px;boder:none">
+<tr>
+<td style="width:240px;"> <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"> Name of Student: <i> <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif; color:black;" t-esc="'%s %s'%(o.l_name and o.l_name or '',o.name)"/></i> </span>
+<br/>
+<span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Date:</span>
+ </td>
+<td style="width:60px;"/>
+<td style="width:250px;"> <span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif"> Name of Parent or Legal Guardian: </span> 
+<br/>
+<span style="font-size:10.0pt;font-family:&quot;Cambria&quot;,serif">Date:</span>
+</td>
+</tr>
+</table>
+
 		            </div>
 	        </div>
+            </div>
+            </div>
             </t>
 	    </t>
 	</template>
@@ -1604,6 +2691,100 @@ The PEI will notify the Student within three (3) working days upon knowledge of 
             name="boston_modifier_status.report_student_contract_document"
             file="boston_modifier_status.report_student_contract_document"
             />
+            
+
+<!-- ANNUAL REPORT -->
+
+    <!-- Headers and Footers for Annual Report -->		
+    <template id="boston_modifier_status.external_layout_anual_report">
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc"/>
+        </t>
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"></t>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"></t>
+        </t>
+        <t t-call="boston_modifier_status.external_layout_anual_report_header" />
+        <t t-raw="0" />
+        <!-- <t t-call="boston_modifier_status.external_layout_anual_report_footer" /> -->
+    </template>
+
+    <template id="boston_modifier_status.external_layout_anual_report_header">
+         <div class="header">
+            <div class="row">
+                <div class="col-xs-6">
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="height:120px;"/>
+                </div>            
+                <span class="col-xs-6 text-right" style="font-size:10pt;">Co. Reg. No. : 200405229G</span>
+                <span class="col-xs-12 text-center" style="font-size:17pt;"><b> ANNUAL REPORT </b></span>
+            </div>
+            <div class="row" style="font-size:10pt;">
+            </div>
+        </div>
+    </template>
+    
+    <template id="boston_modifier_status.report_anual_report">
+    <t t-foreach="docs" t-as="doc">
+    <t t-call="boston_modifier_status.external_layout_anual_report">
+		<t t-set="count" t-value="1"/>
+        <div class="page">
+            <div style="border:1px solid black;overflow:hidden;">
+            <table style="border-collapse:collapse;font-size:10pt;">
+                <thead>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>S/No</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Student Full Name</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>NRIC/Fin No</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Nationality</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Identify of Pass Type</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Gender</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Date of Birth</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Highest Academic Qualification</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Student Type</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Course Title</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Total Fees excluding 7% GST</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Course Commencement Date</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Status of Student</strong></th>
+                        <th class="text-center" style="border-right:1px solid black;border-bottom:1px solid black;padding-left:10px;"><br/><strong>Expected Graduation Date</strong></th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="width:10%;border:none;border-right:1px solid black;"> 
+                            <span> <span t-esc="count"/> </span>
+                            <t t-set="count" t-value="count + 1"/> 
+                        </td>
+                        <td style="border:none;border-right:1px solid black;"> <span t-esc="doc.l_name"/> <span t-esc="doc.name"/> </td>
+                        <td style="border:none;border-right:1px solid black;"> <span t-esc="doc.nric"/> </td>
+                        <td style="border:none;border-right:1px solid black;"> <span t-esc="doc.nationality and doc.nationality.name or ''"/> </td>
+                        <td style="border:none;border-right:1px solid black;"> </td>
+                        <td style="border:none;border-right:1px solid black;"> <span t-esc="doc.gender == 'male' and 'Male' or 'Female'"/> </td>
+                        <td style="border:none;border-right:1px solid black;"> <span t-field="doc.birth_date" t-esc-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/> </td>
+                        <td style="border:none;border-right:1px solid black;"> <span t-esc="get_highest_course and get_highest_course.name or ''"/> </td>
+                        <td style="border:none;border-right:1px solid black;"> <span t-esc="doc.type_std == 'internation' and 'Internation' or 'Local'"/> </td>
+                        <td style="border:none;border-right:1px solid black;"> </td>
+                        <td style="border:none;border-right:1px solid black;"> </td>
+                        <td style="border:none;border-right:1px solid black;"> </td>
+                        <td style="border:none;border-right:1px solid black;"> </td>
+                        <td style="border:none;border-right:1px solid black;"> </td>
+                    </tr>
+               </tbody>
+               </table>
+               </div>               
+        </div>
+    </t>
+    </t>
+    </template>
+        
+     <report
+            id="action_boston_report_report_anual_report"
+            model="school.student"
+            report_type="qweb-pdf"
+            
+            string="ANNUAL REPORT"
+            name="boston_modifier_status.report_anual_report"
+            file="boston_modifier_status.report_anual_report"
+     /><!-- menu="False" -->
         
   </data>
 </openerp>
