@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_school_product_admin,Products,model_school_product,school_management.group_school_admin,1,1,1,1
+access_school_product_teacher,Products,model_school_product,school_management.group_school_teacher,1,0,0,0
+access_school_product_student,Products,model_school_product,school_management.group_school_student,1,0,0,0
+access_product_transfer_admin,Product Transfer,model_product_transfer,school_management.group_school_admin,1,1,1,1
+access_product_transfer_teacher,Product Transfer,model_product_transfer,school_management.group_school_teacher,1,1,1,0
+access_product_transfer_student,Product Transfer,model_product_transfer,school_management.group_school_student,1,0,0,0
+access_product_transfer_line_admin,Product Transfer Line,model_product_transfer_line,school_management.group_school_admin,1,1,1,1
+access_product_transfer_line_teacher,Product Transfer Line,model_product_transfer_line,school_management.group_school_teacher,1,1,1,0
+access_product_transfer_line_student,Product Transfer Line,model_product_transfer_line,school_management.group_school_student,1,0,0,0

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+	<record id="view_school_session_form" model="ir.ui.view">
+    		<field name="name">school.session.form</field>
+            <field name="model">school.session</field>
+            <field name="arch" type="xml">
+                <form>
+                	<sheet style="width: 10%%,height:10%%">
+	                	<group>
+	                		<field name="name"/>
+	                	</group>
+	                	<newline/>
+	                	<group colspan="4" col="4">
+		                	<field name="date_start"/>
+		                	<field name="date_end"/>
+		                	<field name="class_id" options="{'no_create': True, 'no_open': True}"/>
+		                	<field name="session_location"/>
+		                	<field name="teacher_id" required="1"/>
+	                	</group>
+	                	<notebook>
+	                		<page string="Options">
+	                			<group col="1">
+		                			<group>
+		                				<field name="recurrency"/>
+		                			</group>
+		                			<group attrs="{'invisible': [('recurrency','=',False)]}">
+	                					<label for="interval"/>
+	                                   	<div>
+	                						<field name="interval" attrs="{'required': [('recurrency','==',True)]}" class="oe_inline"/>
+	                						<field name="rrule_type" attrs="{'required': [('recurrency','==',True)]}" class="oe_inline"/>
+	                					</div>
+	                					<label string="Until" for="end_type"/>
+                                        <div>
+                                            <field name="end_type" attrs="{'required': [('recurrency','==',True)]}" class="oe_inline"/>
+                                            <field name="count" attrs="{'invisible': [('end_type', '!=', 'count')], 'required': [('recurrency','==',True)]}" class="oe_inline"/>
+                                            <field name="final_date" attrs="{'invisible': [('end_type', '!=', 'end_date')], 'required': [('end_type', '=', 'end_date')]}" class="oe_inline"/>
+                                        </div>
+                                        <label string="Starting from Number" for="starting_no"/>
+                                        <div>
+                                            <field name="starting_no" class="oe_inline"/>
+                                        </div>
+                                                                                
+                                        <label string="Select Weekdays" attrs="{'invisible' :[('rrule_type','not in', ['weekly'])]}"/>
+                                        <group col="6" colspan="1" name="weekdays" attrs="{'invisible' :[('rrule_type','not in', ['weekly'])]}" >
+                                            <field name="mo" />
+                                            <field name="tu" />
+                                            <field name="we" />
+                                            <field name="th" />
+                                            <field name="fr" />
+                                            <field name="sa" />
+                                            <field name="su" />
+                                        </group>
+		                			</group>
+	                			</group>
+	                		</page>
+	                	</notebook>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_school_session_tree" model="ir.ui.view">
+    		<field name="name">school.session.tree</field>
+            <field name="model">school.session</field>
+            <field name="arch" type="xml">
+                <tree string="Session">
+                	<field name="name"/>
+                	<field name="date_start"/>
+		           	<field name="date_end"/>
+                	<field name="session_location"/>
+                	<field name="class_id"/>
+                	<field name="teacher_id"/>
+                </tree>
+            </field>
+        </record>
+		
+
+	    <record id="view_school_session_calendar" model="ir.ui.view">
+	        <field name="name">school.session.calendar</field>
+	        <field name="model">school.session</field>
+	        <field name="arch" type="xml">
+	            <calendar string="Sessions" color="class_id" date_start="date_start" quick_add="False">
+	                <field name="name"/>
+	                <field name="class_id"/>
+	                <field name="teacher_id"/>
+	            </calendar>
+	        </field>
+	    </record>
+    
+        <record id="action_school_session" model="ir.actions.act_window">
+            <field name="name">Sessions</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.session</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">calendar,tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+	</data>
+</openerp>

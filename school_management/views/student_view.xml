@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+	
+	<record id="view_school_student_form" model="ir.ui.view">
+    		<field name="name">school.student.form</field>
+            <field name="model">school.student</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Students">
+                	<sheet style="width: 10%%,height:10%%">
+	                	<field name="image" widget='image' class="oe_avatar oe_left" options='{"size": [128, 128]}'/>
+	                	<div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                            <label for="l_name" string="Last Name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="l_name"/>
+                            </h1>
+	                	</div>
+	                	<notebook>
+	                		<page string="Personal Information">
+	                			<group colspan="4" col="4">
+	                				<field name="birth_date" required="1"/>
+                                	<field name="gender" required="1"/>
+                                	<field name="parent_id" attrs="{'required': [('bill_parent', '=', True)]}"
+                                	context="{
+										'tree_view_ref': 'school_management.view_school_parent_tree',
+						         		'form_view_ref': 'school_management.view_school_parent_form',
+						         		'default_is_parent': True
+										}"/>
+                                	<field name="bill_parent"/>
+                                	<field name="email" required="1"/>
+                                	<field name="user_id" readonly="1"/>
+                                    <field name="nationality" />
+                                    <field name="nric" />
+                                    <field name="religion" />
+                                    <field name="married" />
+                                    <field name="occupation" />
+                                    <field name="address" />
+                                    <field name="home_tel" />
+                                    <field name="office_tel" />
+                                    <field name="handfone" />
+                                	<field name="is_parent" invisible="1"/>
+	                			</group>
+	                		</page>
+                            <page string="Emergency Contact Information">
+                                <group colspan="4" col="4">
+                                    <field name="emer_name" />
+                                    <field name="relationship" />
+                                    <field name="emer_addres" />
+                                    <field name="emer_ocupation" />
+                                    <field name="emer_hometel" />
+                                    <field name="emer_office_tel" />
+                                    <field name="emer_handfone" />
+                                    <field name="emer_email" />
+                                </group>
+                            </page>
+	                	</notebook>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_school_student_tree" model="ir.ui.view">
+    		<field name="name">school.student.tree</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <tree string="Students">
+                	<field name="name"/>
+                	<field name="l_name"/>
+                	<field name="birth_date"/>
+                	<field name="gender"/>
+                	<field name="parent_id"/>
+                </tree>
+            </field>
+        </record>
+        
+        
+        <record id="action_school_student" model="ir.actions.act_window">
+            <field name="name">Students</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.student</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{
+				'tree_view_ref': 'school_management.view_school_student_tree',
+         		'form_view_ref': 'school_management.view_school_student_form'
+				}</field>
+            <field name="domain">[('is_parent', '=', False)]</field>
+        </record>
+		
+		<record id="view_school_parent_form" model="ir.ui.view">
+    		<field name="name">school.student.form</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <form string="Parents">
+                	<sheet style="width: 10%%,height:10%%">
+	                	<group colspan="4" col="2">
+                        	<field name="name"/>
+                        	<field name="email" required="1"/>
+                        	<field name="user_id" readonly="1"/>
+                        	<field name="is_parent" invisible="1"/>
+	                	</group>
+	                	<notebook>
+	                		<page string="Students">
+			                	<group colspan="4" col="2">
+		                        	<field name="child_ids" readonly="1" nolabel="1"/>
+			                	</group>
+			                </page>
+	                	</notebook>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_school_parent_tree" model="ir.ui.view">
+    		<field name="name">school.student.tree</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <tree string="Parents">
+                	<field name="name"/>
+                </tree>
+            </field>
+        </record>
+        
+     	<record id="action_school_parent" model="ir.actions.act_window">
+            <field name="name">Parents</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.student</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{
+				'tree_view_ref': 'school_management.view_school_parent_tree',
+         		'form_view_ref': 'school_management.view_school_parent_form',
+         		'default_is_parent': True
+				}</field>
+            <field name="domain">[('is_parent', '=', True)]</field>
+        </record>
+        
+	</data>
+</openerp>

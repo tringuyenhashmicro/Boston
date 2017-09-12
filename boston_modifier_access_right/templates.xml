@@ -1,0 +1,145 @@
+<openerp>
+    <data>
+        <record model="ir.module.category" id="module_category_boston_accessright">
+            <field name="name">Boston Access Rights</field>
+        </record>
+
+        <record id="group_boston_sales" model="res.groups">
+            <field name="name">Sales</field>
+            <field name="category_id" ref="module_category_boston_accessright"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <record id="group_boston_academic" model="res.groups">
+            <field name="name">Academic</field>
+            <field name="category_id" ref="module_category_boston_accessright"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <record id="group_boston_student_services" model="res.groups">
+            <field name="name">Student Services</field>
+            <field name="category_id" ref="module_category_boston_accessright"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <!--<field name="users" eval="[(4, ref('base.group_user'))]"/>-->
+        </record>
+
+        <record id="group_boston_admin" model="res.groups">
+            <field name="name">QA-Admin"</field>
+            <field name="category_id" ref="module_category_boston_accessright"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+         <record id="group_boston_accounting_calendar" model="res.groups">
+            <field name="name">Accounting Calendar</field>
+            <field name="category_id" ref="module_category_boston_accessright"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+
+         <record id="group_boston_reports" model="res.groups">
+            <field name="name">Reports</field>
+            <field name="category_id" ref="module_category_boston_accessright"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+
+
+        <record id="base.menu_reporting" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_sales'))]"/>
+        </record>
+        <record id="base.menu_reporting" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_academic'))]"/>
+        </record>
+        <record id="base.menu_reporting" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_student_services'))]"/>
+        </record>
+        <record id="base.menu_reporting" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_admin'))]"/>
+        </record>
+        <record id="base.menu_reporting" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_accounting_calendar'))]"/>
+        </record>
+
+        <record id="hr_holidays.menu_open_ask_holidays" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_sales'))]"/>
+        </record>
+        <record id="hr_holidays.menu_open_allocation_holidays" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_sales'))]"/>
+        </record>
+
+        <record id="hr_holidays.menu_open_company_allocation" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_sales'))]"/>
+        </record>
+
+        <record id="hr.menu_hr_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_sales'))]"/>
+        </record>
+
+        <record id="hr.menu_hr_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_academic'))]"/>
+        </record>
+
+        <record id="mail.mail_feeds_main" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_academic'))]"/>
+        </record>
+
+        <record id="mail.mail_feeds_main" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_sales'))]"/>
+        </record>
+        <record id="website.menu_website" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3,ref('group_boston_sales'))]"/>
+        </record>
+        
+        <!-- Add menu Sales Enrolment -->
+        <menuitem name="Enrolment" id="menu_sale_enrolment" parent="base.menu_base_partner"/>
+        
+        <menuitem id="school_management.main_menu_school_management" name="Academic" sequence="1"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent,group_boston_sales,group_boston_academic"/>
+        <menuitem id="school_billing.menu_billing" name="Billing" parent="menu_sale_enrolment" sequence="3"
+			groups="school_management.group_school_admin,group_boston_sales"/>
+        <menuitem id="hr.menu_hr_reporting" parent="base.menu_reporting" name="Human Resources" sequence="40" groups="group_boston_sales"/>
+        <menuitem id="boston_modifier_human_resources.menu_recruitment_employee" parent="hr.menu_hr_main" name="Recruitment Agent"
+                  action="boston_modifier_human_resources.action_view_recruitment_employee" groups="group_boston_sales"/>
+
+        <menuitem id="school_management.menu_student" name="Student Management" parent="school_management.main_menu_school_management" sequence="1"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent,group_boston_sales,group_boston_academic"/>
+        <menuitem id="school_management.menu_school_student" parent="base.menu_sales" action="school_management.action_school_student" sequence="0"
+			groups="school_management.group_school_admin,group_boston_sales"/>
+        <!-- Move this menu to sale menu -->   
+        <menuitem id="school_enroll.menu_student_enroll" parent="menu_sale_enrolment" action="school_enroll.action_student_enroll" sequence="2"
+			groups="school_management.group_school_admin,group_boston_sales"/>
+
+
+        <menuitem id="school_management.menu_subject_class" name="Course, Subject &amp; Classes" parent="school_management.main_menu_school_management" sequence="0"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent,group_boston_academic"/>
+        <menuitem id="school_management.menu_school_subject" parent="school_management.menu_subject_class" action="school_management.action_school_subject" sequence="1"
+			groups="school_management.group_school_admin,group_boston_academic" name="Course"/>
+		<menuitem id="school_management.menu_school_class" parent="school_management.menu_subject_class" action="school_management.action_school_class" sequence="2"
+			groups="school_management.group_school_admin,group_boston_academic" name="Intake"/>
+		<menuitem id="school_management.menu_school_session" name="Class" parent="school_management.menu_subject_class" action="school_management.action_school_session" sequence="3"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent,group_boston_academic"/>
+
+        <menuitem id="school_attendance.menu_attendance" parent="school_management.menu_student" sequence="2" name="Attendances"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent,group_boston_academic"/>
+
+        <menuitem id="school_assignment.menu_assignment" name="Assignments" parent="school_management.menu_student" sequence="6"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent,group_boston_academic"/>
+        <menuitem id="school_exam.menu_exam" name="Tests &amp; Certificates" parent="school_management.menu_student" sequence="7"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,group_boston_academic"/>
+        <menuitem id="school_exam.menu_school_exam" parent="school_exam.menu_exam" action="school_exam.action_school_exam" sequence="0"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,group_boston_academic"/>
+		<!-- <menuitem id="menu_exam_grade" parent="menu_exam" action="action_exam_grade" sequence="1"/> -->
+		<menuitem id="school_exam.menu_school_test" parent="school_exam.menu_exam" action="school_exam.action_school_test" sequence="2"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,group_boston_academic"/>
+		<menuitem id="school_exam.menu_grade_config" parent="school_exam.menu_exam" action="school_exam.action_grade_config" sequence="3"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,group_boston_academic"/>
+
+        <menuitem id="school_inventory.main_menu_inventory" name="Inventory" sequence="30" parent="school_management.main_menu_school_management" groups="group_boston_academic"/>
+        <menuitem id="school_inventory.menu_inventory" name="Inventory" parent="school_inventory.main_menu_inventory" sequence="0" groups="group_boston_academic"/>
+		<menuitem id="school_inventory.menu_products" action="school_inventory.action_school_product" parent="school_inventory.menu_inventory" sequence="0" groups="group_boston_academic"/>
+
+		<menuitem id="school_inventory.menu_transfer" name="Transfers" parent="school_inventory.main_menu_inventory" sequence="1" groups="group_boston_academic"/>
+		<menuitem id="school_inventory.menu_transfer_in" action="school_inventory.action_product_transfer_in" parent="school_inventory.menu_transfer" sequence="0" groups="group_boston_academic"/>
+		<menuitem id="school_inventory.menu_transfer_out" action="school_inventory.action_product_transfer_out" parent="school_inventory.menu_transfer" sequence="1" groups="group_boston_academic"/>
+    </data>
+</openerp>

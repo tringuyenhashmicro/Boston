@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+		<menuitem id="menu_attendance" parent="school_management.menu_student" sequence="2" name="Attendances"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent"/>
+		<menuitem id="menu_student_attendance" parent="menu_attendance" action="action_student_attendance" sequence="0"
+			groups="school_management.group_school_admin,school_management.group_school_teacher"/>
+		<menuitem id="menu_student_attendance_line" parent="menu_attendance" action="action_student_attendance_line" sequence="1"
+			groups="school_management.group_school_admin,school_management.group_school_student,school_management.group_school_student,school_management.group_school_parent"/>
+
+	</data>
+</openerp>

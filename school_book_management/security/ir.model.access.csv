@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_school_book_admin,Books,model_school_book,school_management.group_school_admin,1,1,1,1
+access_school_book_teacher,Books,model_school_book,school_management.group_school_teacher,1,0,0,0
+access_school_book_student,Books,model_school_book,school_management.group_school_student,1,0,0,0
+access_book_holder_admin,Book Holder,model_book_holder,school_management.group_school_admin,1,1,1,1
+access_book_holder_teacher,Book Holder,model_book_holder,school_management.group_school_teacher,1,0,0,0
+access_book_holder_student,Book Holder,model_book_holder,school_management.group_school_student,1,0,0,0
+access_book_transfer_admin,Book Transfer,model_book_transfer,school_management.group_school_admin,1,1,1,1
+access_book_transfer_teacher,Book Transfer,model_book_transfer,school_management.group_school_teacher,1,1,1,0
+access_book_transfer_student,Book Transfer,model_book_transfer,school_management.group_school_student,1,0,0,0
+access_book_transfer_line_admin,Book Transfer Line,model_book_transfer_line,school_management.group_school_admin,1,1,1,1
+access_book_transfer_line_teacher,Book Transfer Line,model_book_transfer_line,school_management.group_school_teacher,1,1,1,0
+access_book_transfer_line_student,Book Transfer Line,model_book_transfer_line,school_management.group_school_student,1,0,0,0

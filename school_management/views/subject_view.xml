@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+	<record id="view_school_subject_form" model="ir.ui.view">
+    		<field name="name">school.subject.form</field>
+            <field name="model">school.school</field>
+            <field name="arch" type="xml">
+                <form>
+                	<sheet>
+	                	<group colspan="4" col="2">
+		                	<field name="name"/>
+		                	<field name="description"/>
+		                	<field name="level"/>
+		                	<field name="objective"/>
+	                	</group>
+	                	<notebook>
+		                	<page string="Classes">
+			                	<group colspan="4" col="2">
+				                	<field name="class_ids" nolabel="1" context="{'default_subject_id': active_id}">
+				                		<tree>
+				                			<field name="name"/>
+						                	<field name="location"/>
+				                			<field name="teacher_id"/>
+					                	</tree>
+				                	</field>
+			                	</group>
+		                	</page>
+	                	</notebook>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_school_subject_tree" model="ir.ui.view">
+    		<field name="name">school.subject.tree</field>
+            <field name="model">school.school</field>
+            <field name="arch" type="xml">
+                <tree>
+                	<field name="name"/>
+                	<field name="description"/>
+                	<field name="level"/>
+                	<field name="objective"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_school_subject" model="ir.actions.act_window">
+            <field name="name">Subjects</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.school</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+	</data>
+</openerp>

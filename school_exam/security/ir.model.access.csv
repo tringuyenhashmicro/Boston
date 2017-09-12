@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_exam_grade,Exam Grade,model_exam_grade,school_management.group_school_admin,1,1,1,1
+access_school_exam,School Exam,model_school_exam,school_management.group_school_admin,1,1,1,1
+access_school_test,School Test,model_school_test,school_management.group_school_admin,1,1,1,1
+access_student_exam,Student Exam,model_student_exam,school_management.group_school_admin,1,1,1,1
+access_exam_grade_teacher,Exam Grade,model_exam_grade,school_management.group_school_teacher,1,1,1,1
+access_school_exam_teacher,School Exam,model_school_exam,school_management.group_school_teacher,1,1,1,1
+access_school_test_teacher,School Test,model_school_test,school_management.group_school_teacher,1,1,1,1
+access_student_exam_teacher,Student Exam,model_student_exam,school_management.group_school_teacher,1,1,1,1

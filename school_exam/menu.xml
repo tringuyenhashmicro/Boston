@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+		<menuitem id="menu_exam" name="Tests &amp; Certificates" parent="school_management.menu_student" sequence="7"
+			groups="school_management.group_school_admin,school_management.group_school_teacher"/>
+		<menuitem id="menu_school_exam" parent="menu_exam" action="action_school_exam" sequence="0"
+			groups="school_management.group_school_admin,school_management.group_school_teacher"/>
+		<!-- <menuitem id="menu_exam_grade" parent="menu_exam" action="action_exam_grade" sequence="1"/> -->
+		<menuitem id="menu_school_test" parent="menu_exam" action="action_school_test" sequence="2"
+			groups="school_management.group_school_admin,school_management.group_school_teacher"/>
+		<menuitem id="menu_grade_config" parent="menu_exam" action="action_grade_config" sequence="3"
+			groups="school_management.group_school_admin,school_management.group_school_teacher"/>
+
+	</data>
+</openerp>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+  <data>
+
+        <record id="view_school_inventory_product_form_inherit" model="ir.ui.view">
+            <field name="name">school.inventory.product.form.inherit</field>
+            <field name="model">school.product</field>
+            <field name="inherit_id" ref="school_inventory.view_school_product_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="after">
+                    <field name="cate_id"/>
+                    <field name="course_id"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_school_inventory_product_tree_inherit" model="ir.ui.view">
+            <field name="name">school.inventory.product.tree.inherit</field>
+            <field name="model">school.product</field>
+            <field name="inherit_id" ref="school_inventory.view_school_product_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="replace"/>
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="course_id" width="200"/>
+                    <field name="cate_id" width="200"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_school_inventory_product_transfer_form_inherit" model="ir.ui.view">
+            <field name="name">school.inventory.product.transfer.form.inherit</field>
+            <field name="model">product.transfer</field>
+            <field name="inherit_id" ref="school_inventory.view_product_transfer_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='transfer_ids']" position="after">
+                    <field name="remark" colspan="4" placeholder="Remark"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_product_update_form_inherit" model="ir.ui.view">
+            <field name="name">product.update.form.inherit</field>
+            <field name="model">product.update</field>
+            <field name="inherit_id" ref="school_inventory.view_product_update_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='quantity']" position="after">
+                    <field name="remark" colspan="4" placeholder="Remark"/>
+                </xpath>
+                <xpath expr="//button[@name='action_update']" position="replace">
+                    <button string="Update" type="object" name="action_update" class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+        
+  </data>
+</openerp>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+		<menuitem id="menu_billing" name="Billing" parent="school_management.main_menu_school_management" sequence="2"
+			groups="school_management.group_school_admin"/>
+		
+		<menuitem id="menu_billing_invoice" parent="menu_billing" name="Invoices" sequence="0"/>
+		<menuitem id="menu_student_invoice" parent="menu_billing_invoice" action="action_student_invoice" sequence="0"/>
+		<menuitem id="menu_student_invoice_refund" parent="menu_billing_invoice" action="action_student_invoice_refund" sequence="1"/>
+		
+		<menuitem id="menu_billing_payment" parent="menu_billing" name="Payments" sequence="1"/>
+		<menuitem id="menu_student_payment" parent="menu_billing_payment" action="action_student_payments" sequence="0"/>
+		<menuitem id="menu_student_payment_refund" parent="menu_billing_payment" action="action_student_payments_refund" sequence="1"/>
+		
+		<menuitem id="menu_deposit" parent="menu_billing" name="Deposits" sequence="2"/>
+		<menuitem id="menu_student_deposit" parent="menu_deposit" action="action_student_deposits" sequence="0"/>
+		
+		<menuitem id="menu_billing_config" parent="menu_billing" name="Configuration" sequence="3"/>
+		<menuitem id="menu_fee_config" parent="menu_billing_config" action="action_fee_config" sequence="0"/>
+		<menuitem id="menu_fees_category" parent="menu_billing_config" action="action_fees_category" sequence="1"/>
+		
+		<menuitem id="menu_school_config" name="Configuration" parent="school_management.main_menu_school_management" sequence="10"
+			groups="school_management.group_school_admin"/>
+		<menuitem id="menu_student_settings" name="Settings" parent="menu_school_config" action="action_student_config"/>
+
+	</data>
+</openerp>

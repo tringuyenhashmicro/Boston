@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="book_holder_school" model="book.holder">
+            <field name="name">School</field>
+            <field name="type">school</field>
+        </record>
+    </data>
+</openerp>

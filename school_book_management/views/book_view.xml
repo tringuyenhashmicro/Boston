@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+	<record id="view_school_book_form" model="ir.ui.view">
+    		<field name="name">school.book.form</field>
+            <field name="model">school.book</field>
+            <field name="arch" type="xml">
+                <form>
+                	<header>
+                        <button name="%(action_update_form)d" type="action" string="Update Books" class="oe_highlight"/>
+                	</header>
+                	<sheet>
+                		<div class="oe_right oe_button_box">
+							<button class="oe_inline oe_stat_button" type="action" 
+								name="%(school_book_management.action_transfer_school)d">
+	                       		<field string="School" name="qty_school" widget="statinfo"/>
+	                        </button>
+	                        <button class="oe_inline oe_stat_button" type="action" 
+	                        	name="%(school_book_management.action_transfer_teacher)d">
+	                       		<field string="Teachers" name="qty_teacher" widget="statinfo"/>
+	                        </button>
+	                        <button class="oe_inline oe_stat_button" type="action" 
+	                        	name="%(school_book_management.action_transfer_student)d">
+	                       		<field string="Students" name="qty_student" widget="statinfo"/>
+	                        </button>
+                    	</div>
+	                	<group colspan="4" col="4">
+		                	<field name="name"/>
+	                	</group>
+	                </sheet>
+                    <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_school_book_tree" model="ir.ui.view">
+    		<field name="name">school.book.tree</field>
+            <field name="model">school.book</field>
+            <field name="arch" type="xml">
+                <tree>
+                	<field name="name"/>
+                	<field name="qty_school"/>
+                	<field name="qty_teacher"/>
+                	<field name="qty_student"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_school_book" model="ir.actions.act_window">
+            <field name="name">Books</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.book</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="view_id" ref="view_school_book_tree"/>
+            <field name="target">current</field>
+            <field name="domain">[]</field>
+        </record>
+		
+		<record id="view_school_book_holder_tree" model="ir.ui.view">
+    		<field name="name">school.book.tree</field>
+            <field name="model">school.book</field>
+            <field name="arch" type="xml">
+                <tree create="false" colors="gray:quantity == 0;green:quantity > 0">
+                	<field name="name"/>
+                	<field name="quantity"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_school_book_holder" model="ir.actions.act_window">
+            <field name="name">Books</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.book</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_school_book_holder_tree"/>
+            <field name="context">{'holder_id': active_id}</field>
+            <field name="target">current</field>
+            <field name="domain">[]</field>
+        </record>
+	
+		<record id="view_book_holder_form" model="ir.ui.view">
+    		<field name="name">book.holder.form</field>
+            <field name="model">book.holder</field>
+            <field name="arch" type="xml">
+                <form create="false">
+                	<sheet>
+                		<div class="oe_right oe_button_box">
+							<button class="oe_inline oe_stat_button" type="action" 
+								name="%(school_book_management.action_school_book_holder)d">
+	                       		<field string="Books" name="quantity" widget="statinfo"/>
+	                        </button>
+                    	</div>
+	                	<group colspan="4" col="4">
+		                	<field name="name"/>
+		                	<field name="type" />
+	                	</group>
+	                </sheet>
+                    <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_book_holder_tree" model="ir.ui.view">
+    		<field name="name">book.holder.tree</field>
+            <field name="model">book.holder</field>
+            <field name="arch" type="xml">
+                <tree create="false">
+                	<field name="name"/>
+                	<field name="quantity"/>
+                	<field name="type" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_book_holder" model="ir.actions.act_window">
+            <field name="name">Book Holder</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">book.holder</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="target">current</field>
+            <field name="domain">[]</field>
+        </record>
+        
+	</data>
+</openerp>

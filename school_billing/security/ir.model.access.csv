@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_student_invoice,Student Invoice,model_student_invoice,,1,1,1,1
+access_student_invoice_line,Student Invoice Line,model_student_invoice_line,,1,1,1,1
+access_student_payment,Student Payment,model_student_payment,,1,1,1,1
+access_student_payment_line,Student Payment Line,model_student_payment_line,,1,1,1,1
+access_student_credit,Student Credit,model_student_credit,,1,1,1,1
+access_fee_signup,Fee Signup,model_fee_signup,,1,1,1,1
+access_fee_recurring,Fee Recurring,model_fee_recurring,,1,1,1,1
+access_fee_enroll,Fee Enroll,model_fee_enroll,,1,1,1,1
+access_fee_enroll_recurring,Fee Enroll Recurring,model_fee_enroll_recurring,,1,1,1,1
+access_fee_config,Fee Config,model_fee_config,,1,1,1,1
+access_fees_category,Fees Category,model_fees_category,,1,1,1,1
+access_student_payment_method,Student Payment Method,model_student_payment_method,,1,1,1,1
+access_student_deposit,Student  Deposit,model_student_deposit,,1,1,1,1
+access_student_deposit_line,Student  Deposit Line,model_student_deposit_line,,1,1,1,1

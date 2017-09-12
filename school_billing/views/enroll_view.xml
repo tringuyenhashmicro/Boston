@@ -1,0 +1,18 @@
+<openerp>
+    <data>
+
+        <record id="view_student_enroll_form" model="ir.ui.view">
+            <field name="name">student.enroll.form.inherit</field>
+            <field name="model">student.enroll</field>
+            <field name="inherit_id" ref="school_enroll.view_student_enroll_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='student_id']" position="after">
+                	<field name="credit"/>
+                	<button name="action_refund" type="object" string="Refund" class="oe_highlight"
+                		attrs="{'invisible': [('credit', '=', 0)]}"/>
+                </xpath>
+            </field>
+        </record>
+		
+    </data>
+</openerp>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_product_update_form" model="ir.ui.view">
+            <field name="name">product.update.form</field>
+            <field name="model">product.update</field>
+            <field name="arch" type="xml">
+                <form>
+                	<group>
+                		<field name="product_id" readonly="1"/>
+                		<field name="quantity" required="1"/>
+                		<field name="type" invisible="1"/>
+                	</group>
+                    <footer>
+                        <button string="Update" type="object" name="action_update" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_update_form" model="ir.actions.act_window">
+            <field name="name">Update Stock</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.update</field>
+            <field name="view_id" ref="view_product_update_form"/>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_type': 'in'}</field>
+        </record>
+        
+        <record id="action_reduce_form" model="ir.actions.act_window">
+            <field name="name">Reduce Stock</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.update</field>
+            <field name="view_id" ref="view_product_update_form"/>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_type': 'out'}</field>
+        </record>
+        
+    </data>
+</openerp>

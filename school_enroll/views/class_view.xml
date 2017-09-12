@@ -1,0 +1,23 @@
+<openerp>
+    <data>
+
+        <record id="view_school_class_form" model="ir.ui.view">
+            <field name="name">school.class.form.inherit</field>
+            <field name="model">school.class</field>
+            <field name="inherit_id" ref="school_management.view_school_class_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Sessions']" position="after">
+                	<page string="Enrolled Students">
+                		<field name="student_ids">
+                		</field>
+                	</page>
+                	<page string="Enrollment History">
+                		<field name="enroll_ids">
+                		</field>
+                	</page>
+                </xpath>
+            </field>
+        </record>
+		
+    </data>
+</openerp>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+		<menuitem id="main_menu_school_management" name="School Management" sequence="1"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent"/>
+		<menuitem id="menu_subject_class" name="Subject &amp; Classes" parent="main_menu_school_management" sequence="0"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent"/>
+		<menuitem id="menu_school_subject" parent="menu_subject_class" action="action_school_subject" sequence="0"
+			groups="school_management.group_school_admin"/>
+		<menuitem id="menu_school_class" parent="menu_subject_class" action="action_school_class" sequence="1"
+			groups="school_management.group_school_admin"/>
+		<menuitem id="menu_school_session" parent="menu_subject_class" action="action_school_session" sequence="2"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent"/>
+		<!-- <menuitem id="menu_school_teacher" parent="menu_subject_class" action="hr.open_view_employee_list_my" sequence="3" name="Teacher" -->
+			<!-- groups="school_management.group_school_admin"/> -->
+		
+		<menuitem id="menu_student" name="Student Management" parent="main_menu_school_management" sequence="1"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent"/>
+		<menuitem id="menu_school_student" parent="menu_student" action="action_school_student" sequence="0"
+			groups="school_management.group_school_admin"/>
+		<menuitem id="menu_school_parent" parent="menu_student" action="action_school_parent" sequence="1"
+			groups="school_management.group_school_admin"/>
+
+	</data>
+</openerp>

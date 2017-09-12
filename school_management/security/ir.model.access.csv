@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ir_sequence_admin,Subject,model_school_subject,school_management.group_school_admin,1,1,1,1
+access_school_class_admin,Class,model_school_class,school_management.group_school_admin,1,1,1,1
+access_school_session_admin,Session,model_school_session,school_management.group_school_admin,1,1,1,1
+access_school_teacher_admin,Teacher,model_school_teacher,school_management.group_school_admin,1,1,1,1
+access_school_student_admin,Student,model_school_student,school_management.group_school_admin,1,1,1,1
+access_school_subject_teacher,Subject,model_school_subject,school_management.group_school_teacher,1,0,0,0
+access_school_class_teacher,Class,model_school_class,school_management.group_school_teacher,1,0,0,0
+access_school_session_teacher,Session,model_school_session,school_management.group_school_teacher,1,0,0,0
+access_school_student_teacher,Student,model_school_student,school_management.group_school_teacher,1,0,0,0
+access_ir_sequence_admin,Student,base.model_ir_sequence,school_management.group_school_admin,1,0,0,0
+access_ir_sequence_teacher,Student,base.model_ir_sequence,school_management.group_school_teacher,1,0,0,0
+access_school_student_student,Student,model_school_student,school_management.group_school_student,1,0,0,0
+access_school_teacher_teacher,Teacher,model_school_teacher,school_management.group_school_teacher,1,0,0,0
+access_school_session_student,Session,model_school_session,school_management.group_school_student,1,0,0,0
+access_school_session_parent,Session,model_school_session,school_management.group_school_parent,1,0,0,0
+access_school_student_parent,Student,model_school_student,school_management.group_school_parent,1,0,0,0

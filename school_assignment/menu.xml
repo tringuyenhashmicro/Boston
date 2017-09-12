@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+		<menuitem id="menu_assignment" name="Assignments" parent="school_management.menu_student" sequence="6"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent"/>
+		<menuitem id="menu_class_assignment" parent="menu_assignment" action="action_class_assignment" sequence="0"
+			groups="school_management.group_school_admin,school_management.group_school_teacher"/>
+		<menuitem id="menu_student_assignment" parent="menu_assignment" action="action_student_assignment" sequence="1"
+			groups="school_management.group_school_admin,school_management.group_school_teacher,school_management.group_school_student,school_management.group_school_parent"/>
+		<menuitem id="menu_assignment_grade" parent="menu_assignment" action="action_grade_config" sequence="2"
+			groups="school_management.group_school_admin"/>
+
+	</data>
+</openerp>

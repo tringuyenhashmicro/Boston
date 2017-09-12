@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+.openerp .oe_list_content th.oe_list_header_float{
+   text-align: right;
+}
+
+.openerp .oe_list_content th.oe_list_header_integer{
+   text-align: right;
+   padding: 0 !important;
+}
+
+.openerp label.oe_subtotal_footer_separator_noline{
+    float:right;
+    width: 184px !important;
+}
+
+.openerp .oe_form .oe_subtotal_footer .oe_subtotal_footer_separator_noline {
+  min-width: 108px;
+  margin-top: 4px;
+  padding-top: 4px;
+/*  font-weight: bold;*/
+  font-size: 10px;
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_grade_config" model="ir.ui.view">
+            <field name="name">grade.config</field>
+            <field name="model">grade.config</field>
+            <field name="arch" type="xml">
+                <form string="Configure Grades" class="oe_form_configuration">
+                    <header>
+                        <button string="Apply" type="object" name="configure_grades" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" type="object" name="cancel" class="oe_link"/>
+                    </header>
+                    <separator string="Grades Configuration"/>
+                    <group colspan="4" col="2">
+                    	<field name="grade_ids" nolabel="1">
+                    		<tree editable="bottom">
+                    			<field name="name"/>
+                    			<field name="old_name" invisible="1"/>
+                    			<field name="mark_from"/>
+                    			<field name="mark_to"/>
+                    		</tree>
+                    	</field>
+                    	<label string=""/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_grade_config" model="ir.actions.act_window">
+            <field name="name">Grade Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">grade.config</field>
+            <field name="view_id" ref="view_grade_config"/>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+    </data>
+</openerp>

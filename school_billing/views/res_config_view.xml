@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_student_config_settings" model="ir.ui.view">
+            <field name="name">student.config.settings</field>
+            <field name="model">student.config.settings</field>
+            <field name="arch" type="xml">
+                <form string="Configure Sales" class="oe_form_configuration">
+                    <header>
+                        <button string="Apply" type="object" name="execute" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" type="object" name="cancel" class="oe_link"/>
+                    </header>
+                    <separator string="Credit Hours Configuration"/>
+                    <group>
+                    <div>
+                        <label for="credit_hours" string="1 Credit"/>
+                        <field name="credit_hours" required="1" class="oe_inline"/>
+                        <label for="credit_hours" string="Hours"/>
+                    </div>
+                    </group>
+                    <separator string="Fees Configuration"/>
+                    <group>
+                        <field name="first_signup" required="1" class="oe_inline"/>
+                        <field name="recurring_fees" required="1" class="oe_inline"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_student_config" model="ir.actions.act_window">
+            <field name="name">Configure Student Management</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">student.config.settings</field>
+            <field name="view_id" ref="view_student_config_settings"/>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+    </data>
+</openerp>

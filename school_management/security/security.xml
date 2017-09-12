@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="1">
+
+        <record model="ir.module.category" id="module_category_school_management">
+            <field name="name">School Management</field>
+            <field name="sequence">0</field>
+        </record>
+
+    	<record id="group_school_admin" model="res.groups">
+	        <field name="name">Administrator</field>
+	        <field name="category_id" ref="school_management.module_category_school_management"/>
+    	</record>
+    	
+    	<record id="group_school_student" model="res.groups">
+	        <field name="name">Student</field>
+	        <field name="category_id" ref="school_management.module_category_school_management"/>
+    	</record>
+    	
+    	<record id="group_school_parent" model="res.groups">
+	        <field name="name">Parent</field>
+	        <field name="category_id" ref="school_management.module_category_school_management"/>
+    	</record>
+    	
+    	<record id="group_school_teacher" model="res.groups">
+	        <field name="name">Teacher</field>
+	        <field name="category_id" ref="school_management.module_category_school_management"/>
+    	</record>
+    	
+    </data>
+</openerp>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- Sequences for Student Attendance -->
+        <record id="seq_type_stud_att" model="ir.sequence.type">
+            <field name="name">Student Attendance</field>
+            <field name="code">stud.att</field>
+        </record>
+
+        <record id="seq_stud_att" model="ir.sequence">
+            <field name="name">Student Attendance</field>
+            <field name="code">stud.att</field>
+            <field name="prefix">AT-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</openerp>

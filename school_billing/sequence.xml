@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+
+        <!-- Sequences for Student Invoice -->
+        <record id="seq_type_stud_inv" model="ir.sequence.type">
+            <field name="name">Student Invoice</field>
+            <field name="code">stud.invoice</field>
+        </record>
+
+        <record id="seq_stud_inv" model="ir.sequence">
+            <field name="name">Student Invoice</field>
+            <field name="code">stud.invoice</field>
+            <field name="prefix">ST/INV-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+
+	 <!-- Sequences for Student Payment -->
+        <record id="seq_type_stud_payment" model="ir.sequence.type">
+            <field name="name">Student Payment</field>
+            <field name="code">stud.payment</field>
+        </record>
+
+        <record id="seq_stud_payment" model="ir.sequence">
+            <field name="name">Student Payment</field>
+            <field name="code">stud.payment</field>
+            <field name="prefix">ST/PAY-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+
+    <!-- Sequences for Student Deposit -->
+        <record id="seq_type_stud_deposit" model="ir.sequence.type">
+            <field name="name">Student Deposit</field>
+            <field name="code">stud.deposit</field>
+        </record>
+
+        <record id="seq_stud_deposit" model="ir.sequence">
+            <field name="name">Student Deposit</field>
+            <field name="code">stud.deposit</field>
+            <field name="prefix">ST/D-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</openerp>

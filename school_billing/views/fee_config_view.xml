@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+	<record id="view_fee_config_form" model="ir.ui.view">
+    		<field name="name">fee.config.form</field>
+            <field name="model">fee.config</field>
+            <field name="arch" type="xml">
+                <form string="Fee Config">
+                	<sheet style="width: 10%%,height:10%%">
+	                	<group colspan="4" col="4">
+	                		<field name="name" required="1"/>
+	                		<field name="amount" required="1"/>
+	                		<field name="category_id" required="1"/>
+	                	</group>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_fee_config_tree" model="ir.ui.view">
+    		<field name="name">fee.config.tree</field>
+            <field name="model">fee.config</field>
+            <field name="arch" type="xml">
+                <tree string="Fee Config">
+                	<field name="name"/>
+                	<field name="amount"/>
+                	<field name="category_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_fee_config" model="ir.actions.act_window">
+            <field name="name">Fees Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fee.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        
+        <record id="view_fees_category_form" model="ir.ui.view">
+    		<field name="name">fees.category.form</field>
+            <field name="model">fees.category</field>
+            <field name="arch" type="xml">
+                <form string="Fees Category">
+                	<sheet style="width: 10%%,height:10%%">
+	                	<group colspan="4" col="4">
+	                		<field name="name"/>
+	                	</group>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_fees_category_tree" model="ir.ui.view">
+    		<field name="name">fees.category.tree</field>
+            <field name="model">fees.category</field>
+            <field name="arch" type="xml">
+                <tree string="Fees Category">
+                	<field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_fees_category" model="ir.actions.act_window">
+            <field name="name">Fees Categories</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fees.category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+	</data>
+</openerp>

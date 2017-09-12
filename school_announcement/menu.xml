@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+		<menuitem id="menu_announcement" action="action_school_announcement" parent="school_management.menu_student" sequence="8"/>
+
+	</data>
+</openerp>

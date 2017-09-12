@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+	<record id="view_student_attendance_form" model="ir.ui.view">
+    		<field name="name">student.attendance.form</field>
+            <field name="model">student.attendance</field>
+            	<field name="arch" type="xml">
+                <form string="Attendance">
+                	<header>
+                        <button name="action_validate" type="object" states="draft" string="Validate" class="oe_highlight"/>
+                    	<field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                	</header>
+                	<sheet style="width: 10%%,height:10%%">
+	                	<div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+	                	</div>
+	                	<group colspan="4" col="4">
+	                		<field name="subject_id" options="{'no_create': True, 'no_open': True}" required="1" 
+	                			attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+	                		<field name="class_id" options="{'no_create': True, 'no_open': True}"
+	                			domain="[('subject_id', '=', subject_id)]" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+	                		<field name="session_id" options="{'no_create': True, 'no_open': True}"
+	                			domain="[('class_id', '=', class_id)]" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+	                	</group>
+	                	<notebook>
+	                		<page string="Attendances">
+	                			<field name="attendance_ids" attrs="{'readonly':[('state', '!=', 'draft')]}">
+	                				<tree editable="bottom">
+	                					<field name="student_id" options="{'no_create': True, 'no_open': True}"
+	                						required="1" domain="[('is_parent', '=', False)]"/>
+	                					<field name="gender"/>
+	                					<field name="present_ok"/>
+	                					<field name="absent_ok"/>
+	                					<field name="late_ok"/>
+	                					<field name="makeup_ok"/>
+	                					<field name="credits_deduct" attrs="{'required': [('makeup_ok', '=', True)]}"/>
+	                				</tree>
+	                				<form create="false">
+	                					<group>
+	                						<field name="student_id" readonly="0"/>
+	                						<field name="gender" readonly="0"/>
+	                						<field name="present_ok"/>
+		                					<field name="absent_ok"/>
+		                					<field name="late_ok"/>
+		                					<field name="makeup_ok"/>
+	                						<field name="remark"/>
+	                					</group>
+	                				</form>
+	                			</field>
+	                		</page>
+	                	</notebook>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_student_attendance_tree" model="ir.ui.view">
+    		<field name="name">student.attendance.tree</field>
+            <field name="model">student.attendance</field>
+            <field name="arch" type="xml">
+                <tree string="Attendance">
+                	<field name="name"/>
+                	<field name="subject_id"/>
+                	<field name="class_id"/>
+                	<field name="session_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_student_attendance" model="ir.actions.act_window">
+            <field name="name">Attendance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">student.attendance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+		
+		<record id="view_student_attendance_line_tree" model="ir.ui.view">
+    		<field name="name">student.attendance.line.tree</field>
+            <field name="model">student.attendance.line</field>
+            <field name="arch" type="xml">
+                <tree string="Student Attendances" create="false">
+                	<field name="name"/>
+                	<field name="student_id"/>
+					<field name="present_ok"/>
+					<field name="absent_ok"/>
+					<field name="late_ok"/>
+					<field name="makeup_ok"/>
+                	<field name="subject_id"/>
+                	<field name="class_id"/>
+                	<field name="session_id"/>
+                	<field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_student_attendance_line" model="ir.actions.act_window">
+            <field name="name">Student Attendances</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">student.attendance.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{}</field>
+            <field name="domain">[('state', '=', 'posted')]</field>
+        </record>
+	</data>
+</openerp>

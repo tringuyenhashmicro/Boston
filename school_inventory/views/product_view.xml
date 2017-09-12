@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+		<record id="view_school_product_form" model="ir.ui.view">
+    		<field name="name">school.product.form</field>
+            <field name="model">school.product</field>
+            <field name="arch" type="xml">
+                <form>
+                	<header>
+                        <button name="%(action_update_form)d" type="action" string="Update Stock" class="oe_highlight"/>
+                        <button name="%(action_reduce_form)d" type="action" string="Reduce Stock" class="oe_highlight"/>
+                	</header>
+                	<sheet>
+                		<div class="oe_right oe_button_box">
+	                        <button class="oe_inline oe_stat_button" type="action" icon="fa-building-o"
+	                        	name="%(action_transfer)d">
+	                       		<field string="Available Quantity" name="qty_available" widget="statinfo"/>
+	                        </button>
+                    	</div>
+	                	<group colspan="4" col="4">
+		                	<field name="name"/>
+		                	<field name="code"/>
+	                	</group>
+	                </sheet>
+	                <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_school_product_tree" model="ir.ui.view">
+    		<field name="name">school.product.tree</field>
+            <field name="model">school.product</field>
+            <field name="arch" type="xml">
+                <tree>
+                	<field name="name"/>
+                	<field name="code"/>
+                	<field name="qty_available"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_school_product" model="ir.actions.act_window">
+            <field name="name">Items</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="target">current</field>
+            <field name="domain">[]</field>
+        </record>
+        
+	</data>
+</openerp>

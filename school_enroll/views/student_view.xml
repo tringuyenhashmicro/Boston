@@ -1,0 +1,19 @@
+<openerp>
+    <data>
+
+        <record id="view_school_student_form" model="ir.ui.view">
+            <field name="name">school.student.form.inherit</field>
+            <field name="model">school.student</field>
+            <field name="inherit_id" ref="school_management.view_school_student_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Personal Information']" position="after">
+                	<page string="Enrolment History">
+                		<field name="enroll_ids" readonly="1">
+                		</field>
+                	</page>
+                </xpath>
+            </field>
+        </record>
+		
+    </data>
+</openerp>

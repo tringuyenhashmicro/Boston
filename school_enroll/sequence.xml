@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- Sequences for Student Enroll -->
+        <record id="seq_type_stud_enroll" model="ir.sequence.type">
+            <field name="name">Student Enroll</field>
+            <field name="code">stud.enroll</field>
+        </record>
+
+        <record id="seq_stud_enroll" model="ir.sequence">
+            <field name="name">Student Enroll</field>
+            <field name="code">stud.enroll</field>
+            <field name="prefix">EN-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</openerp>

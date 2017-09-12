@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+		<menuitem id="main_menu_book_management" name="Book Management" sequence="2"/>
+		<menuitem id="menu_book_management" name="Book Management" parent="main_menu_book_management" sequence="0"/>
+		<menuitem id="menu_books" action="action_school_book" parent="menu_book_management" sequence="0"/>
+		<menuitem id="menu_book_holder" action="action_book_holder" parent="menu_book_management" sequence="1"/>
+		
+		<menuitem id="menu_transfer" name="Transfer Books" parent="main_menu_book_management" sequence="1"/>
+		<menuitem id="menu_book_transfer_teacher" action="action_book_transfer_teacher" parent="menu_transfer" sequence="0"/>
+		<menuitem id="menu_book_transfer_student" action="action_book_transfer_student" parent="menu_transfer" sequence="1"/>
+		<menuitem id="menu_book_transfer_school" action="action_book_transfer_school" parent="menu_transfer" sequence="2"/>
+		
+		<menuitem id="school_inventory.menu_inventory" name="Inventory" parent="main_menu_book_management" sequence="1"/>
+		<menuitem id="school_inventory.menu_transfer" name="Transfers" parent="main_menu_book_management" sequence="1"/>
+
+	</data>
+</openerp>

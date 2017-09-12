@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+		<menuitem id="main_menu_inventory" name="Inventory" sequence="3"/>
+		<menuitem id="menu_inventory" name="Inventory" parent="main_menu_inventory" sequence="0"/>
+		<menuitem id="menu_products" action="action_school_product" parent="menu_inventory" sequence="0"/>
+		
+		<menuitem id="menu_transfer" name="Transfers" parent="main_menu_inventory" sequence="1"/>
+		<menuitem id="menu_transfer_in" action="action_product_transfer_in" parent="menu_transfer" sequence="0"/>
+		<menuitem id="menu_transfer_out" action="action_product_transfer_out" parent="menu_transfer" sequence="1"/>
+		
+
+	</data>
+</openerp>

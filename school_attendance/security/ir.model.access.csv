@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_student_attendance_admin,Student Attendance,model_student_attendance,school_management.group_school_admin,1,1,1,1
+access_student_attendance_line_admin,Student Attendance Line,model_student_attendance_line,school_management.group_school_admin,1,1,1,1
+access_student_attendance_teacher,Student Attendance,model_student_attendance,school_management.group_school_teacher,1,1,1,0
+access_student_attendance_line_teacher,Student Attendance Line,model_student_attendance_line,school_management.group_school_teacher,1,1,1,0
+access_student_attendance_line_student,Student Attendance Line,model_student_attendance_line,school_management.group_school_student,1,0,0,0
+access_student_attendance_line_parent,Student Attendance Line,model_student_attendance_line,school_management.group_school_parent,1,0,0,0

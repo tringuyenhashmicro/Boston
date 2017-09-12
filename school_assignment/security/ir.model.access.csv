@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_class_assignment_admin,Class Assignment,model_class_assignment,school_management.group_school_admin,1,1,1,1
+access_class_assignment_teacher,Class Assignment,model_class_assignment,school_management.group_school_teacher,1,1,1,0
+access_student_assignment_admin,Student Assignment,model_student_assignment,school_management.group_school_admin,1,1,1,1
+access_student_assignment_teacher,Student Assignment,model_student_assignment,school_management.group_school_teacher,1,1,1,0
+access_student_assignment_student,Student Assignment,model_student_assignment,school_management.group_school_student,1,1,0,0
+access_student_assignment_parent,Student Assignment,model_student_assignment,school_management.group_school_parent,1,0,0,0
+access_assignment_grade_admin,Assignment Grade,model_assignment_grade,school_management.group_school_admin,1,1,1,1
+access_assignment_grade_teacher,Assignment Grade,model_assignment_grade,school_management.group_school_teacher,1,1,1,1
+access_assignment_grade_parent,Assignment Grade,model_assignment_grade,school_management.group_school_parent,1,0,0,0
+access_assignment_grade_student,Assignment Grade,model_assignment_grade,school_management.group_school_student,1,0,0,0

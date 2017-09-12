@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+	<record id="view_student_enroll_form" model="ir.ui.view">
+    		<field name="name">student.enroll.form</field>
+            <field name="model">student.enroll</field>
+            <field name="arch" type="xml">
+                <form string="Enroll">
+                	<header>
+                        <button name="action_enroll" type="object" states="draft" string="Enroll" class="oe_highlight"/>
+                        <button name="action_batch_enroll" type="object" states="enrolled" string="Enroll into another Class" class="oe_highlight"/>
+                    	<field name="state" widget="statusbar" statusbar_visible="draft,enrolled"/>
+                	</header>
+                	<sheet style="width: 10%%,height:10%%">
+	                	<div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+	                	</div>
+	                	<group colspan="4" col="4">
+	                		<field name="class_id" required="1"/>
+	                		<field name="date_start" required="1"/>
+	                		<field name="date_end" required="1"/>
+	                	</group>
+	                	<notebook>
+	                		<page string="Students">
+	                			<field name="line_ids" nolabel="1" attrs="{'readonly': [('state', '!=', 'draft')]}">
+	                				<tree editable="bottom">
+	                					<field name="student_id" domain="[('is_parent', '=', False)]" required="1"/>
+	                				</tree>
+	                			</field>
+	                		</page>
+	                	</notebook>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_student_enroll_tree" model="ir.ui.view">
+    		<field name="name">student.enroll.tree</field>
+            <field name="model">student.enroll</field>
+            <field name="arch" type="xml">
+                <tree string="Enroll">
+                	<field name="name"/>
+                	<field name="class_id"/>
+                	<field name="date_start"/>
+                	<field name="date_end"/>
+                	<field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_student_enroll" model="ir.actions.act_window">
+            <field name="name">Enroll</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">student.enroll</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+	</data>
+</openerp>

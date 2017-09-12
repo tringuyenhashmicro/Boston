@@ -1,0 +1,60 @@
+<openerp>
+    <data>
+
+        <record id="view_school_class_form" model="ir.ui.view">
+            <field name="name">school.class.form.inherit</field>
+            <field name="model">school.class</field>
+            <field name="inherit_id" ref="school_enroll.view_school_class_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Enrollment History']" position="after">
+                	<page string="Fees">
+                		<group col="2" colspan="4">
+	                		<group>
+		                		<separator string="First Enrollment"/>
+		                		<newline/>
+		                		<field name="enroll_fee_ids" nolabel="1">
+		                			<tree editable="bottom">
+		                				<field name="category_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+		                				<field name="fee_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"
+		                					domain="[('category_id', '=', category_id)]"/>
+		                				<field name="amount" required="1" sum="Total"/>
+		                			</tree>
+		                		</field>
+		                		<field name="enroll_fee_total" invisible="1"/>
+		                	</group>
+		                	<group>
+		                		<separator string="Recurring Enrollment"/>
+		                		<newline/>
+		                		<field name="enroll_rec_ids" nolabel="1">
+		                			<tree editable="bottom">
+		                				<field name="category_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+		                				<field name="fee_id" required="1" options="{'no_quick_create': True, 'no_create_edit': True}"
+		                					domain="[('category_id', '=', category_id)]"/>
+		                				<field name="amount" required="1" sum="Total"/>
+		                			</tree>
+		                		</field>
+		                		<field name="enroll_rec_total" invisible="1"/>
+		                	</group>
+                		</group>
+                	</page>
+                	<page string="Deposits">
+                		<group colspan="4" col="2">
+	                		<field name="deposit_ids" nolabel="1">
+	                			<tree editable="bottom" readonly="1">
+			                		<field name="deposit_id" string="Reference"/>
+			                		<field name="student_id"/>
+			                		<field name="date"/>
+			                		<field name="amount"/>
+			                	</tree>
+		                	</field>
+	                	</group>
+	                	<group colspan="4" col="2">
+		                	<field name="total_deposit"/>
+	                	</group>
+                	</page>
+                </xpath>
+            </field>
+        </record>
+		
+    </data>
+</openerp>

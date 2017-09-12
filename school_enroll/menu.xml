@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+		<menuitem id="menu_student_enroll" parent="school_management.menu_student" action="action_student_enroll" sequence="1"
+			groups="school_management.group_school_admin"/>
+
+	</data>
+</openerp>

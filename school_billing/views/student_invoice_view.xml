@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+	<record id="view_student_invoice_form" model="ir.ui.view">
+    		<field name="name">student.invoice.form</field>
+            <field name="model">student.invoice</field>
+            	<field name="arch" type="xml">
+                <form string="Invoice">
+                	<header>
+                        <button name="action_validate" type="object" states="draft" string="Validate" class="oe_highlight"/>
+                        <button name="action_cancel" type="object" states="draft,open" string="Cancel" class="oe_highlight"/>
+                        <button name="action_draft" type="object" states="cancel" string="Reset to Draft" class="oe_highlight"/>
+                        <button name="make_refund" type="object" states="paid" string="Refund" class="oe_highlight"/>
+                        <!-- attrs="{'invisible': [('refund_ok','=',True),('state','!=','paid')]}" -->
+                    	<field name="state" widget="statusbar" statusbar_visible="draft,open,paid"/>
+                	</header>
+                	<sheet>
+	                	<div class="oe_title">
+                            <h1>
+                            	<label string="Invoice " attrs="{'invisible': [('refund_ok','=',True)]}"/>
+                        		<label string="Refund Invoice " attrs="{'invisible': [('refund_ok','!=',True)]}"/>
+                                <field name="name" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </h1>
+	                	</div>
+	                	<group colspan="4" col="4">
+	                		<field name="student_id" default_focus="1" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"
+	                		options="{'no_open': True}"/>
+	                		<field name="date" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+	                		<field name="class_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+	                		<field name="parent_id" required="0" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+	                		<field name="session_qty" readonly="1"/>
+	                		<field name="session_qty_paid"/>
+	                		<field name="refund_ok" invisible="1"/>
+	                	</group>
+	                	<notebook>
+	                		<page string="Invoice Lines">
+	                			<field name="invoice_lines" attrs="{'readonly':[('state', '!=', 'draft')]}">
+	                				<tree editable="bottom">
+	                					<field name="student_id" required="1"/>
+	                					<field name="name" required="1"/>
+	                					<field name="quantity" required="1"/>
+	                					<field name="price_unit" required="1"/>
+	                					<field name="subtotal"/>
+	                				</tree>
+	                			</field>
+	                			<group class="oe_subtotal_footer oe_right">
+	                				<field name="amount_total" class="oe_subtotal_footer_separator_noline"/>
+	                				<field name="amount_paid" readonly="1" class="oe_subtotal_footer_separator_noline"
+	                					attrs="{'invisible': [('state', 'in', ('draft', 'cancel'))]}"/>
+	                				<field name="amount_balance" class="oe_subtotal_footer_separator"
+	                					attrs="{'invisible': [('state', 'in', ('draft', 'cancel'))]}"/>
+                            	</group>
+                            	<group col="6" colspan="4">
+                            		<label string=""/>
+                            	</group>
+	                		</page>
+	                	</notebook>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_student_invoice_tree" model="ir.ui.view">
+    		<field name="name">student.invoice.tree</field>
+            <field name="model">student.invoice</field>
+            <field name="arch" type="xml">
+                <tree string="Invoices">
+                	<field name="name"/>
+                	<field name="student_id"/>
+                	<field name="date"/>
+                	<field name="amount_total" sum="Total"/>
+                	<field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_student_invoice" model="ir.actions.act_window">
+            <field name="name">Invoices</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">student.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[('refund_ok', '=', False)]</field>
+        </record>
+		
+		
+		<record id="action_student_invoice_refund" model="ir.actions.act_window">
+            <field name="name">Refund Invoices</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">student.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[('refund_ok', '=', True)]</field>
+        </record>
+		
+	</data>
+</openerp>

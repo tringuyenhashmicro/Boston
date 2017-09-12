@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+
+	<record id="view_school_announcement_form" model="ir.ui.view">
+    		<field name="name">school.announcement.form</field>
+            <field name="model">school.announcement</field>
+            <field name="arch" type="xml">
+                <form>
+                	<header>
+                		<button name="action_publish" type="object" states="draft" string="Puclish" class="oe_highlight"/>
+                    	<field name="state" widget="statusbar" statusbar_visible="draft,published"/>
+                	</header>
+                	<sheet style="width: 10%%,height:10%%">
+	                	<div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+	                	</div>
+	                	<group colspan="4" col="2">
+	                		<field name="title" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+	                		<field name="description" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+	                	</group>
+	                	<group colspan="4" col="2">
+	                		<field name="date_publish" readonly="1"/>
+	                	</group>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_school_announcement_tree" model="ir.ui.view">
+    		<field name="name">school.announcement.tree</field>
+            <field name="model">school.announcement</field>
+            <field name="arch" type="xml">
+                <tree>
+                	<field name="name"/>
+                	<field name="title"/>
+                	<field name="date_publish"/>
+                	<field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_school_announcement" model="ir.actions.act_window">
+            <field name="name">Announcements</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">school.announcement</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+	</data>
+</openerp>
