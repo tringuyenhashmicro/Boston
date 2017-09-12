@@ -52,12 +52,133 @@ class student_invoice(models.Model):
                 if to_date > end_date:
                     raise osv.except_osv(_('Validation Error'),
                                          _('To date should be lower than or equal to %s' % (self.class_id.end_date)))
-                                         
+    
 class school_school(models.Model):
     _inherit = 'school.school'
     
     sequence = fields.Integer('Sequence')
     company_id = fields.Many2one('res.company', 'Company', default=1)
+    
+class SchoolStudent(models.Model):
+    _inherit = 'school.student'
+    
+    recruit_id = fields.Many2one('res.partner', string='Recruitment Agent')
+    industi_id = fields.Many2one('res.partner', string='Industrial Partner')
+
+class SchoolStudentLine(models.Model):
+    _name = 'school.student.line'
+    
+    student_id = fields.Many2one('school.student', string='Student Name')
+    std_idd    = fields.Char(string='Student ID', size=256, related='student_id.std_idd')
+    course_id = fields.Many2many('school.school', string='Course')
+    intake_id = fields.Many2many('school.class', string='Intake')
+    con_from = fields.Date(string='Contract Period')
+    con_to   = fields.Date(string='Contract Period To')
+    name = fields.Many2one('res.partner', string='Customer')
+    
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+    
+    @api.onchange('student_id')
+    @api.depends('student_id')
+    def _onchange_student_id(self):
+        for rc in self:
+            if rc.student_id:
+                if rc.student_id.recruit_id:
+                    rc.is_recruit = True
+                elif rc.student_id.industi_id:
+                    rc.is_industrial = True
+                else:
+                    rc.is_recruit = False
+                    rc.is_industrial = False
+    line_ids = fields.One2many('school.student.line', 'name', string='Students')
+    is_recruit    = fields.Boolean(string='Is a Recruitment Agent')
+    is_industrial = fields.Boolean(string='Is an Industrial Partner')
+    con_from = fields.Date(string='Contract Period')
+    con_to   = fields.Date(string='Contract Period To')
+    student_id = fields.Many2one('school.student', string='Student Name')
+    std_idd    = fields.Char(string='Student ID', size=256, related='student_id.std_idd')
+    course_id = fields.Many2many('school.school', string='Course')
+    intake_id = fields.Many2many('school.class', string='Intake')
+    
+class CalendarType(models.Model):
+    _name = 'calendar.type'
+    name = fields.Char(string='Name', size=256)
+    code = fields.Char(string='Code', size=256)
+
+class CalendarEvent(models.Model):
+    _inherit = 'calendar.event'
+    
+    type = fields.Selection(selection=[('leave', 'Leave'),
+                             ('pub_ho','Public Holiday'),
+                             ('class', 'Class'),
+                             ('lead',  'Lead')], string='Type')
+    type_id = fields.Many2one('calendar.type', string='Calendar Type')
+    
+    def update_type(self, cr, uid, vals, context=None):
+        ct_obj = self.pool.get('calendar.type')
+        cur_ids  = self.search(cr, uid, [])
+        for vals in self.browse(cr, uid, cur_ids):
+            if vals.type:
+                ct_id = ct_obj.search(cr, uid, [('code', '=', vals.type)])
+                ct_id = ct_id and ct_id[0] or 0
+                if ct_id:
+                    self.write(cr, uid, [vals.id], {'type_id': ct_id})
+        return 1
+    
+    def update_calendar(self, cr, uid, vals, context=None):
+        class_obj = self.pool.get('school.session')
+        calendar_obj = self.pool.get('calendar.event')
+        class_ids  = class_obj.search(cr, uid, [])
+        for vals in class_obj.browse(cr, uid, class_ids):
+            if vals.module_id:
+                tmp_name = vals.module_id.name
+            if vals.class_id:
+                tmp_name = '%s, %s'%(tmp_name, vals.class_id.name)
+            if vals.classroom_id:
+                tmp_name = '%s, %s'%(tmp_name, vals.classroom_id.name)
+            if vals.teacher_id:
+                tmp_name = '%s, %s'%(tmp_name, vals.teacher_id.name)
+            calendar_obj.create(cr, uid, {'name'    : tmp_name, 
+                                          'start'   : vals.date_start, 
+                                          'stop'    : vals.date_end,
+                                          'start_date': vals.date_start, 
+                                          'stop_date' : vals.date_end,
+                                          'type'      :'class'})
+        return 1
+    
+class CrmLead(models.Model):
+    _inherit = 'crm.lead'
+    
+    def create(self, cr, uid, vals, context=None):
+        calendar_obj = self.pool.get('calendar.event')
+        if vals.has_key('date_action'):
+            calendar_obj.create(cr, uid, {'name': vals['name'], 'type':'lead', 'start': vals['date_action'], 'stop': vals['date_action'],'start_date': vals['date_action'], 'stop_date': vals['date_action']})
+        return super(CrmLead, self).create(cr, uid, vals, context=context)
+    
+    nric = fields.Char(string='NRIC/FIN/Passport No', size=256)
+    infor_src = fields.Char(string='Info Source', size=256)
+    course_inter = fields.Many2one('school.school', string='Course Interested')
+    login = fields.Date(string='Log in')
+    
+class StudentEnrolDuedateLine(models.Model):
+    _name = 'student.enrol.duedate.line'
+    
+    sequence = fields.Integer(string='Sequence')
+    name = fields.Char(string='Name', size=256)
+    parent_id = fields.Many2one('student.enroll.duedate', string='Parent')
+    duedate = fields.Date(string='Due Date')
+    
+class student_enroll_duedate(models.Model):
+    _name = 'student.enroll.duedate'
+    
+    @api.multi
+    def validate(self):
+        return 1
+    
+    name = fields.Integer(string='Number of Instalment')
+    enrol_id = fields.Many2one('student.enroll.line', string='Due Date')
+    line_ids = fields.One2many('student.enrol.duedate.line', 'parent_id', string='Lines')
     
 class student_enroll_line(models.Model):
     _inherit = 'student.enroll.line'
@@ -67,8 +188,11 @@ class student_enroll_line(models.Model):
         if self.student_id:
             self.std_idd = self.student_id.std_idd or ''
             
+    duedate_ids = fields.One2many('student.enroll.duedate', 'enrol_id', 'Due Date')
     std_idd = fields.Char(related='student_id.std_idd', string='Student ID', size=256)
     install_num = fields.Integer(string='Number of Instalment')
+    
+
     
 class StudentInvoiceLine(models.Model):
     _inherit = 'student.invoice.line'
@@ -83,6 +207,62 @@ class StudentInvoiceLine(models.Model):
         
     install_num = fields.Integer(string='Number of Instalment', default=1)
 
+class SchoolTest(models.Model):
+    _inherit = 'school.test'
+    
+    attachment = fields.Binary('Assignment File')
+    file_name = fields.Char('File Name')
+    
+    @api.model
+    def create(self, vals):
+        school_test_obj = self.env['school.test.inmo']
+        stest_id = school_test_obj.search([('name','=',vals['exam_id']),
+                                           ('module_id','=',vals['module_id']),
+                                           ('intake_id','=',vals['class_id'])])
+        if not stest_id:
+            school_test_obj.create({'name': vals['exam_id'], 'module_id': vals['module_id'], 'intake_id': vals['class_id']})
+        return super(SchoolTest, self).create(vals)
+        
+    @api.onchange('class_id','module_id')
+    @api.depends('class_id','module_id')
+    def _onchange_module_id(self):
+        for rc in self:
+            if rc.class_id and rc.module_id:
+                school_test_obj = self.env['school.test.inmo']
+                stest_id = school_test_obj.search([('module_id','=',rc.module_id.id),
+                                                   ('intake_id','=',rc.class_id.id)])
+                if stest_id:
+                    rc.exam_id = school_test_obj.browse(stest_id[0].id).name.id
+    
+    module_id = fields.Many2one('school.module', string='Module')
+
+class SchoolTestInmo(models.Model):
+    _name = 'school.test.inmo'
+    name = fields.Many2one('school.exam', string='Tests Types')
+    module_id = fields.Many2one('school.module', string='Module')
+    intake_id = fields.Many2one('school.class', string='Intake')
+
+class HrEmployeeLine(models.Model):
+    _name = 'hr.employee.line'
+    
+    name = fields.Char('Name', size=256)
+    trainee = fields.Many2one('hr.employee', string='Trainees')
+    trainer = fields.Many2one('res.partner', string='Trainer')
+    dateorder = fields.Date(string='Date')
+    department = fields.Many2one('hr.department', string='Department')
+    course_tit = fields.Many2one('employee.training', string='Course Title')
+    course_duhr = fields.Float(string='Course Duration in Hrs', digits=(12,1))
+    course_fees = fields.Float(string='Course Fees')
+    train_type  = fields.Selection(selection=[('Internal','Internal'),('External','External')], string='Type of Training')
+    remark = fields.Text('Remarks')
+    emp_id = fields.Many2one('hr.employee', 'Employee')
+    
+class HrEmployee(models.Model):
+    _inherit = 'hr.employee'
+    
+    training_records = fields.One2many('hr.employee.line', 'trainee', string='Employee')
+    empt_type = fields.Selection(selection=[('Employee', 'Employee'),
+                                            ('Training', 'Training Record')], string='Type of Employees')
     
 class StudentEnroll(models.Model):
     _inherit = 'student.enroll'
@@ -148,3 +328,5 @@ class StudentEnroll(models.Model):
             # Checking these invoices are full amount or not. if full, we will make this enroll done
         if total_untax == total_invoice:
             self.state = 'enrolled'
+        else:
+            self.action_enroll()

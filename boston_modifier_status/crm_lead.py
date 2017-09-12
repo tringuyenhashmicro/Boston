@@ -3,6 +3,7 @@ from openerp import tools
 import datetime
 from datetime import timedelta
 import time
+import imgkit
 from openerp.exceptions import Warning
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 from openerp.addons.base.res.res_partner import format_address
@@ -72,8 +73,8 @@ class res_partner_title(osv.osv):
         return res
     
 class school_student(osv.osv):
-    _inherit = 'school.student'
-    _inherits = {'mail.thread':'message_follower_ids'}
+    _name = 'school.student'
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
     
     def update_invoice_payment(self, cr, uid, ids=[], context={}):
         inv_obj = self.pool.get('student.invoice')
@@ -292,42 +293,32 @@ class hr_employee(osv.osv):
         'att_lines': fields.one2many('teacher.attendance.line', 'teacher_id', 'Attendance Lines'),
         'current_date': fields.function(get_current_date, string='Current Date', method=True, type='date'),
     }
-    
-    # def write(self, cr, uid, ids, vals, context=None):
-        # res = super(school_teacher, self).write(cr, uid, ids, vals, context=context)
-        # for teacher in self.browse(cr, uid, ids):
-            # if teacher.user_id:
-                # teacher.user_id.write({'name': teacher.name, 'email': teacher.email})
-            # else:
-                # user_id = self.pool.get('res.users').create(cr, uid, {
-                    # 'name': teacher.name,
-                    # 'login': teacher.email
-                    # }) 
-                # teacher.write({'user_id': user_id})
-        # return res
-    
+        
     def create(self, cr, uid, vals, context=None):
         user_obj = self.pool.get('res.users')
-        user_id = user_obj.create(cr, uid, {
-                'name': vals['name'],
-                'login': vals['work_email'],
-                })
-        if not vals.has_key('resource_id'):
-            resource_id = self.pool.get('resource.resource').create(cr, uid, {'name': vals['name'],
-                                                                 'resource_type': 'user',
-                                                                 'user_id': user_id,
-                                                                 'time_efficiency': 1})
-            vals.update({'resource_id': resource_id})
-        vals.update({'user_id': user_id})
-        teacher_id = super(hr_employee, self).create(cr, uid, vals)
-        groups = []
-        dataobj = self.pool.get('ir.model.data')
-        dummy,group_id = dataobj.get_object_reference(cr, SUPERUSER_ID, 'base', 'group_portal')
-        groups.append(group_id)
-        dummy,group_id = dataobj.get_object_reference(cr, SUPERUSER_ID, 'school_management', 'group_school_teacher')
-        groups.append(group_id)
-        user_obj.write(cr, uid, [user_id], {'groups_id': [(6, 0, groups)]})
-        return teacher_id
+        if vals.has_key('work_email') and vals.has_key('name'):
+            if not vals.get('name', ''):
+                vals['name'] = '/'
+            user_id = user_obj.create(cr, uid, {
+                    'name': vals['name'],
+                    'login': vals['work_email'],
+                    })
+            if not vals.has_key('resource_id'):
+                resource_id = self.pool.get('resource.resource').create(cr, uid, {'name': vals['name'],
+                                                                     'resource_type': 'user',
+                                                                     'user_id': user_id,
+                                                                     'time_efficiency': 1})
+                vals.update({'resource_id': resource_id})
+            vals.update({'user_id': user_id})
+            
+            groups = []
+            dataobj = self.pool.get('ir.model.data')
+            dummy,group_id = dataobj.get_object_reference(cr, SUPERUSER_ID, 'base', 'group_portal')
+            groups.append(group_id)
+            dummy,group_id = dataobj.get_object_reference(cr, SUPERUSER_ID, 'school_management', 'group_school_teacher')
+            groups.append(group_id)
+            user_obj.write(cr, uid, [user_id], {'groups_id': [(6, 0, groups)]})
+        return super(hr_employee, self).create(cr, uid, vals)
     
     
 hr_employee()
@@ -387,6 +378,17 @@ class school_session(osv.osv):
     
     def create(self, cr, uid, vals, context=None):        
         if vals.has_key('date_end') and vals.has_key('date_start'):
+            tmp_name = vals['name']
+            if vals.has_key('module_id'):
+                tmp_name = self.pool.get('school.module').browse(cr, uid, vals['module_id']).name
+            if vals.has_key('class_id'):
+                tmp_name = '%s, %s'%(tmp_name, self.pool.get('school.class').browse(cr, uid, vals['class_id']).name)
+            if vals.has_key('classroom_id'):
+                tmp_name = '%s, %s'%(tmp_name, self.pool.get('school.classroom').browse(cr, uid, vals['classroom_id']).name)
+            if vals.has_key('teacher_id'):
+                tmp_name = '%s, %s'%(tmp_name, self.pool.get('hr.employee').browse(cr, uid, vals['teacher_id']).name)
+            calendar_obj = self.pool.get('calendar.event')
+            calendar_obj.create(cr, uid, {'name': tmp_name, 'type':'class', 'start': vals['date_start'], 'stop': vals['date_end'],'start_date': vals['date_start'], 'stop_date': vals['date_end']})
             end =  str(vals['date_end']).split(' ')
             end1 = end[0].split('-')
             end2 = end[1].split(':')
@@ -1090,7 +1092,6 @@ class school_school(models.Model):
     shool_module_ids = fields.Many2many('school.module', 'school_school_module_rel', 'school_id', 'module_id', string='Module')
     enroll_fee_ids = fields.One2many('fee.enroll', 'course_id', 'First Enrollment')
     
-    
 class StudentInvoiceLine(models.Model):
     _inherit = 'student.invoice.line'
     
@@ -1258,7 +1259,20 @@ class HrHolidays(models.Model):
         if vals.has_key('is_public'):
             if vals.get('is_public', False):
                 vals.update({'public_date': vals['date_from']})
+        calendar_obj = self.pool.get('calendar.event')
+        if vals.has_key('date_from') and vals.has_key('date_to'):
+            calendar_obj.create(cr, uid, {'name': vals['name'], 'type': 'leave', 'start': vals['date_from'], 'start_date': vals['date_from'], 'stop': vals['date_to'], 'stop_date': vals['date_to']})
         return super(HrHolidays, self).create(cr, uid, vals, context=context)
+        
+
+class HrHolidayLines(models.Model):
+    _inherit = 'hr.holiday.lines'  
+        
+    def create(self, cr, uid, vals, context=None):
+        calendar_obj = self.pool.get('calendar.event')
+        if vals.has_key('holiday_date') and vals.has_key('name'):
+            calendar_obj.create(cr, uid, {'name': vals['name'], 'type': 'pub_ho', 'start': vals['holiday_date'], 'stop': vals['holiday_date'], 'start_date': vals['holiday_date'], 'stop_date': vals['holiday_date']})
+        return super(HrHolidayLines, self).create(cr, uid, vals, context=context)
     
 #   USING FOR REPORT         
 class ReportCreditNoteReceipt(models.AbstractModel):
@@ -1372,7 +1386,7 @@ class ReportStudentContractDocument(models.AbstractModel):
         issue_date = data['issued_date'].split('-')
         # raise Warning(str(data))
         # try:
-        #imgkit.from_string(self.env['school.school'].browse(data['course_id']).entry_req, '/boston_modifier_status/static/description/%s.png'%self.env['school.school'].browse(data['course_id']).code)
+        # imgkit.from_string(self.env['school.school'].browse(data['course_id']).entry_req, '/opt/odoo/odoo/addons/boston_modifier_status/static/description/entry_req001.png')#%self.env['school.school'].browse(data['course_id']).code)
         # except:
             # pass
         docargs = {
@@ -1545,6 +1559,7 @@ class ReportAnnualReportDocument(models.AbstractModel):
             'docs': self.env['school.student'].browse(docids),
             'get_highest_course': self.get_highest_course(docids[0]),
         }
+        print '+++++++++++++++    ', docargs
         return self.env['report'].render('boston_modifier_status.report_anual_report', values=docargs)
         
 #   FPS Report
@@ -1574,3 +1589,29 @@ class ReportQuarterlyReportDocument(models.AbstractModel):
             'docs': self.env['school.student'].browse(docids),
         }
         return self.env['report'].render('boston_modifier_status.report_quarterly_report', values=docargs)
+        
+class StudentAssignment(models.Model):
+    _inherit = 'student.assignment'
+    
+    assign_mark = fields.Char(string='Assignment Marks', size=256)
+    assign_grade = fields.Char(string='Assignment Grade', size=256)
+    
+class ClassAssignment(models.Model):
+    _inherit = 'class.assignment'
+    
+    @api.one
+    @api.onchange('class_id')
+    def _onchange_class(self):
+        class_obj = self.env['school.class']
+        if self.class_id:
+            class_ids = [x.id for x in self.class_id]
+            student_list = []
+            for cls_id in class_obj.browse(class_ids):
+                for student in cls_id.student_ids:
+                    student_list.append((0, 1, {'student_id': student.id}))
+            # student_list = list(set(student_list))
+            self.student_assign_ids = student_list
+        else:
+            self.student_assign_ids = False
+    
+    class_id = fields.Many2many('school.class', 'assignment_class_rel', 'assignment_id', 'class_id', 'Intake')
