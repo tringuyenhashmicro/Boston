@@ -1751,6 +1751,17 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
             </field>
         </record>
         
+        <record id="view_student_enroll_duedate_tree" model="ir.ui.view">
+            <field name="name">view.student.enroll.duedate.tree</field>
+            <field name="model">student.enroll.duedate</field>
+            <field name="arch" type="xml">
+                <tree string="Due Date Detail">
+                        <field name="name"/>
+                        <field name="enrol_id"/>
+                </tree>
+            </field>
+        </record>
+        
         <record id="view_student_enroll_duedate_form" model="ir.ui.view">
             <field name="name">view.student.enroll.duedate.form</field>
             <field name="model">student.enroll.duedate</field>
@@ -1763,7 +1774,7 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                             <field name="enrol_id" invisible="1"/>
                         </group>
                         <group colspan="2" col="2">
-                            <field name="line_ids" nolabel="1">
+                            <field name="line_ids" nolabel="1" context="{'enrol_id':enrol_id}">
                                 <tree name="Due Date Lines" editable="bottom">
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
@@ -1806,7 +1817,7 @@ cover letter, quiz you in a mock interview. And all majors are welcome!
                 <xpath expr="//field[@name='line_ids']/tree/field[@name='student_id']" position="after">
                     <field name="std_idd"/>
                     <field name="install_num"/>
-                    <button name="%(action_duedate_instalment)d" string="Due Date" type="action" context="{'default_enrol_id':active_id, 'default_name':install_num}" domain="[('enrol_id','=',active_id)]"/>
+                    <button name="open_instalment_duedate" string="Due Date" type="object" context="{'default_enrol_id':active_id, 'default_name':install_num}" domain="[('enrol_id','=',active_id)]"/>
                 </xpath>
                 <notebook>
                     <page string="Leave/MC Summary">

@@ -164,17 +164,23 @@ class CrmLead(models.Model):
 class StudentEnrolDuedateLine(models.Model):
     _name = 'student.enrol.duedate.line'
     
+    @api.model
+    def get_start_date(self):
+        enrl_obj = self.env['student.enroll.line']
+        if self._context.has_key('enrol_id') and not self.parent_id.line_ids:
+            return enrl_obj.browse(self._context['enrol_id']).enroll_id.date_start
+    
     sequence = fields.Integer(string='Sequence')
     name = fields.Char(string='Name', size=256)
     parent_id = fields.Many2one('student.enroll.duedate', string='Parent')
-    duedate = fields.Date(string='Due Date')
+    duedate = fields.Date(string='Due Date', default=get_start_date)
     
 class student_enroll_duedate(models.Model):
     _name = 'student.enroll.duedate'
     
     @api.multi
     def validate(self):
-        return 1
+        return 1    
     
     name = fields.Integer(string='Number of Instalment')
     enrol_id = fields.Many2one('student.enroll.line', string='Due Date')
@@ -187,6 +193,20 @@ class student_enroll_line(models.Model):
     def onchange_student_id(self):
         if self.student_id:
             self.std_idd = self.student_id.std_idd or ''
+
+    @api.multi
+    def open_instalment_duedate(self):
+        res_id = self.env['student.enroll.duedate'].search([('enrol_id', 'in', self.ids)])
+        return {
+            'name': 'Instalment Due Date',
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'student.enroll.duedate',
+            'res_id'   : res_id and res_id[0].id or False,
+            'context'  : {'default_enrol_id':self.ids[0], 'default_name':self.browse(self.ids[0]).install_num},
+            'target': 'new',
+        }
             
     duedate_ids = fields.One2many('student.enroll.duedate', 'enrol_id', 'Due Date')
     std_idd = fields.Char(related='student_id.std_idd', string='Student ID', size=256)
